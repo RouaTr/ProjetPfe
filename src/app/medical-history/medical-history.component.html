@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dossier Médical</title>
+</head>
+
+<body>
+  <div class="app-wrapper">
+    <app-menu></app-menu>
+    <div class="app-content">
+      <app-header></app-header>
+
+      <div class="container-fluid">
+        <app-tabs></app-tabs>
+
+        <main>
+          <div class="row m-1">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4 class="header-title">Antécédents</h4>
+                </div>
+
+                <div class="card-body">
+                  <div class="container">
+
+
+                    <!-- Sélection du type -->
+                    <label for="typeActe">Choisir un antécedant :</label>
+                    <select id="typeActe" (change)="onTypeChange($event)">
+                      <option value="">Sélectionnez un type</option>
+                      <option value="vaccin">Vaccin</option>
+                      <option value="allergie">Allergie</option>
+                      <option value="medicaux">Médicaux</option>
+                      <option value="familiaux">Familiaux</option>
+                      <option value="ist">IST</option>
+                    </select>
+
+                    <!-- Formulaire Vaccin -->
+                    <div *ngIf="selectedType === 'vaccin'" class="form-section">
+                      <h3>Fiche Acte de Vaccination</h3>
+                      <label>Code Vaccin :</label>
+                      <input type="number">
+                      <label>Type</label>
+
+                      <select>
+                        <option value="VHA">VHA</option>
+                        <option value="VHB">VHB</option>
+                        <option value="HPV">HPV</option>
+                        <option value="COVID-19">COVID-19</option>
+                        <option value="Grippe">Grippe</option>
+                      </select>
+
+
+                      <label>Date de l’acte :</label>
+                      <input type="date">
+
+                      <label>N° de lot :</label>
+                      <input type="text" placeholder="Numéro du lot">
+
+                      <label>Statut :</label>
+                      <select>
+                        <option value="En cours">En cours</option>
+                        <option value="Terminé">Terminé</option>
+                        <option value="Annulé">Annulé</option>
+                      </select>
+
+                    <button type="submit" class="validate-btn" style="background-color: #2f2594; color: white;">Enregistrer</button>
+                    </div>
+
+                    <!-- Formulaire Allergie -->
+                    <div *ngIf="selectedType === 'allergie'" class="form-section">
+                      <h3>Fiche Acte d'Allergie</h3>
+                      <label>Date de diagnostic :</label>
+                      <input type="date">
+
+                      <label>Type d'allergie :</label>
+                      <input type="text" placeholder="Ex: Pollen, Antibiotique...">
+
+                      <label>Réaction :</label>
+                      <textarea placeholder="Décrivez la réaction"></textarea>
+
+                      <label>Médication :</label>
+                      <input type="text" placeholder="Traitement prescrit">
+
+                      <label>Statut :</label>
+                      <select>
+                        <option value="En cours">En cours</option>
+                        <option value="Guéri">Guéri</option>
+                      </select>
+
+                      <button type="submit" class="validate-btn" style="background-color: #2f2594; color: white;">Enregistrer</button>
+                    </div>
+
+                    <!-- Formulaire Médicaux -->
+                    <div *ngIf="selectedType === 'medicaux'" class="form-section">
+                      <h3>Fiche Acte Médicaux</h3>
+                      <label>Condition médicale :</label>
+                      <input type="text" placeholder="Ex: Diabète, Hypertension">
+
+                      <label>Date de diagnostic :</label>
+                      <input type="date">
+
+                      <label>Traitement :</label>
+                      <input type="text" placeholder="Traitement actuel">
+
+                      <label>Date de début du traitement :</label>
+                      <input type="date">
+
+                      <label>Date d’arrêt du traitement :</label>
+                      <input type="date">
+
+                      <label>Suivi médical :</label>
+                      <input type="text" placeholder="Spécialiste ou centre de suivi">
+
+                      <label>Statut :</label>
+                      <select>
+                        <option value="En cours">En cours</option>
+                        <option value="Terminé">Terminé</option>
+                        <option value="Récurrent">Récurrent</option>
+                      </select>
+
+                      <button type="submit" class="validate-btn" style="background-color: #2f2594; color: white;">Enregistrer</button>
+                    </div>
+
+                    <!-- Formulaire Familiaux -->
+                    <div *ngIf="selectedType === 'familiaux'" class="form-section">
+                      <h3>Fiche Antécédents Familiaux</h3>
+                      <label>Maladie Héréditaire :</label>
+                      <input type="text" placeholder="Ex: Cancer, Diabète...">
+
+                      <label>Parent concerné :</label>
+                      <input type="text" placeholder="Ex: Père, Mère, Grand-parent">
+
+                      <label>Date de diagnostic :</label>
+                      <input type="date">
+
+                      <label>Statut :</label>
+                      <select>
+                        <option value="En cours">En cours</option>
+                        <option value="Décédé">Décédé</option>
+                      </select>
+
+                      <button type="submit" class="validate-btn" style="background-color: #2f2594; color: white;">Enregistrer</button>
+                    </div>
+
+                    <!-- Formulaire IST -->
+                    <div *ngIf="selectedType === 'ist'" class="form-section">
+                      <h3>Fiche Acte IST (Infections Sexuellement Transmissibles)</h3>
+                      <label>Type d'IST :</label>
+                      <input type="text" placeholder="Ex: VIH, Chlamydia, Syphilis...">
+
+                      <label>Date de diagnostic :</label>
+                      <input type="date">
+
+                      <label>Traitement prescrit :</label>
+                      <input type="text" placeholder="Antibiotiques, Antiviraux...">
+
+                      <label>Date de début du traitement :</label>
+                      <input type="date">
+
+                      <label>Date d’arrêt du traitement :</label>
+                      <input type="date">
+
+                      <label>Suivi médical :</label>
+                      <input type="text" placeholder="Nom du médecin ou centre de suivi">
+
+                      <label>Statut :</label>
+                      <select>
+                        <option value="En cours">En cours</option>
+                        <option value="Guéri">Guéri</option>
+                        <option value="Chronique">Chronique</option>
+                      </select>
+
+                      <button type="submit" class="validate-btn" style="background-color: #2f2594; color: white;">Enregistrer</button>
+                    </div>
+                  </div>
+
+
+
+
+                </div>
+
+
+
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

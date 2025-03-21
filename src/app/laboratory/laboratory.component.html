@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dossier Médical</title>
+  <script>
+    function onTypeChange(event) {
+      document.querySelectorAll('.form-section').forEach(section => {
+        section.style.display = 'none';
+      });
+      const selectedType = event.target.value;
+      if (selectedType) {
+        document.getElementById(selectedType).style.display = 'block';
+      }
+    }
+  </script>
+  <style>
+    .form-section { display: none; margin-top: 20px; }
+    .validate-btn { margin-top: 10px; }
+  </style>
+</head>
+
+<body>
+  <div class="app-wrapper">
+    <app-menu></app-menu>
+    <div class="app-content">
+      <app-header></app-header>
+      <div class="container-fluid">
+        <app-tabs></app-tabs>
+        <main>
+          <div class="row m-1">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4 class="header-title">Bilans</h4>
+                </div>
+                <div class="card-body">
+                  <div class="container">
+                    <label for="typeBilan">Choisir un bilan :</label>
+                    <select id="typeBilan" onchange="onTypeChange(event)">
+                      <option value="">Sélectionnez un Bilan</option>
+                      <option value="immunologique">Standard</option>
+                      <option value="chargeVirale">Divers</option>
+                      <option value="hepatique">Urinaire</option>
+                      <option value="renal">Fibrose</option>
+                      <option value="hematologique1">Serologie</option>
+                      <option value="hematologique2">Microbio IST</option>
+                      <option value="hematologique3">Scores</option>
+                      <option value="hematologique4">Génotype</option>
+                      <option value="hematologique5">Geno VIH</option>
+                      <option value="hematologique6">Tuberculose</option>
+                      <option value="hematologique7">Pharmacologie</option>
+                    </select>
+
+                    <div id="immunologique" class="form-section">
+                      <h3>Standard</h3>
+                      <label>Test :</label>
+                      <input type="text" placeholder="Nom du test">
+                      <button type="submit" class="validate-btn">Enregistrer</button>
+                    </div>
+
+                    <div id="chargeVirale" class="form-section">
+                      <h3>Divers</h3>
+                      <label>Valeur :</label>
+                      <input type="text" placeholder="Valeur">
+                      <button type="submit" class="validate-btn">Enregistrer</button>
+                    </div>
+
+                    <div id="hepatique" class="form-section">
+                      <h3>Urinaire</h3>
+                      <label>Résultat :</label>
+                      <input type="text" placeholder="Résultat">
+                      <button type="submit" class="validate-btn">Enregistrer</button>
+                    </div>
+
+                    <div id="renal" class="form-section">
+                      <h3>Fibrose</h3>
+                      <label>Indice :</label>
+                      <input type="text" placeholder="Indice">
+                      <button type="submit" class="validate-btn">Enregistrer</button>
+                    </div>
+
+                    <div id="hematologique1" class="form-section">
+                      <h3>Serologie</h3>
+                      <label>Test :</label>
+                      <input type="text" placeholder="Résultat">
+                      <button type="submit" class="validate-btn">Enregistrer</button>
+                    </div>
+
+                    <div id="hematologique2" class="form-section">
+                      <h3>Microbio IST</h3>
+                      <label>Type :</label>
+                      <input type="text" placeholder="Détails">
+                      <button type="submit" class="validate-btn">Enregistrer</button>
+                    </div>
+
+                    <div id="hematologique3" class="form-section">
+                      <h3>Scores</h3>
+                      <label>Valeur :</label>
+                      <input type="text" placeholder="Valeur du score">
+                      <button type="submit" class="validate-btn">Enregistrer</button>
+                    </div>
+
+                    <div id="hematologique4" class="form-section">
+                      <h3>Génotype</h3>
+                      <label>Analyse :</label>
+                      <input type="text" placeholder="Détails du génotype">
+                      <button type="submit" class="validate-btn">Enregistrer</button>
+                    </div>
+
+                    <div id="hematologique5" class="form-section">
+                      <h3>Geno VIH</h3>
+                      <label>Résultat :</label>
+                      <input type="text" placeholder="Détails">
+                      <button type="submit" class="validate-btn">Enregistrer</button>
+                    </div>
+
+                    <div id="hematologique6" class="form-section">
+                      <h3>Tuberculose</h3>
+                      <label>Test :</label>
+                      <input type="text" placeholder="Résultat du test">
+                      <button type="submit" class="validate-btn">Enregistrer</button>
+                    </div>
+
+                    <div id="hematologique7" class="form-section">
+                      <h3>Pharmacologie</h3>
+                      <label>Médicament :</label>
+                      <input type="text" placeholder="Nom du médicament">
+                      <button type="submit" class="validate-btn">Enregistrer</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

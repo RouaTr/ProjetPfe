@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Multipurpose, super flexible, powerful, clean modern responsive bootstrap 5 admin template">
+  <title>Dossier Médical</title>
+</head>
+
+<body>
+  <div class="app-wrapper default">
+    <app-menu></app-menu>
+    <div class="app-content">
+      <app-header></app-header>
+      <div class="container-fluid">
+        <app-tabs></app-tabs>
+        <main>
+          <form (ngSubmit)="addNewPatient()" [formGroup]="PatientForm">
+            <div class="row m-1">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h4 class="header-title">Administratif</h4>
+                  </div>
+
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label for="nom" class="form-label">Nom</label>
+                          <input type="text" id="nom" name="nom" class="form-control" required
+                            formControlName="lastName">
+                        </div>
+                        <div class="mb-3">
+                          <label for="prenom" class="form-label">Prénom</label>
+                          <input type="text" id="prenom" name="prenom" formControlName="firstName" class="form-control"
+                            required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="date_naissance" class="form-label">Date de Naissance</label>
+                          <input type="date" id="date_naissance" name="date_naissance" class="form-control" required
+                            formControlName="birthDate">
+                        </div>
+                        <div class="mb-3">
+                          <label for="sexe" class="form-label">Sexe</label>
+                          <select class="form-select" id="sexe" name="sexe" formControlName="gender">
+                            <option>Homme</option>
+                            <option>Femme</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="telephone" class="form-label">Numéro de Téléphone</label>
+                          <div class="input-group">
+                            <span class="input-group-text">+216</span>
+                            <input type="text" id="telephone" name="telephone" class="form-control" pattern="[0-9]{8}"
+                              maxlength="8" required placeholder="Ex: 98765432" formControlName="phoneNumber">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label for="ville" class="form-label">Ville</label>
+                          <select class="form-select" id="ville" name="ville" formControlName="city">
+                            <option value="">Sélectionner une ville</option>
+                            <option value="tunis">Tunis</option>
+                            <option value="sousse">Sousse</option>
+                            <option value="sfax">Sfax</option>
+                            <option value="nabeul">Nabeul</option>
+                            <option value="bizerte">Bizerte</option>
+                            <option value="gabes">Gabès</option>
+                            <option value="ariana">Ariana</option>
+                            <option value="ben_arous">Ben Arous</option>
+                            <option value="manouba">Manouba</option>
+                            <option value="medenine">Médenine</option>
+                            <option value="monastir">Monastir</option>
+                            <option value="kairouan">Kairouan</option>
+                            <option value="tozeur">Tozeur</option>
+                            <option value="gafsa">Gafsa</option>
+                            <option value="beja">Béja</option>
+                            <option value="jendouba">Jendouba</option>
+                            <option value="kef">Le Kef</option>
+                            <option value="sidi_bouzid">Sidi Bouzid</option>
+                            <option value="siliana">Siliana</option>
+                            <option value="kasserine">Kasserine</option>
+                            <option value="tatouine">Tataouine</option>
+                            <option value="zaghouan">Zaghouan</option>
+                            <option value="mahdia">Mahdia</option>
+                            <option value="kerkennah"> Kerkennah</option>
+
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="region" class="form-label">Région</label>
+                          <input type="text" id="region" name="region" class="form-control" formControlName="region">
+                        </div>
+                        <div class="mb-3">
+                          <label for="code_postal" class="form-label">Code Postal</label>
+                          <input type="text" id="code_postal" name="code_postal" class="form-control" pattern="[0-9]{4}"
+                            maxlength="4" required formControlName="postalCode">
+                        </div>
+                        <div class="mb-3">
+                          <label for="adresse" class="form-label">Adresse</label>
+                          <input type="text" id="adresse" name="adresse" class="form-control" formControlName="address">
+                        </div>
+                        <div class="mb-3">
+                          <label for="nationalite" class="form-label">Nationalité</label>
+                          <select class="form-select" id="nationalite" name="nationalite" formControlName="nationality">
+                            <option>Tunisien</option>
+                            <option>Etranger</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card-header">
+                    <h4 class="header-title">Données Démographiques</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label for="poids" class="form-label">Poids (kg)</label>
+                          <input type="number" id="poids" name="poids" class="form-control" min="20" max="300" required
+                            formControlName="weight">
+                        </div>
+                        <div class="mb-3">
+                          <label for="taille" class="form-label">Taille (cm)</label>
+                          <input type="number" id="taille" name="taille" class="form-control" min="50" max="250"
+                            required formControlName="height">
+                        </div>
+                        <div class="mb-3">
+                          <label for="statut_matrimonial" class="form-label">Statut matrimonial</label>
+                          <select class="form-select" id="statut_matrimonial" name="statut_matrimonial"
+                            formControlName="maritalStatus">
+                            <option value="single">Célibataire</option>
+                            <option value="married">Marié(e)</option>
+                            <option value="divorced">Divorcé(e)</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="enfants" class="form-label">Nombre d'enfants</label>
+                          <input type="number" id="enfants" name="enfants" class="form-control" min="0" max="20"
+                            formControlName="children">
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="logement" class="form-label">Logement</label>
+                          <select class="form-select" id="example-select" formControlName="housing">
+                            <option value="">Sélectionner</option>
+                            <option value="appartement">Appartement</option>
+                            <option value="maison">Maison</option>
+                            <option value="autre">Autre</option>
+                          </select>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="type-logement" class="form-label">Type de logement</label>
+                          <select class="form-select" id="example-select" formControlName="housingType">
+                            <option value="">Sélectionner</option>
+                            <option value="loue">Loué</option>
+                            <option value="propre">Son propre logement</option>
+                          </select>
+                        </div>
+
+
+
+                      </div>
+
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label for="niveau_education" class="form-label">Niveau d'éducation</label>
+                          <select class="form-select" id="niveau_education" name="niveau_education"
+                            formControlName="educationLevel">
+                            <option value="">Sélectionner</option>
+                            <option value="primaire">Primaire</option>
+                            <option value="secondaire">Secondaire</option>
+                            <option value="universitaire">Universitaire</option>
+                          </select>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="tabagisme" class="form-label">Tabagisme</label>
+                          <select class="form-select" id="example-select" formControlName="smoking">
+                            <option value="">Sélectionner</option>
+                            <option value="oui">Oui</option>
+                            <option value="non">Non</option>
+                          </select>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="alcoolisme" class="form-label">Alcoolisme</label>
+                          <select class="form-select" id="example-select" formControlName="alcohol">
+                            <option value="">Sélectionner</option>
+                            <option value="oui">Oui</option>
+                            <option value="non">Non</option>
+                          </select>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="toxicomanie" class="form-label">Toxicomanie</label>
+                          <select class="form-select" id="example-select" formControlName="drugUse">
+                            <option value="">Sélectionner</option>
+                            <option value="oui">Oui</option>
+                            <option value="non">Non</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="physicalActivity" class="form-label">Activité Physique</label>
+                          <select class="form-select" id="example-select" formControlName="physicalActivity">
+                            <option value="">Sélectionner</option>
+                            <option value="oui">Oui</option>
+                            <option value="non">Non</option>
+                          </select>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-header">
+                    <h4 class="header-title">Signes Vitaux</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label for="temperature" class="form-label">Température du corps (°C)</label>
+                          <input type="number" id="temperature" name="temperature" class="form-control"
+                            formControlName="bodyTemperature" placeholder="Ex: 37.0" step="0.1">
+                        </div>
+
+                        <div class="mb-3">
+                          <label class="form-label" for="frequence-cardiaque">Fréquence Cardiaque (bpm)</label>
+                          <input type="number" id="frequence-cardiaque" name="frequence-cardiaque" class="form-control"
+                            formControlName="heartRate" placeholder="Ex : 75">
+                        </div>
+
+
+
+
+                      </div>
+
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label for="tension" class="form-label">Pression Artérielle (mmHg)</label>
+                          <input type="text" id="tension" name="tension" class="form-control" placeholder="Ex: 120/80"
+                            formControlName="bloodPressure">
+                        </div>
+
+
+
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-header">
+                    <h4 class="header-title">Epidémiologie</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label for="example-select" class="form-label">Mode de contamination</label>
+                          <select class="form-select" id="example-select" formControlName="contaminationMode">
+                            <option>A E S</option>
+                            <option>Bisexuel</option>
+                            <option>Homosexuel</option>
+                            <option>Hémophile</option>
+                            <option>Hétérosexuel</option>
+                            <option>Materno-foetale</option>
+                            <option>Toxicomane IV</option>
+                            <option>Trasnfusé</option>
+                            <option>Inconnu</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="example-select" class="form-label">Type dépistage initial</label>
+                          <select class="form-select" id="example-select" formControlName="initialScreeningType">
+                            <option>Elisa</option>
+                            <option>Trod</option>
+                            <option>Autotest</option>
+
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="example-select" class="form-label">Motif dépistage initial</label>
+                          <select class="form-select" id="example-select" formControlName="initialScreeningReason">
+                            <option>risque d'exposition au VIH inférieur à 6 mois </option>
+                            <option>risque d'exposition au VIH supérieur à 6 mois</option>
+                            <option>symptomes/signes cliniques liés au VIH</option>
+                            <option>infection sexuellement transmissible</option>
+                            <option>controle d'une séropositivité connue</option>
+                            <option>Grossesse</option>
+                            <option>Dépistage sans notion d'exposition au VIH</option>
+                            <option>confirmation TROD</option>
+                            <option>confirmation auto-test positif</option>
+                            <option>arrivée de zone d'endemie</option>
+                            <option>séropositivité d'un parent</option>
+                            <option>séropositivité d'un(e) partenaire</option>
+                            <option>Autre</option>
+
+                          </select>
+
+                        </div>
+
+
+                        <div class="mb-3">
+                          <label for="date_naissance" class="form-label">Date dernière négative</label>
+                          <input type="date" id="date_naissance" name="date_naissance" class="form-control" required
+                            formControlName="lastNegativeDate">
+                        </div>
+
+
+                        <div class="mb-3">
+                          <label for="date_naissance" class="form-label">Date VIH +</label>
+                          <input type="date" id="date_naissance" name="date_naissance" class="form-control" required
+                            formControlName="positiveHIVDate">
+                        </div>
+                        <div class="mb-3">
+                          <label for="example-select" class="form-label">Typage HLA B5701</label>
+                          <select class="form-select" id="example-select" formControlName="hlaB5701Typing">
+
+                            <option>positif</option>
+                            <option>négatif</option>
+                            <option>non fait</option>
+
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-6">
+
+                        <div class="mb-3">
+                          <label for="example-select" class="form-label">Circonstance Dépistage initial</label>
+                          <select class="form-select" id="example-select" formControlName="screeningCircumstance">
+                            <option>Demande du Patient</option>
+                            <option>Proposition du Médecin</option>
+                            <option>Proposition d'une Association</option>
+                            <option>Autres circonstances</option>
+                          </select>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="example-select" class="form-label">Type viral</label>
+                          <select class="form-select" id="example-select" formControlName="viralType">
+                            <option>VIH 1</option>
+                            <option>VIH 2</option>
+                            <option>VIH 1/VIH 2</option>
+
+                          </select>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="date_naissance" class="form-label">Date contamination</label>
+                          <input type="date" id="date_naissance" name="date_naissance" class="form-control" required
+                            formControlName="contaminationDate">
+                        </div>
+                        <div class="mb-3">
+                          <label for="example-select" class="form-label">Stade CDC</label>
+                          <select class="form-select" id="example-select" formControlName="cdcStage">
+                            <option>selectionner</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </main>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

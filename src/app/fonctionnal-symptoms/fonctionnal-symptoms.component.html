@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Multipurpose, super flexible, powerful, clean modern responsive bootstrap 5 admin template">
+  <title>Dossier Médical</title>
+</head>
+
+<body>
+  <div class="app-wrapper default">
+    <app-menu></app-menu>
+    <div class="app-content">
+      <app-header></app-header>
+
+      <div class="container-fluid">
+        <app-tabs></app-tabs>
+        <main>
+          <form action="" method="POST">
+            <div class="row m-1">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h4 class="header-title">Depuis la dernière consultation, avez-vous eu ?</h4>
+                  </div>
+
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Symptôme</th>
+                            <th>Oui</th>
+                            <th>Non</th>
+                            <th>Symptôme</th>
+                            <th>Oui</th>
+                            <th>Non</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Fièvre</td>
+                            <td><input type="radio" name="fievre" value="oui"></td>
+                            <td><input type="radio" name="fievre" value="non"></td>
+                            <td>Diarrhée</td>
+                            <td><input type="radio" name="diarrhee" value="oui"></td>
+                            <td><input type="radio" name="diarrhee" value="non"></td>
+                          </tr>
+                          <tr>
+                            <td>Toux</td>
+                            <td><input type="radio" name="toux" value="oui"></td>
+                            <td><input type="radio" name="toux" value="non"></td>
+                            <td>Douleurs abdomin.</td>
+                            <td><input type="radio" name="douleurs" value="oui"></td>
+                            <td><input type="radio" name="douleurs" value="non"></td>
+                          </tr>
+                          <tr>
+                            <td>Dyspnée</td>
+                            <td><input type="radio" name="dyspnee" value="oui"></td>
+                            <td><input type="radio" name="dyspnee" value="non"></td>
+                            <td>Nausées</td>
+                            <td><input type="radio" name="nausees" value="oui"></td>
+                            <td><input type="radio" name="nausees" value="non"></td>
+                          </tr>
+                          <tr>
+                            <td>Asthénie</td>
+                            <td><input type="radio" name="asthenie" value="oui"></td>
+                            <td><input type="radio" name="asthenie" value="non"></td>
+                            <td>Arthralgie</td>
+                            <td><input type="radio" name="arthralgie" value="oui"></td>
+                            <td><input type="radio" name="arthralgie" value="non"></td>
+                          </tr>
+                          <tr>
+                            <td>Sueurs nocturnes</td>
+                            <td><input type="radio" name="sueurs" value="oui"></td>
+                            <td><input type="radio" name="sueurs" value="non"></td>
+                            <td>Céphalée</td>
+                            <td><input type="radio" name="cephalee" value="oui"></td>
+                            <td><input type="radio" name="cephalee" value="non"></td>
+                          </tr>
+                          <tr>
+                            <td>Dysphagie</td>
+                            <td><input type="radio" name="dysphagie" value="oui"></td>
+                            <td><input type="radio" name="dysphagie" value="non"></td>
+                            <td>Prurit</td>
+                            <td><input type="radio" name="prurit" value="oui"></td>
+                            <td><input type="radio" name="prurit" value="non"></td>
+                          </tr>
+                          <tr>
+                            <td>Anorexie</td>
+                            <td><input type="radio" name="anorexie" value="oui"></td>
+                            <td><input type="radio" name="anorexie" value="non"></td>
+                            <td>Insomnie</td>
+                            <td><input type="radio" name="insomnie" value="oui"></td>
+                            <td><input type="radio" name="insomnie" value="non"></td>
+                          </tr>
+                          <tr>
+                            <td>Trouble humeur</td>
+                            <td><input type="radio" name="trouble_humeur" value="oui"></td>
+                            <td><input type="radio" name="trouble_humeur" value="non"></td>
+                            <td>Rhinorhée</td>
+                            <td><input type="radio" name="rhinorhee" value="oui"></td>
+                            <td><input type="radio" name="rhinorhee" value="non"></td>
+                          </tr>
+                          <tr>
+                            <td>Paresthésie</td>
+                            <td><input type="radio" name="paresthesie" value="oui"></td>
+                            <td><input type="radio" name="paresthesie" value="non"></td>
+                            <td>Crampes</td>
+                            <td><input type="radio" name="crampes" value="oui"></td>
+                            <td><input type="radio" name="crampes" value="non"></td>
+                          </tr>
+                          <tr>
+                            <td>Troubles visuels</td>
+                            <td><input type="radio" name="troubles_visuels" value="oui"></td>
+                            <td><input type="radio" name="troubles_visuels" value="non"></td>
+                            <td>Myalgie</td>
+                            <td><input type="radio" name="myalgie" value="oui"></td>
+                            <td><input type="radio" name="myalgie" value="non"></td>
+                          </tr>
+                          <tr>
+                            <td>Troubles Libido</td>
+                            <td><input type="radio" name="troubles_libido" value="oui"></td>
+                            <td><input type="radio" name="troubles_libido" value="non"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="card-header">
+                    <h4 class="header-title">Autres signes fonctionnels :</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Signe</th>
+                            <th>Statut</th>
+                            <th>Description</th>
+
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><input type="text" class="form-control" name="signe"></td>
+                            <td><input type="text" class="form-control" name="statut"></td>
+                            <td><textarea class="form-control" name="description"></textarea>
+
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+
+                      <button type="button" class="btn" style="background-color: #cd5858; color: white;">
+                        Ajouter un signe
+                      </button>
+
+                    </div>
+                  </div>
+
+                  <div class="card-footer">
+                    <button type="submit" class="btn btn-primary" style="background-color: #2f2594; color: white;">Enregistrer</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </form>
+        </main>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

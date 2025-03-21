@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Multipurpose, super flexible, powerful, clean modern responsive bootstrap 5 admin template">
+  <title>Dossier Médical</title>
+</head>
+
+<body>
+  <div class="app-wrapper default">
+    <app-menu></app-menu>
+    <div class="app-content">
+      <app-header></app-header>
+
+      <div class="container-fluid">
+        <app-tabs></app-tabs>
+        <main>
+          <form action="" method="POST">
+            <div class="row m-1">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h4 class="header-title">Examen Clinique </h4>
+                  </div>
+
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label class="lbl">signes généraux :</label><br>
+                          <input type="checkbox" id="adenopathie_isolee" name="signesGeneraux"
+                            value="adenopathie_isolee">
+                          <label for="adenopathie_isolee">Adénopathie isolée</label><br>
+
+                          <input type="checkbox" id="adenopathies_generalisees" name="signesGeneraux"
+                            value="adenopathies_generalisees">
+                          <label for="adenopathies_generalisees">Adénopathies généralisées</label><br>
+
+                          <input type="checkbox" id="amaigrissement" name="signesGeneraux" value="amaigrissement">
+                          <label for="amaigrissement">Amaigrissement</label><br>
+
+                          <input type="checkbox" id="cachexie" name="signesGeneraux" value="cachexie">
+                          <label for="cachexie">Cachexie</label><br>
+
+                          <input type="checkbox" id="fievre_aigue" name="signesGeneraux" value="fievre_aigue">
+                          <label for="fievre_aigue">Fièvre aigüe</label><br>
+
+                          <input type="checkbox" id="fievre_persistante" name="signesGeneraux"
+                            value="fievre_persistante">
+                          <label for="fievre_persistante">Fièvre persistante</label><br>
+
+                          <input type="checkbox" id="prise_de_poids" name="signesGeneraux" value="prise_de_poids">
+                          <label for="prise_de_poids">Prise de poids</label><br>
+
+                          <input type="checkbox" id="syndrome_dysthyroidien" name="signesGeneraux"
+                            value="syndrome_dysthyroidien">
+                          <label for="syndrome_dysthyroidien">Syndrome dysthyroïdien</label><br>
+
+                          <input type="checkbox" id="syndrome_pseudogrippal" name="signesGeneraux"
+                            value="syndrome_pseudogrippal">
+                          <label for="syndrome_pseudogrippal">Syndrome pseudogrippal</label><br>
+
+                          <input type="checkbox" id="syndrome_sec" name="signesGeneraux" value="syndrome_sec">
+                          <label for="syndrome_sec">Syndrome sec</label><br>
+
+                          <input type="checkbox" id="alteration_etat_general" name="signesGeneraux"
+                            value="alteration_etat_general">
+                          <label for="alteration_etat_general">Altération de l'état général</label><br>
+
+                          <input type="checkbox" id="autres" name="signesGeneraux" value="autres">
+                          <label for="autres">Autres signes généraux</label><br>
+
+                        </div>
+                        <div class="mb-3">
+                          <label class="lbl">Dermatologique :</label><br>
+                          <input type="checkbox" id="abscess" name="dermatologique" value="abscess">
+                          <label for="abscess">Abcès</label><br>
+
+                          <input type="checkbox" id="acne" name="dermatologique" value="acne">
+                          <label for="acne">Acné</label><br>
+
+                          <input type="checkbox" id="drug_allergy" name="dermatologique" value="drug_allergy">
+                          <label for="drug_allergy">Allergie médicamenteuse (Dermite)</label><br>
+
+                          <input type="checkbox" id="spider_angioma" name="dermatologique" value="spider_angioma">
+                          <label for="spider_angioma">Angiome stellaire</label><br>
+
+                          <input type="checkbox" id="aphthae" name="dermatologique" value="aphthae">
+                          <label for="aphthae">Aphtes</label><br>
+
+                          <input type="checkbox" id="condyloma" name="dermatologique" value="condyloma">
+                          <label for="condyloma">Condylomes</label><br>
+
+                          <input type="checkbox" id="bullous_dermatosis" name="dermatologique"
+                            value="bullous_dermatosis">
+                          <label for="bullous_dermatosis">Dermatose bulleuse</label><br>
+
+                          <input type="checkbox" id="seborrheic_dermatitis" name="dermatologique"
+                            value="seborrheic_dermatitis">
+                          <label for="seborrheic_dermatitis">Dermite séborrhéique</label><br>
+
+                          <input type="checkbox" id="eczema" name="dermatologique" value="eczema">
+                          <label for="eczema">Eczéma</label><br>
+
+                          <input type="checkbox" id="skin_rash" name="dermatologique" value="skin_rash">
+                          <label for="skin_rash">Éruption cutanée (préciser le type)</label><br>
+
+                          <input type="checkbox" id="erythema" name="dermatologique" value="erythema">
+                          <label for="erythema">Érythème</label><br>
+
+                          <input type="checkbox" id="palmar_erythrosis" name="dermatologique" value="palmar_erythrosis">
+                          <label for="palmar_erythrosis">Érythrose palmaire</label><br>
+
+                          <input type="checkbox" id="folliculitis" name="dermatologique" value="folliculitis">
+                          <label for="folliculitis">Folliculite</label><br>
+
+                          <input type="checkbox" id="scabies" name="dermatologique" value="scabies">
+                          <label for="scabies">Gale</label><br>
+
+                          <input type="checkbox" id="herpes" name="dermatologique" value="herpes">
+                          <label for="herpes">Herpès</label><br>
+
+                          <input type="checkbox" id="kaposi_sarcoma" name="dermatologique" value="kaposi_sarcoma">
+                          <label for="kaposi_sarcoma">Kaposi cutané</label><br>
+
+                          <input type="checkbox" id="hairy_leukoplakia" name="dermatologique" value="hairy_leukoplakia">
+                          <label for="hairy_leukoplakia">Leucoplasie chevelue</label><br>
+
+                          <input type="checkbox" id="lichen_planus" name="dermatologique" value="lichen_planus">
+                          <label for="lichen_planus">Lichen plan</label><br>
+
+                          <input type="checkbox" id="melanodermia" name="dermatologique" value="melanodermia">
+                          <label for="melanodermia">Mélanodermie</label><br>
+
+                          <input type="checkbox" id="oral_thrush" name="dermatologique" value="oral_thrush">
+                          <label for="oral_thrush">Muguet buccal</label><br>
+
+                          <input type="checkbox" id="nail_abnormalities" name="dermatologique"
+                            value="nail_abnormalities">
+                          <label for="nail_abnormalities">Ongles: anomalies à préciser</label><br>
+
+                          <input type="checkbox" id="onychomycosis" name="dermatologique" value="onychomycosis">
+                          <label for="onychomycosis">Onychomycose</label><br>
+                        </div>
+
+                        <div class="mb-3">
+                          <label class="lbl">Neuro-ostéo-musculaire :</label><br>
+                          <input type="checkbox" name="neuro_osteo_musculaire" value="ataxie"> Ataxie<br>
+                          <input type="checkbox" name="neuro_osteo_musculaire" value="atteinte_fonctions_superieures">
+                          Atteinte des fonctions supérieures<br>
+                          <input type="checkbox" name="neuro_osteo_musculaire" value="deficit_moteur"> Déficit
+                          moteur<br>
+                          <input type="checkbox" name="neuro_osteo_musculaire" value="deficit_sensitif"> Déficit
+                          sensitif<br>
+                          <input type="checkbox" name="neuro_osteo_musculaire" value="lumbago"> Lumbago<br>
+                          <input type="checkbox" name="neuro_osteo_musculaire" value="myalgie"> Myalgie<br>
+                          <input type="checkbox" name="neuro_osteo_musculaire" value="paralysie_faciale"> Paralysie
+                          faciale<br>
+                          <input type="checkbox" name="neuro_osteo_musculaire" value="polynevrite"> Polynévrite<br>
+                          <input type="checkbox" name="neuro_osteo_musculaire" value="syndrome_meninge"> Syndrome
+                          méningé<br>
+                          <input type="checkbox" name="neuro_osteo_musculaire" value="tremblement"> Tremblement<br>
+                          <input type="checkbox" name="neuro_osteo_musculaire" value="vertiges"> Vertiges<br>
+                          <input type="checkbox" name="neuro_osteo_musculaire" value="autres_signes_neuro"> Autres
+                          signes neuro<br>
+                        </div>
+                        <div class="mb-3">
+                          <label class="lbl">O R L :</label><br>
+                          <input type="checkbox" name="orl" value="aphtes"> Aphtes<br>
+                          <input type="checkbox" name="orl" value="aphtose"> Aphtose<br>
+                          <input type="checkbox" name="orl" value="leucoplasie_chevelue"> Leucoplasie chevelue<br>
+                          <input type="checkbox" name="orl" value="muguet_buccal"> Muguet buccal<br>
+                          <input type="checkbox" name="orl" value="otorrhee"> Otorrhée<br>
+                          <input type="checkbox" name="orl" value="parotide_hypertrophiee"> Parotide hypertrophiée<br>
+                          <input type="checkbox" name="orl" value="pharyngite"> Pharyngite<br>
+                          <input type="checkbox" name="orl" value="sinusite"> Sinusite<br>
+                          <input type="checkbox" name="orl" value="autres_signes_orl"> Autres signes ORL<br>
+                        </div>
+                        <div class="mb-3">
+                          <label class="lbl">Psychiatrique :</label><br>
+                          <input type="checkbox" name="psychiatrique" value="demence_vih"> Démence liée au VIH<br>
+                          <input type="checkbox" name="psychiatrique" value="depression_majeure"> Dépression majeure<br>
+                          <input type="checkbox" name="psychiatrique" value="desorientation"> Désorientation<br>
+                          <input type="checkbox" name="psychiatrique" value="irritabilite"> Irritabilité<br>
+                          <input type="checkbox" name="psychiatrique" value="syndrome_depressif"> Syndrome dépressif<br>
+                          <input type="checkbox" name="psychiatrique" value="trouble_humeur"> Trouble de l'humeur<br>
+                          <input type="checkbox" name="psychiatrique" value="trouble_memoire"> Trouble de la mémoire<br>
+                          <input type="checkbox" name="psychiatrique" value="trouble_comportement"> Trouble du
+                          comportement<br>
+                          <input type="checkbox" name="psychiatrique" value="autres_signes"> Autres signes
+                          neuro-psychiatriques<br>
+                        </div>
+                        <div class="mb-3">
+                          <label class="lbl">Cardiovasculaire :</label><br>
+                          <input type="checkbox" id="intermittent_claudication" name="cardiovasculaire"
+                            value="intermittent_claudication">
+                          <label for="intermittent_claudication">Claudication intermittente</label><br>
+
+                          <input type="checkbox" id="arterial_hypertension" name="cardiovasculaire"
+                            value="arterial_hypertension">
+                          <label for="arterial_hypertension">Hypertension artérielle</label><br>
+
+                          <input type="checkbox" id="arterial_hypotension" name="cardiovasculaire"
+                            value="arterial_hypotension">
+                          <label for="arterial_hypotension">Hypotension artérielle</label><br>
+
+                          <input type="checkbox" id="edema" name="cardiovasculaire" value="edema">
+                          <label for="edema">Oedème</label><br>
+
+                          <input type="checkbox" id="arterial_murmur" name="cardiovasculaire" value="arterial_murmur">
+                          <label for="arterial_murmur">Souffle artériel</label><br>
+
+                          <input type="checkbox" id="heart_murmur" name="cardiovasculaire" value="heart_murmur">
+                          <label for="heart_murmur">Souffle cardiaque</label><br>
+
+                          <input type="checkbox" id="arrhythmia" name="cardiovasculaire" value="arrhythmia">
+                          <label for="arrhythmia">Trouble du rythme</label><br>
+
+                          <input type="checkbox" id="other_cardiovascular_signs" name="cardiovasculaire"
+                            value="other_cardiovascular_signs">
+                          <label for="other_cardiovascular_signs">autre signes cardiovasculaires</label><br>
+
+
+
+                        </div>
+                      </div>
+
+                      <div class="col-lg-6">
+
+                        <div class="mb-3">
+                          <label class="lbl">Digestif :</label><br>
+                          <input type="checkbox" name="digestif" value="angiome_stellaire"> Angiome stellaire<br>
+                          <input type="checkbox" name="digestif" value="ascite"> Ascite<br>
+                          <input type="checkbox" name="digestif" value="circulation_veineuse_collaterale"> Circulation
+                          veineuse collatérale<br>
+                          <input type="checkbox" name="digestif" value="diarrhee"> Diarrhée<br>
+                          <input type="checkbox" name="digestif" value="douleurs_abdominales"> Douleurs abdominales<br>
+                          <input type="checkbox" name="digestif" value="dysphagie"> Dysphagie<br>
+                          <input type="checkbox" name="digestif" value="encephalopathie_hepatique"> Encéphalopathie
+                          hépatique<br>
+                          <input type="checkbox" name="digestif" value="erythrose_palmaire"> Erythrose palmaire<br>
+                          <input type="checkbox" name="digestif" value="gastroenterite"> Gastroentérite<br>
+                          <input type="checkbox" name="digestif" value="hemorragie_digestive"> Hémorragie digestive<br>
+                          <input type="checkbox" name="digestif" value="hepatomegalie"> Hépatomégalie<br>
+                          <input type="checkbox" name="digestif" value="ictere"> Ictère<br>
+                          <input type="checkbox" name="digestif" value="masse_abdominale"> Masse abdominale<br>
+                          <input type="checkbox" name="digestif" value="nausees_vomissements"> Nausées et
+                          vomissements<br>
+                          <input type="checkbox" name="digestif" value="splenomegalie"> Splénomégalie<br>
+                          <input type="checkbox" name="digestif" value="varices_oesophagiennes"> Varices
+                          oesophagiennes<br>
+                          <input type="checkbox" name="digestif" value="autres"> Autres signes digestifs<br>
+                        </div>
+                        <div class="mb-3">
+                          <label class="lbl">Lipodystrophie :</label><br>
+                          <input type="checkbox" name="lipodystrophie" value="accumulation_graisse"> Accumulation de
+                          graisse<br>
+                          <input type="checkbox" name="lipodystrophie" value="ballonement_abdominal"> Ballonnement
+                          abdominal<br>
+                          <input type="checkbox" name="lipodystrophie" value="bosse_bison"> Bosse de bison<br>
+                          <input type="checkbox" name="lipodystrophie" value="gynecomastie"> Gynécomastie<br>
+                          <input type="checkbox" name="lipodystrophie" value="perte_graisse"> Perte de graisse<br>
+                        </div>
+                        <div class="mb-3">
+                          <label class="lbl">Génito-urinaire :</label><br>
+                          <input type="checkbox" name="genito_urinaire" value="coliques_nephretiques"> Coliques
+                          néphrétiques<br>
+                          <input type="checkbox" name="genito_urinaire" value="condylomes"> Condylomes<br>
+                          <input type="checkbox" name="genito_urinaire" value="dysplasie_legere"> Dysplasie légère du
+                          col<br>
+                          <input type="checkbox" name="genito_urinaire" value="dysplasie_moyenne"> Dysplasie moyenne du
+                          col<br>
+                          <input type="checkbox" name="genito_urinaire" value="dysplasie_severe"> Dysplasie sévère du
+                          col<br>
+                          <input type="checkbox" name="genito_urinaire" value="ecoulement_uretral"> Ecoulement
+                          urétral<br>
+                          <input type="checkbox" name="genito_urinaire" value="fissure_anale"> Fissure anale<br>
+                          <input type="checkbox" name="genito_urinaire" value="fistule_anale"> Fistule anale<br>
+                          <input type="checkbox" name="genito_urinaire" value="grossesse"> Grossesse<br>
+                          <input type="checkbox" name="genito_urinaire" value="hypertrophie_mammaire"> Hypertrophie
+                          mammaire<br>
+                          <input type="checkbox" name="genito_urinaire" value="leucorrhee"> Leucorrhée<br>
+                          <input type="checkbox" name="genito_urinaire" value="toucher_vaginal"> Toucher vaginal<br>
+                          <input type="checkbox" name="genito_urinaire" value="ulcerations_genitales"> Ulcérations
+                          génitales<br>
+                          <input type="checkbox" name="genito_urinaire" value="autres"> Autres signes uro-génitaux<br>
+                        </div>
+                        <div class="mb-3">
+                          <label class="lbl">Ophtalmologique :</label><br>
+                          <input type="checkbox" name="ophtalmologique" value="amputation_champ_visuel"> Amputation
+                          champ visuel<br>
+                          <input type="checkbox" name="ophtalmologique" value="baisse_acuite_visuelle"> Baisse acuité
+                          visuelle<br>
+                          <input type="checkbox" name="ophtalmologique" value="cecite"> Cécité<br>
+                          <input type="checkbox" name="ophtalmologique" value="conjonctivite"> Conjonctivite<br>
+                          <input type="checkbox" name="ophtalmologique" value="keratite"> Kératite<br>
+                          <input type="checkbox" name="ophtalmologique" value="trouble_visuel"> Trouble visuel (SAI)<br>
+                          <input type="checkbox" name="ophtalmologique" value="autres_signes_ophtalmologiques"> Autres
+                          signes ophtalmologiques<br>
+                        </div>
+                        <div class="mb-3">
+                          <label class="lbl">Pleuro-Pulmonaire :</label><br>
+                          <input type="checkbox" name="pleuro_pulmonaire" value="bronchite_aigue"> Bronchite aigüe
+                          (SAI)<br>
+                          <input type="checkbox" name="pleuro_pulmonaire" value="bronchite_chronique"> Bronchite
+                          chronique (SAI)<br>
+                          <input type="checkbox" name="pleuro_pulmonaire" value="cyanose"> Cyanose<br>
+                          <input type="checkbox" name="pleuro_pulmonaire" value="dyspnee"> Dyspnée<br>
+                          <input type="checkbox" name="pleuro_pulmonaire" value="rales"> Râles<br>
+                          <input type="checkbox" name="pleuro_pulmonaire" value="sifflements"> Sifflements<br>
+                          <input type="checkbox" name="pleuro_pulmonaire" value="toux"> Toux<br>
+                          <input type="checkbox" name="pleuro_pulmonaire" value="autres_signes"> Autres signes
+                          pleuro-pulmonaires<br>
+                        </div>
+
+                        <div class="mb-3">
+                          <label class="lbl">Puberté :</label><br>
+                          <input type="checkbox" name="puberte" value="tanner_filles_s1"> Classif. Tanner - Filles -
+                          S1<br>
+                          <input type="checkbox" name="puberte" value="tanner_filles_s2"> Classif. Tanner - Filles -
+                          S2<br>
+                          <input type="checkbox" name="puberte" value="tanner_filles_s3"> Classif. Tanner - Filles -
+                          S3<br>
+                          <input type="checkbox" name="puberte" value="tanner_filles_s4"> Classif. Tanner - Filles -
+                          S4<br>
+                          <input type="checkbox" name="puberte" value="tanner_filles_s5"> Classif. Tanner - Filles -
+                          S5<br>
+                          <input type="checkbox" name="puberte" value="tanner_filles_p1"> Classif. Tanner - Filles -
+                          P1<br>
+                          <input type="checkbox" name="puberte" value="tanner_filles_p2"> Classif. Tanner - Filles -
+                          P2<br>
+                          <input type="checkbox" name="puberte" value="tanner_filles_p3"> Classif. Tanner - Filles -
+                          P3<br>
+                          <input type="checkbox" name="puberte" value="tanner_filles_p4"> Classif. Tanner - Filles -
+                          P4<br>
+                          <input type="checkbox" name="puberte" value="tanner_filles_p5"> Classif. Tanner - Filles -
+                          P5<br>
+                          <input type="checkbox" name="puberte" value="tanner_garcons_t1"> Classif. Tanner - Garçons -
+                          T1<br>
+                          <input type="checkbox" name="puberte" value="tanner_garcons_t2"> Classif. Tanner - Garçons -
+                          T2<br>
+                          <input type="checkbox" name="puberte" value="tanner_garcons_t3"> Classif. Tanner - Garçons -
+                          T3<br>
+                          <input type="checkbox" name="puberte" value="tanner_garcons_t4"> Classif. Tanner - Garçons -
+                          T4<br>
+                          <input type="checkbox" name="puberte" value="tanner_garcons_t5"> Classif. Tanner - Garçons -
+                          T5<br>
+                          <input type="checkbox" name="puberte" value="tanner_garcons_p1"> Classif. Tanner - Garçons -
+                          P1<br>
+                          <input type="checkbox" name="puberte" value="tanner_garcons_p2"> Classif. Tanner - Garçons -
+                          P2<br>
+                          <input type="checkbox" name="puberte" value="tanner_garcons_p3"> Classif. Tanner - Garçons -
+                          P3<br>
+                          <input type="checkbox" name="puberte" value="tanner_garcons_p4"> Classif. Tanner - Garçons -
+                          P4<br>
+                          <input type="checkbox" name="puberte" value="tanner_garcons_p5"> Classif. Tanner - Garçons -
+                          P5<br>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="card-footer">
+                    <button type="submit" class="btn btn-primary" style="background-color: #2f2594; color: white;">Enregistrer</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </main>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
