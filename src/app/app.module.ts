@@ -17,6 +17,9 @@ import { MedicalHistoryComponent } from './medical-history/medical-history.compo
 import { LaboratoryComponent } from './laboratory/laboratory.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import { ListObservationComponent } from './list-observation/list-observation.component';
+import { MedicalFolderComponent } from './medical-folder/medical-folder.component';
+import { UpdatePatientComponent } from './update-patient/update-patient.component';
 
 
 @NgModule({
@@ -33,7 +36,10 @@ import {HttpClientModule} from '@angular/common/http';
     FonctionnalSymptomsComponent,
     ObservationComponent,
     MedicalHistoryComponent,
-    LaboratoryComponent
+    LaboratoryComponent,
+    ListObservationComponent,
+    MedicalFolderComponent,
+    UpdatePatientComponent
   ],
   imports: [
     BrowserModule,

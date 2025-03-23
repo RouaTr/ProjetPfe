@@ -14,6 +14,7 @@ export class CrudService {
 
   //  **Gestion des Patients**
   addPatient(patient: Patient): Observable<Patient> {
+    console.log("Patient envoyé :", patient);
     return this.http.post<Patient>(`${this.apiUrl}/patients`, patient);
   }
 

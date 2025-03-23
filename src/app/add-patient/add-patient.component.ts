@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CrudService } from '../service/crud.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Patient } from '../Entity/Patient.Entity';
 
@@ -13,148 +13,130 @@ export class AddPatientComponent {
   messageCommande = "";
   PatientForm: FormGroup;
 
-  constructor(private service: CrudService, private router: Router, private fb: FormBuilder) {
+  constructor(private crudService: CrudService, private router: Router, private fb: FormBuilder) {
     let formControls = {
       lastName: new FormControl('', [Validators.required]),
       firstName: new FormControl('', [Validators.required]),
       birthDate: new FormControl('', [Validators.required]),
-      gender: new FormControl('', [Validators.required]),
-      phoneNumber: new FormControl('', [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+      gender: new FormControl(''),
+      phoneNumber: ['', [
+        Validators.required,
+        Validators.pattern(/^[0-9]{8}$/)
+      ]],
       city: new FormControl('', [Validators.required]),
-      region: new FormControl('', [Validators.required]),
+      region: new FormControl(''),
       postalCode: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
-      nationality: new FormControl('', [Validators.required]),
-      weight: new FormControl('', [Validators.required, Validators.min(1)]),
-      height: new FormControl('', [Validators.required, Validators.min(1)]),
-      maritalStatus: new FormControl('', [Validators.required]),
-      children: new FormControl('', [Validators.required, Validators.min(0)]),
-      housing: new FormControl('', [Validators.required]),
-      housingType: new FormControl('', [Validators.required]),
-      educationLevel: new FormControl('', [Validators.required]),
-      smoking: new FormControl('', [Validators.required]),
-      alcohol: new FormControl('', [Validators.required]),
-      drugUse: new FormControl('', [Validators.required]),
-      physicalActivity: new FormControl('', [Validators.required]),
-      bodyTemperature: new FormControl('', [Validators.required]),
-      heartRate: new FormControl('', [Validators.required]),
-      bloodPressure: new FormControl('', [Validators.required]),
-      contaminationMode: new FormControl('', [Validators.required]),
-      initialScreeningType: new FormControl('', [Validators.required]),
-      initialScreeningReason: new FormControl('', [Validators.required]),
-      lastNegativeDate: new FormControl('', [Validators.required]),
-      positiveHIVDate: new FormControl('', [Validators.required]),
-      hlaB5701Typing: new FormControl('', [Validators.required]),
-      screeningCircumstance: new FormControl('', [Validators.required]),
-      viralType: new FormControl('', [Validators.required]),
-      contaminationDate: new FormControl('', [Validators.required]),
-      cdcStage: new FormControl('', [Validators.required])
-    };
+      address: new FormControl(''),
+      nationality: new FormControl(''),
+      weight: new FormControl(''),
+      height: new FormControl(''),
+      maritalStatus: new FormControl(''),
+      children: new FormControl(''),
+      housing: new FormControl(''),
+      housingType: new FormControl(''),
+      educationLevel: new FormControl(''),
+      smoking: new FormControl(''),
+      alcohol: new FormControl(''),
+      drugUse: new FormControl(''),
+      physicalActivity: new FormControl(''),
+      bodyTemperature: new FormControl(''),
+      heartRate: new FormControl(''),
+      bloodPressure: new FormControl(''),
+      contaminationMode: new FormControl(''),
+      initialScreeningType: new FormControl(''),
+      initialScreeningReason: new FormControl(''),
+      lastNegativeDate: new FormControl(''),
+      positiveHIVDate: new FormControl(''),
+      hlaB5701Typing: new FormControl(''),
+      screeningCircumstance: new FormControl(''),
+      viralType: new FormControl(''),
+      contaminationDate: new FormControl(''),
+      cdcStage: new FormControl('')
+    }
+  
 
     this.PatientForm = this.fb.group(formControls);
+
+  }
+  get lastNameControl(): FormControl {
+    return this.PatientForm.get('lastName') as FormControl;
+  }
+  get firstNameControl(): FormControl {
+    return this.PatientForm.get('firstName') as FormControl;
+  }
+  get birthDateControl(): FormControl {
+    return this.PatientForm.get('birthDate') as FormControl;
+  }
+  get cityControl(): FormControl {
+    return this.PatientForm.get('city') as FormControl;
+  }
+  get postalCodeControl(): FormControl {
+    return this.PatientForm.get('postalCode') as FormControl;
+  }
+  get phoneNumberControl(): FormControl {
+    return this.PatientForm.get('phoneNumber') as FormControl;
+  }
+  isInvalidAndTouchedOrDirty(control: AbstractControl | null): boolean {
+    return (control as FormControl).invalid && ((control as FormControl).touched || (control as FormControl).dirty);
+
   }
 
-  // Getters pour accéder aux champs du formulaire
-  get lastName() { return this.PatientForm.get('lastName'); }
-  get firstName() { return this.PatientForm.get('firstName'); }
-  get birthDate() { return this.PatientForm.get('birthDate'); }
-  get gender() { return this.PatientForm.get('gender'); }
-  get phoneNumber() { return this.PatientForm.get('phoneNumber'); }
-  get city() { return this.PatientForm.get('city'); }
-  get region() { return this.PatientForm.get('region'); }
-  get postalCode() { return this.PatientForm.get('postalCode'); }
-  get address() { return this.PatientForm.get('address'); }
-  get nationality() { return this.PatientForm.get('nationality'); }
-  get weight() { return this.PatientForm.get('weight'); }
-  get height() { return this.PatientForm.get('height'); }
-  get maritalStatus() { return this.PatientForm.get('maritalStatus'); }
-  get children() { return this.PatientForm.get('children'); }
-  get housing() { return this.PatientForm.get('housing'); }
-  get housingType() { return this.PatientForm.get('housingType'); }
-  get educationLevel() { return this.PatientForm.get('educationLevel'); }
-  get smoking() { return this.PatientForm.get('smoking'); }
-  get alcohol() { return this.PatientForm.get('alcohol'); }
-  get drugUse() { return this.PatientForm.get('drugUse'); }
-  get physicalActivity() { return this.PatientForm.get('physicalActivity'); }
-  get bodyTemperature() { return this.PatientForm.get('bodyTemperature'); }
-  get heartRate() { return this.PatientForm.get('heartRate'); }
-  get bloodPressure() { return this.PatientForm.get('bloodPressure'); }
-  get contaminationMode() { return this.PatientForm.get('contaminationMode'); }
-  get initialScreeningType() { return this.PatientForm.get('initialScreeningType'); }
-  get initialScreeningReason() { return this.PatientForm.get('initialScreeningReason'); }
-  get lastNegativeDate() { return this.PatientForm.get('lastNegativeDate'); }
-  get positiveHIVDate() { return this.PatientForm.get('positiveHIVDate'); }
-  get hlaB5701Typing() { return this.PatientForm.get('hlaB5701Typing'); }
-  get screeningCircumstance() { return this.PatientForm.get('screeningCircumstance'); }
-  get viralType() { return this.PatientForm.get('viralType'); }
-  get contaminationDate() { return this.PatientForm.get('contaminationDate'); }
-  get cdcStage() { return this.PatientForm.get('cdcStage'); }
+  logInvalidFields() {
+    console.log("🔴 Champs invalides dans le formulaire :");
+
+    Object.keys(this.PatientForm.controls).forEach(key => {
+      const control = this.PatientForm.get(key);
+      if (control?.invalid) {
+        console.log(`❌ Champ : ${key}`);
+        console.log("   ↳ Erreurs :", control.errors);
+      }
+    });
+  }
 
   addNewPatient() {
+    this.PatientForm.markAllAsTouched();
+    if (this.PatientForm.invalid) {
+      console.log("🚨 Formulaire invalide !");
+      this.logInvalidFields(); // 🔍 Afficher les erreurs des champs invalides
+      return;
+    }
+    console.log("Valeurs du formulaire :", this.PatientForm.value);
+    console.log("Formulaire valide ?", this.PatientForm.valid);
+
+
+
     let data = this.PatientForm.value;
-    console.log(data);
-    let patient = new Patient(
-      undefined,
-      data.lastName,
-      data.firstName,
-      data.birthDate,
-      data.gender,
-      data.phoneNumber,
-      data.city,
-      data.region,
-      data.postalCode,
-      data.address,
-      data.nationality,
-      data.weight,
-      data.height,
-      data.maritalStatus,
-      data.children,
-      data.housing,
-      data.housingType,
-      data.educationLevel,
-      data.smoking,
-      data.alcohol,
-      data.drugUse,
-      data.physicalActivity,
-      data.bodyTemperature,
-      data.heartRate,
-      data.bloodPressure,
-      data.contaminationMode,
-      data.initialScreeningType,
-      data.initialScreeningReason,
-      data.lastNegativeDate,
-      data.positiveHIVDate,
-      data.hlaB5701Typing,
-      data.screeningCircumstance,
-      data.viralType,
-      data.contaminationDate,
-      data.cdcStage
+    console.log("✅ Formulaire valide :", data);
+
+    let patient = new Patient(undefined,
+      data.lastName, data.firstName, data.birthDate, data.gender,
+      data.phoneNumber, data.city, data.region, data.postalCode,
+      data.address, data.nationality, data.weight, data.height,
+      data.maritalStatus, data.children, data.housing, data.housingType,
+      data.educationLevel, data.smoking, data.alcohol, data.drugUse,
+      data.physicalActivity, data.bodyTemperature, data.heartRate,
+      data.bloodPressure, data.contaminationMode, data.initialScreeningType,
+      data.initialScreeningReason, data.lastNegativeDate, data.positiveHIVDate,
+      data.hlaB5701Typing, data.screeningCircumstance, data.viralType,
+      data.contaminationDate, data.cdcStage
     );
 
-    console.log(patient);
-
-    if (this.PatientForm.invalid) {
-      this.messageCommande = `<div class="alert alert-warning" role="alert">
-        Tous les champs sont obligatoires !
-      </div>`;
-    } else {
-      this.service.addPatient(patient).subscribe(
-        res => {
-          console.log(res);
-          this.messageCommande = `<div class="alert alert-success" role="alert">
-          Patient ajouté avec succès !
-        </div>`;
+    this.crudService.addPatient(patient).subscribe(
+      res => {
+        console.log("✅ Patient ajouté avec succès :", res);
+        this.messageCommande = "Patient ajouté avec succès !";
+        setTimeout(() => {
           this.router.navigate(['/listpatient']);
-        },
-        err => {
-          console.log(err);
-          this.messageCommande = `<div class="alert alert-danger" role="alert">
-          Problème de serveur !
-        </div>`;
-        }
-      );
-    }
+        }, 2000);
+      },
+      err => {
+        console.log("❌ Erreur serveur :", err);
+        this.messageCommande = "Problème de serveur !";
+      }
+    );
   }
+
+
 
   ngOnInit(): void {}
 }

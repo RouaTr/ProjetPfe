@@ -62,11 +62,11 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
+                        <tr *ngFor="let patient of listPatients">
 
-                          <td>01</td>
-                          <td>Joseph Parker</td>
-                          <td>VLZ-452</td>
+                          <td>{{patient.id}}</td>
+                          <td>{{patient.lastName}} {{patient.firstName}}</td>
+                          <td>{{patient.gender}}</td>
                           <td>VLZ1400087402</td>
                           <td>Joseph Parker</td>
                           <td>Alexis Clarke</td>
@@ -80,7 +80,7 @@
                                 <i class="ri-more-fill align-middle"></i>
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a href="#!" class="dropdown-item"><i
+                                <li><a [routerLink]="['/medicalfolder', patient.id]" class="dropdown-item"><i
                                       class="ri-eye-fill align-bottom me-2 text-muted"></i> Consulter dossier médical
                                   </a></li>
                                 <li><a class="dropdown-item edit-item-btn"><i

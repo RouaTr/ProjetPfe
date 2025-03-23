@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Multipurpose, super flexible, powerful, clean modern responsive bootstrap 5 admin template">
+  <title>Dossier Médical</title>
+</head>
+
+<body class="app-wrapper default">
+  <app-menu></app-menu>
+  <div class="app-content">
+    <app-header></app-header>
+    <div class="container-fluid">
+      <div class="container">
+        <h3> Dossier Médical:</h3>
+
+        <div class="tabs">
+          <a [routerLink]="['/medicalfolder', patient.id]" class="tab">Patient</a>
+          <a href="medhistory" class="tab">Antécédents</a>
+          <a href="clinicsymptoms" class="tab">Signes Cliniques</a>
+          <a href="fonctsymptoms" class="tab">Signes Fonctionnelles</a>
+          <a href="laboratory" class="tab">Résultats Biologiques</a>
+          <a href="observation" class="tab">Observation</a>
+        </div>
+      </div>
+      <main>
+        <div class="container mt-4">
+
+
+          <div *ngIf="patient; else loading">
+            <div class="card">
+
+              <div class="card-body">
+                  <h5>Administratif</h5><br>
+
+                <p><strong>Nom :</strong> {{ patient.lastName }}</p>
+                <p><strong>Prénom :</strong> {{ patient.firstName }}</p>
+                <p><strong>Date de Naissance :</strong> {{ patient.birthDate }}</p>
+                <p><strong>Sexe :</strong> {{ patient.gender }}</p>
+                <p><strong>Téléphone :</strong> {{ patient.phoneNumber }}</p>
+                <p><strong>Ville :</strong> {{ patient.city }}</p>
+                <p><strong>Région :</strong> {{ patient.region }}</p>
+                <p><strong>Code Postal :</strong> {{ patient.postalCode }}</p>
+                <p><strong>Adresse:</strong> {{ patient.address }}</p>
+                <p><strong>Nationalité :</strong> {{ patient.nationality }}</p><br>
+
+                  <h5>Données Démographiques</h5>
+                <br>
+                <p><strong>Poids:</strong> {{ patient.weight }}</p>
+                <p><strong>Taille :</strong> {{ patient.height }}</p>
+                <p><strong>Statut matrimonial:</strong> {{ patient.maritalStatus }}</p>
+                <p><strong>Nombre d'enfants :</strong> {{ patient.children }}</p>
+                <p><strong>Logement:</strong> {{ patient.housing }}</p>
+                <p><strong>Type de Logement :</strong> {{ patient.housingType }}</p>
+                <p><strong>Niveau d'éducation:</strong> {{ patient.educationLevel }}</p>
+                <p><strong>Tabagisme :</strong> {{ patient.smoking }}</p>
+                <p><strong>Alcool :</strong> {{ patient.alcohol }}</p>
+                <p><strong>Consommation de drogues :</strong> {{ patient.drugUse }}</p>
+                <p><strong>Activité physique :</strong> {{ patient.physicalActivity }}</p>
+                <br>
+                  <h5>Signes Vitaux</h5>
+                <br>
+                <p><strong>Température corporelle :</strong> {{ patient.bodyTemperature }}</p>
+                <p><strong>Fréquence cardiaque :</strong> {{ patient.heartRate }}</p>
+                <p><strong>Pression artérielle :</strong> {{ patient.bloodPressure }}</p>
+                <br>
+                  <h5>Epidémiologie</h5>
+                <br>
+                <p><strong>Mode de contamination :</strong> {{ patient.contaminationMode }}</p>
+                <p><strong>Type de dépistage initial :</strong> {{ patient.initialScreeningType }}</p>
+                <p><strong>Motif du dépistage initial :</strong> {{ patient.initialScreeningReason }}</p>
+                <p><strong>Dernier test négatif :</strong> {{ patient.lastNegativeDate }}</p>
+                <p><strong>Date de séropositivité VIH :</strong> {{ patient.positiveHIVDate }}</p>
+                <p><strong>Typage HLA-B5701 :</strong> {{ patient.hlaB5701Typing }}</p>
+                <p><strong>Circonstances du dépistage :</strong> {{ patient.screeningCircumstance }}</p>
+                <p><strong>Type de virus :</strong> {{ patient.viralType }}</p>
+                <p><strong>Date de contamination :</strong> {{ patient.contaminationDate }}</p>
+                <p><strong>Stade CDC :</strong> {{ patient.cdcStage }}</p>
+                <button class="btn btn-primary" (click)="updatePatient()" type="submit">Modifier</button>
+
+              </div>
+
+
+            </div>
+          </div>
+
+          <!-- Affichage d’un message de chargement -->
+          <ng-template #loading>
+            <p>Chargement des informations du patient...</p>
+          </ng-template>
+
+        </div>
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
