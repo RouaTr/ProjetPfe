@@ -19,12 +19,13 @@
         <h3> Dossier Médical:</h3>
 
         <div class="tabs">
-          <a [routerLink]="['/medicalfolder', patient.id]" class="tab">Patient</a>
-          <a href="medhistory" class="tab">Antécédents</a>
-          <a href="clinicsymptoms" class="tab">Signes Cliniques</a>
-          <a href="fonctsymptoms" class="tab">Signes Fonctionnelles</a>
+          <a [routerLink]="['/medicalfolder', patient?.id]" class="tab">Patient</a>
+          <a [routerLink]="['/medicalfolder/listmedicalhistory', patient?.id]" class="tab">Antécédents</a>
+          <a [routerLink]="['/medicalfolder/listclinicalsymptoms', patient?.id]" class="tab">Signes Cliniques</a>
+          <a [routerLink]="['/medicalfolder/listfunctionalsymptoms', patient?.id]" class="tab">Signes Fonctionnels</a>
+
           <a href="laboratory" class="tab">Résultats Biologiques</a>
-          <a href="observation" class="tab">Observation</a>
+          <a [routerLink]="['/medicalfolder/listobservation', patient?.id]" class="tab">Observation</a>
         </div>
       </div>
       <main>

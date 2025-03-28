@@ -40,11 +40,11 @@
                       <option value="ist">IST</option>
                     </select>
                     <div
-                      *ngIf="MedicalHistoryForm.get('historyType')?.invalid && MedicalHistoryForm.get('historyType')?.touched">
+                      *ngIf="updateForm.get('historyType')?.invalid && updateForm.get('historyType')?.touched">
                       <small class="text-danger">Veuillez sélectionner un type d’antécédent.</small>
                     </div>
 
-                    <form [formGroup]="MedicalHistoryForm" (ngSubmit)="addNewMedicalHistory()">
+                    <form [formGroup]="updateForm" (ngSubmit)="updateMedicalHistory()" >
 
                       <!-- Vaccination -->
                       <div *ngIf="selectedType === 'vaccin'">
@@ -235,7 +235,7 @@
 
                       <!-- Submit -->
                       <button type="submit" class="btn btn-primary" style="background-color: #2f2594; color: white;"
-                        [disabled]="MedicalHistoryForm.invalid">
+                        [disabled]="updateForm.invalid">
                         Enregistrer
                       </button>
                     </form>

@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { Observation } from '../Entity/Observation.Entity';
-import { CrudService } from '../service/crud.service';
+import { FunctionalSymptoms } from '../Entity/FunctionalSymptoms.Entity';
 import { ActivatedRoute } from '@angular/router';
 import { Patient } from '../Entity/Patient.Entity';
+import { CrudService } from '../service/crud.service';
 
 @Component({
-  selector: 'app-list-observation',
-  templateUrl: './list-observation.component.html',
-  styleUrls: ['./list-observation.component.css']
+  selector: 'app-list-functional-symptoms',
+  templateUrl: './list-functional-symptoms.component.html',
+  styleUrls: ['./list-functional-symptoms.component.css']
 })
-export class ListObservationComponent implements OnInit {
+export class ListFunctionalSymptomsComponent implements OnInit {
   patient: Patient | null = null;
-  observations: Observation[] = [];
+  functionalsymptoms: FunctionalSymptoms[] = [];
   patientId!: number;
 
   constructor(
@@ -27,7 +27,7 @@ export class ListObservationComponent implements OnInit {
         this.patientId = +id;
         console.log("ID du patient récupéré :", this.patientId);
         this.loadPatientData();
-        this.getObservations();
+        this.getFunctionalSymptoms();
       } else {
         console.error("Erreur : patientId non récupéré");
       }
@@ -46,14 +46,19 @@ export class ListObservationComponent implements OnInit {
     });
   }
 
-  getObservations(): void {
-    this.crudService.getObservationsByPatientId(this.patientId).subscribe({
+  getFunctionalSymptoms(): void {
+    this.crudService.getFunctionalSymptomsByPatientId(this.patientId).subscribe({
       next: (data) => {
-        this.observations = data;
+        this.functionalsymptoms = data.filter(symptom => symptom.patient?.id === this.patientId);
+        console.log("Signes fonctionnels du patient :", this.functionalsymptoms);
       },
       error: (err) => {
-        console.warn('Erreur lors de la récupération des observations :', err);
+        console.warn("Erreur lors de la récupération des signes fonctionnels :", err);
       }
     });
+  }
+
+  formatValue(value: boolean): string {
+    return value ? 'Oui' : 'Non';
   }
 }

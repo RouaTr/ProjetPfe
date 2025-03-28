@@ -124,9 +124,17 @@ export class AddPatientComponent {
     this.crudService.addPatient(patient).subscribe(
       res => {
         console.log("✅ Patient ajouté avec succès :", res);
+
+        // 🔹 Stocker l'ID du patient dans localStorage
+        if (res && res.id) {
+          localStorage.setItem('selectedPatientId', res.id.toString());
+        }
+
         this.messageCommande = "Patient ajouté avec succès !";
+
+        // Redirection vers la liste des patients ou l'onglet Observation
         setTimeout(() => {
-          this.router.navigate(['/listpatient']);
+          this.router.navigate(['/functionalsymptoms']); // Change '/observation' selon ta route
         }, 2000);
       },
       err => {
@@ -134,6 +142,7 @@ export class AddPatientComponent {
         this.messageCommande = "Problème de serveur !";
       }
     );
+
   }
 
 

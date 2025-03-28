@@ -20,6 +20,13 @@ import {HttpClientModule} from '@angular/common/http';
 import { ListObservationComponent } from './list-observation/list-observation.component';
 import { MedicalFolderComponent } from './medical-folder/medical-folder.component';
 import { UpdatePatientComponent } from './update-patient/update-patient.component';
+import { UpdateObservationComponent } from './update-observation/update-observation.component';
+import { ListFunctionalSymptomsComponent } from './list-functional-symptoms/list-functional-symptoms.component';
+import { UpdateFunctionalSymptomsComponent } from './update-functional-symptoms/update-functional-symptoms.component';
+import { ListMedicalHistoryComponent } from './list-medical-history/list-medical-history.component';
+import { UpdateMedicalHistoryComponent } from './update-medical-history/update-medical-history.component';
+import { UpdateClinicalSymptomsComponent } from './update-clinical-symptoms/update-clinical-symptoms.component';
+import { ListClinicalSymptomsComponent } from './list-clinical-symptoms/list-clinical-symptoms.component';
 
 
 @NgModule({
@@ -39,7 +46,15 @@ import { UpdatePatientComponent } from './update-patient/update-patient.componen
     LaboratoryComponent,
     ListObservationComponent,
     MedicalFolderComponent,
-    UpdatePatientComponent
+    UpdatePatientComponent,
+    UpdateObservationComponent,
+    ListFunctionalSymptomsComponent,
+    UpdateFunctionalSymptomsComponent,
+    ListMedicalHistoryComponent,
+    UpdateMedicalHistoryComponent,
+    UpdateClinicalSymptomsComponent,
+    ListClinicalSymptomsComponent,
+  
   ],
   imports: [
     BrowserModule,

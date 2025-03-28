@@ -1,19 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { ClinicalSymptoms } from '../Entity/ClinicalSymptoms.Entity';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { Patient } from '../Entity/Patient.Entity';
 import { CrudService } from '../service/crud.service';
 
 @Component({
-  selector: 'app-cliniacl-symptoms',
-  templateUrl: './cliniacl-symptoms.component.html',
-  styleUrls: ['./cliniacl-symptoms.component.css']
+  selector: 'app-update-clinical-symptoms',
+  templateUrl: './update-clinical-symptoms.component.html',
+  styleUrls: ['./update-clinical-symptoms.component.css']
 })
-export class CliniaclSymptomsComponent implements OnInit {
-  ClinicalSymptomsForm: FormGroup;
-  patientId: number | null = null;
-  messageCommande = "";
+export class UpdateClinicalSymptomsComponent {
 
-  // Liste des options par catégorie
+  patient: Patient | null = null;
+  ClinicalSymptomsForm: FormGroup;
+  patientId: number ;
+  messageCommande = "";
+  symptomId: number;
+
+  currentClinicalSymptoms!: ClinicalSymptoms;
+
   options: { [key: string]: string[] } = {
     generalSigns: [
       'Adénopathie isolée', 'Adénopathies généralisées', 'Amaigrissement', 'Cachexie',
@@ -76,9 +83,10 @@ export class CliniaclSymptomsComponent implements OnInit {
   ]
 
   };
+
   optionsKeys: string[] = [];
 
-  constructor(private service: CrudService, private router: Router, private fb: FormBuilder) {
+  constructor(private service: CrudService, private router: Router, private fb: FormBuilder, private route: ActivatedRoute) {
     let formControls = {
       generalSigns: new FormArray(this.options['generalSigns'].map(() => new FormControl(false))),
       dermatological: new FormArray(this.options['dermatological'].map(() => new FormControl(false))),
@@ -92,13 +100,11 @@ export class CliniaclSymptomsComponent implements OnInit {
       ophthalmological: new FormArray(this.options['ophthalmological'].map(() => new FormControl(false))),
       pulmonary: new FormArray(this.options['pulmonary'].map(() => new FormControl(false))),
       puberty: new FormArray(this.options['puberty'].map(() => new FormControl(false))),
-
       clinicalSymptomsDate: ['', Validators.required]
     };
 
     this.ClinicalSymptomsForm = fb.group(formControls);
   }
-
 
   ngOnInit(): void {
     this.optionsKeys = Object.keys(this.options);
@@ -109,6 +115,68 @@ export class CliniaclSymptomsComponent implements OnInit {
     } else {
       console.error("⚠️ Aucun patient sélectionné !");
     }
+
+    // Récupérer l'ID du symptôme à mettre à jour à partir de l'URL
+    this.route.params.subscribe(params => {
+      this.symptomId = params['id'];
+      if (this.symptomId) {
+        this.loadClinicalSymptoms(this.symptomId);
+      }
+    });
+  }
+
+  loadClinicalSymptoms(symptomId: number): void {
+    this.service.findClinicalSymptomsById(this.symptomId).subscribe(
+
+      (res: any) => {
+        console.log("✅ Symptômes cliniques récupérés :", res);
+        const data = res;
+
+        // Remplir le formulaire avec les données
+        this.ClinicalSymptomsForm.patchValue({
+          clinicalSymptomsDate: data.clinicalSymptomsDate
+        });
+
+        // Transformer les chaînes en tableaux et mettre à jour les contrôles des FormArray
+        this.setSymptomsArray('generalSigns', data.generalSigns);
+        this.setSymptomsArray('dermatological', data.dermatological);
+        this.setSymptomsArray('ent', data.ent);
+        this.setSymptomsArray('psychiatric', data.psychiatric);
+        this.setSymptomsArray('cardiovascular', data.cardiovascular);
+        this.setSymptomsArray('digestive', data.digestive);
+        this.setSymptomsArray('lipodystrophy', data.lipodystrophy);
+        this.setSymptomsArray('genitourinary', data.genitourinary);
+        this.setSymptomsArray('ophthalmological', data.ophthalmological);
+        this.setSymptomsArray('pulmonary', data.pulmonary);
+        this.setSymptomsArray('puberty', data.puberty);
+
+
+      },
+      (err) => {
+        console.error("❌ Erreur lors de la récupération des symptômes :", err);
+      }
+    );
+  }
+
+  setSymptomsArray(group: string, symptoms: string | null | undefined): void {
+    const control = this.ClinicalSymptomsForm.get(group) as FormArray;
+
+    // Vérifier si symptoms est défini, sinon utiliser une chaîne vide
+    const symptomsArray = symptoms ? symptoms.split(', ').map(symptom => symptom.trim()) : [];
+
+    if (!control) {
+      console.error(`Le FormArray '${group}' est introuvable.`);
+      return;
+    }
+
+    if (!this.options[group]) {
+      console.error(`Les options pour '${group}' sont introuvables.`);
+      return;
+    }
+
+    this.options[group].forEach((option, index) => {
+      control.controls[index]?.setValue(symptomsArray.includes(option));
+    });
   }
 
 
@@ -124,64 +192,64 @@ export class CliniaclSymptomsComponent implements OnInit {
         control.removeAt(index);
       }
     }
-
   }
 
   convertArrayToString(arr: any[], options: string[]): string {
-    // Filtrer les symptômes sélectionnés
     return arr
       .map((selected, index) => selected ? options[index] : null)
       .filter(symptom => symptom !== null)
       .join(', ');
   }
 
+  isInvalidAndTouchedOrDirty(control: AbstractControl | null): boolean {
+    return (control as FormControl).invalid && ((control as FormControl).touched || (control as FormControl).dirty);
 
-    isInvalidAndTouchedOrDirty(control: AbstractControl | null): boolean {
-        return (control as FormControl).invalid && ((control as FormControl).touched || (control as FormControl).dirty);
+  }
 
-      }
-      logInvalidFields() {
-        console.log("🔴 Champs invalides dans le formulaire :");
-        Object.keys(this.ClinicalSymptomsForm.controls).forEach(key => {
-          const control = this.ClinicalSymptomsForm.get(key);
-          if (control?.invalid) {
-            console.log(`❌ Champ : ${key}`);
-            console.log("   ↳ Erreurs :", control.errors);
-            // Ajoutez un contrôle spécifique pour les FormArrays
-            if (control instanceof FormArray) {
-              control.controls.forEach((ctrl, index) => {
-                if (ctrl.invalid) {
-                  console.log(`   ↳ Erreur dans FormArray ${key} à l'index ${index}`);
-                }
-              });
+  logInvalidFields() {
+    console.log("🔴 Champs invalides dans le formulaire :");
+    Object.keys(this.ClinicalSymptomsForm.controls).forEach(key => {
+      const control = this.ClinicalSymptomsForm.get(key);
+      if (control?.invalid) {
+        console.log(`❌ Champ : ${key}`);
+        console.log("   ↳ Erreurs :", control.errors);
+        if (control instanceof FormArray) {
+          control.controls.forEach((ctrl, index) => {
+            if (ctrl.invalid) {
+              console.log(`   ↳ Erreur dans FormArray ${key} à l'index ${index}`);
             }
-          }
-        });
+          });
+        }
       }
+    });
+  }
 
-    get clinicalSymptomsDate() { return this.ClinicalSymptomsForm.get('clinicalSymptomsDate'); }
+  get clinicalSymptomsDate() { return this.ClinicalSymptomsForm.get('clinicalSymptomsDate'); }
 
-  addNewClinicalSymptoms() {
+  updateClinicalSymptoms() {
+
     this.ClinicalSymptomsForm.markAllAsTouched();
     if (this.ClinicalSymptomsForm.invalid) {
       console.log("🚨 Formulaire invalide !");
-      this.logInvalidFields(); // 🔍 Afficher les erreurs des champs invalides
+      this.logInvalidFields(); // Afficher les erreurs des champs invalides
       return;
     }
+
     if (!this.patientId) {
       console.error("Erreur : Aucun ID patient récupéré !");
       this.messageCommande = `<div class="alert alert-danger" role="alert">
-        Impossible d'ajouter les signes fonctionnels : aucun patient enregistré.
+        Impossible de mettre à jour les signes fonctionnels : aucun patient enregistré.
       </div>`;
       return;
     }
-      if (this.ClinicalSymptomsForm.get('clinicalSymptomsDate')?.invalid) {
-    console.log("🚨 La date est obligatoire !");
-    this.messageCommande = `<div class="alert alert-danger" role="alert">
-      Veuillez renseigner la date avant de soumettre le formulaire.
-    </div>`;
-    return;
-  }
+
+    if (this.ClinicalSymptomsForm.get('clinicalSymptomsDate')?.invalid) {
+      console.log("🚨 La date est obligatoire !");
+      this.messageCommande = `<div class="alert alert-danger" role="alert">
+        Veuillez renseigner la date avant de soumettre le formulaire.
+      </div>`;
+      return;
+    }
     console.log("📅 Date enregistrée :", this.ClinicalSymptomsForm.value.clinicalSymptomsDate);
 
     let data = this.ClinicalSymptomsForm.value;
@@ -207,16 +275,21 @@ export class CliniaclSymptomsComponent implements OnInit {
 
     console.log("📤 Données envoyées :", JSON.stringify(data, null, 2));
 
+    let clinicalsymptoms = new ClinicalSymptoms();
+        Object.assign(clinicalsymptoms, data);
+        clinicalsymptoms.id = this.symptomId;
+       
 
 
-    this.service.addClinicalSymptoms(this.patientId, data).subscribe(
-      res => {
-        console.log("✅ Réponse du serveur :", res);
-        this.router.navigate([`/medicalfolder/listclinicalsymptoms/${this.patientId}`]);
+    this.service.updateClinicalSymptoms(this.symptomId, this.patientId, clinicalsymptoms).subscribe({
+      next: (res) => {
+        console.log("✅ signes cliniques mise à jour avec succès :", res);
+        this.router.navigate(['/medicalfolder/listclinicalsymptoms', this.patientId]);
       },
-      err => {
-        console.error("❌ Erreur lors de l'envoi :", err);
+      error: (err) => {
+        console.error("⚠️ Erreur lors de la mise à jour :", err);
       }
-    );
+    });
   }
-}
+  }
+

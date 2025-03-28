@@ -19,7 +19,7 @@
       <div class="container-fluid">
         <app-tabs></app-tabs>
         <main>
-          <form action="" method="POST" [formGroup]="FunctionalSymptomsForm" (ngSubmit)="addNewFunctionalSymptoms()">
+          <form action="" method="POST" [formGroup]="updateForm" (ngSubmit)="updateFunctionalSymptoms()">
             <div class="row m-1">
               <div class="col-12">
                 <div class="card">
@@ -132,13 +132,6 @@
                             <td><input type="radio" name="libidoDisorders" value="false"
                                 formControlName="libidoDisorders"></td>
                           </tr>
-                          <tr><td><h4>Date d'ajout des signes fonctionnels</h4>
-                            <input type="date" id="date_naissance" name="date_naissance" class="form-control"
-                            formControlName="functionalSymptomsDate"
-                            [class.is-invalid]="isInvalidAndTouchedOrDirty(functionalSymptomsDateControl)">
-                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(functionalSymptomsDateControl)">
-                            Date d'ajout obligatoire
-                          </small></td></tr>
                         </tbody>
                       </table>
                     </div>

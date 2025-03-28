@@ -3,10 +3,11 @@
 
   <div class="tabs">
     <a href="newpatient" class="tab">Nouveau Patient</a>
-    <a href="medhistory" class="tab">Antécédents</a>
-    <a href="clinicsymptoms" class="tab">Signes Cliniques</a>
-    <a href="fonctsymptoms" class="tab">Signes Fonctionnelles</a>
+    <a href="medicalhistory" class="tab">Antécédents</a>
+    <a [routerLink]="['/clinicalsymptoms']" *ngIf="patientId" class="tab">Signes Cliniques</a>
+    <a [routerLink]="['/functionalsymptoms']" *ngIf="patientId" class="tab">Signes Fonctionnelles</a>
     <a href="laboratory" class="tab">Résultats Biologiques</a>
-    <a href="observation" class="tab">Observation</a>
+    <a [routerLink]="['/observation']" *ngIf="patientId" class="tab">Observation</a>
+
   </div>
 </div>

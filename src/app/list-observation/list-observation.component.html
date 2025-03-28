@@ -1,1 +1,95 @@
-<p>list-observation works!</p>
+<!doctype html>
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
+  data-sidebar-image="none" data-preloader="disable">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Liste des patients</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+  <meta content="Themesbrand" name="author" />
+</head>
+
+<body>
+  <div class="app-wrapper default">
+    <app-menu></app-menu>
+    <div class="app-content">
+      <app-header></app-header>
+
+      <div class="container-fluid">
+        <div class="tabs">
+          <a [routerLink]="['/medicalfolder', patient?.id]" class="tab">Patient</a>
+          <a [routerLink]="['/medicalfolder/listmedicalhistory', patient?.id]" class="tab">Antécédents</a>
+          <a href="clinicsymptoms" class="tab">Signes Cliniques</a>
+          <a [routerLink]="['/medicalfolder/listfunctionalsymptoms', patient?.id]" class="tab">Signes Fonctionnels</a>
+
+          <a href="laboratory" class="tab">Résultats Biologiques</a>
+          <a [routerLink]="['/medicalfolder/listobservation', patient?.id]" class="tab">Observation</a>
+        </div>
+      </div>
+
+      <main>
+        <div class="mb-3 d-flex justify-content-between align-items-center">
+          <a href="/observation" class="btn btn-primary">
+            <i class="ri-user-add-line"></i> + nouvelle Observation
+          </a>
+          <!-- Barre de recherche -->
+          <div class="input-group" style="max-width: 300px;">
+            <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher un patient...">
+            <span class="input-group-text"><i class="ri-search-line"></i></span>
+          </div>
+        </div>
+
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">Liste des Observations </h5>
+                </div>
+                <div class="card-body">
+                  <table id="scroll-horizontal" class="table nowrap align-middle" style="width:100%">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Date d'observation</th>
+                        <th>Observation</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let observation of observations">
+                        <td>{{ observation?.id }}</td>
+                        <td>{{ observation?.observationDate }}</td>
+                        <td>{{ observation?.observationDetails }}</td>
+                        <td>
+                          <div class="dropdown d-inline-block">
+                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
+                              data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="ri-more-fill align-middle"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                              <li><a [routerLink]="['/medicalfolder/listobservation/updateobservation', observation.id]" class="dropdown-item">
+                                <i class="ri-eye-fill align-bottom me-2 text-muted"></i> Modifier
+                                </a></li>
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
+                      <!-- Affichage si la liste est vide -->
+                      <tr *ngIf="observations.length === 0">
+                        <td colspan="4" class="text-center">Aucune observation trouvée</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>

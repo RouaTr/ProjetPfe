@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Multipurpose, super flexible, powerful, clean modern responsive bootstrap 5 admin template">
+  <title>Dossier Médical</title>
+</head>
+
+<body class="app-wrapper default">
+  <app-menu></app-menu>
+  <div class="app-content">
+    <app-header></app-header>
+    <div class="container-fluid">
+      <div class="container">
+        <h3> Dossier Médical:</h3>
+
+        <div class="tabs">
+          <a [routerLink]="['/medicalfolder', patient?.id]" class="tab">Patient</a>
+          <a [routerLink]="['/medicalfolder/listmedicalhistory', patient?.id]" class="tab">Antécédents</a>
+          <a [routerLink]="['/medicalfolder/listclinicalsymptoms', patient?.id]" class="tab">Signes Cliniques</a>
+          <a [routerLink]="['/medicalfolder/listfunctionalsymptoms', patient?.id]" class="tab">Signes Fonctionnels</a>
+
+          <a href="laboratory" class="tab">Résultats Biologiques</a>
+          <a [routerLink]="['/medicalfolder/listobservation', patient?.id]" class="tab">Observation</a>
+        </div>
+      </div>
+      <main>
+        <div class="mb-3 d-flex justify-content-between align-items-center">
+          <a href="/clinicalsymptoms" class="btn btn-primary">
+            <i class="ri-user-add-line"></i> + signes Cliniques
+          </a>
+          <!-- Barre de recherche -->
+          <div class="input-group" style="max-width: 300px;">
+            <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher ...">
+            <span class="input-group-text"><i class="ri-search-line"></i></span>
+          </div>
+        </div>
+        <div class="container mt-4">
+
+          <div *ngIf="clinicalsymptoms.length > 0; else loading">
+            <div class="card" *ngFor="let symptom of clinicalsymptoms">
+              <div class="card-body">
+                <h5>Signes Cliniques</h5><br>
+
+                <p *ngIf="symptom.generalSigns"><strong>Signes Généraux :</strong> {{ symptom.generalSigns }}</p>
+                <p *ngIf="symptom.dermatological"><strong>Dermatologique :</strong> {{ symptom.dermatological }}</p>
+                <p *ngIf="symptom.neuroMuscular"><strong>Neuro-Musculaire :</strong> {{ symptom.neuroMuscular }}</p>
+                <p *ngIf="symptom.ent"><strong>ENT :</strong> {{ symptom.ent }}</p>
+                <p *ngIf="symptom.psychiatric"><strong>Psychiatrique :</strong> {{ symptom.psychiatric }}</p>
+                <p *ngIf="symptom.cardiovascular"><strong>Cardiovasculaire :</strong> {{ symptom.cardiovascular }}</p>
+                <p *ngIf="symptom.digestive"><strong>Digestif :</strong> {{ symptom.digestive }}</p>
+                <p *ngIf="symptom.lipodystrophy"><strong>Lipodystrophie :</strong> {{ symptom.lipodystrophy }}</p>
+                <p *ngIf="symptom.genitourinary"><strong>Génito-Urinaire :</strong> {{ symptom.genitourinary }}</p>
+                <p *ngIf="symptom.ophthalmological"><strong>Ophtalmologique :</strong> {{ symptom.ophthalmological }}</p>
+                <p *ngIf="symptom.pulmonary"><strong>Pulmonaire :</strong> {{ symptom.pulmonary }}</p>
+                <p *ngIf="symptom.puberty"><strong>Puberté :</strong> {{ symptom.puberty }}</p>
+                <p *ngIf="symptom.clinicalSymptomsDate"><strong>Date :</strong> {{ symptom.clinicalSymptomsDate | date:'dd/MM/yyyy' }}</p>
+                <button class="btn btn-primary" (click)="updateClinicalSymptoms(symptom.id)" type="submit">Modifier</button>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Message de chargement si aucun symptôme n'est trouvé -->
+          <ng-template #loading>
+            <p>Chargement des informations des signes cliniques...</p>
+          </ng-template>
+
+          <!-- Affichage d’un message de chargement si aucun symptôme n’est trouvé -->
+          <ng-template #loading>
+            <p>Chargement des informations des signes cliniques...</p>
+          </ng-template>
+
+
+        </div>
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>

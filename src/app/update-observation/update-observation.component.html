@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Multipurpose, super flexible, powerful, clean modern responsive bootstrap 5 admin template">
+  <title>Dossier Médical</title>
+</head>
+
+<body>
+  <div class="app-wrapper default">
+    <app-menu></app-menu>
+    <div class="app-content">
+      <app-header></app-header>
+
+      <div class="container-fluid">
+        <div class="tabs">
+          <a [routerLink]="['/medicalfolder', patientId]" class="tab">Patient</a>
+          <a href="medhistory" class="tab">Antécédents</a>
+          <a href="clinicsymptoms" class="tab">Signes Cliniques</a>
+          <a href="fonctsymptoms" class="tab">Signes Fonctionnelles</a>
+          <a href="laboratory" class="tab">Résultats Biologiques</a>
+          <a *ngIf="patient?.id" [routerLink]="['/medicalfolder/listobservation', patient.id]" class="tab">
+            Observation
+          </a>
+                  </div>
+        <main>
+          <form [formGroup]="updateForm" (ngSubmit)="updateObservation()">
+            <div class="row m-1">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h4 class="header-title">Nouvelle Observation</h4>
+                  </div>
+
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="mb-3">
+
+                          <!-- Champ Date -->
+                          <label for="date" class="form-label">Date :</label>
+                          <input type="date" id="date" class="form-control" formControlName="observationDate" required>
+                          <div *ngIf="observationDateControl?.invalid && (observationDateControl?.touched || observationDateControl?.dirty)">
+                            <small class="text-danger">La date est obligatoire.</small>
+                          </div>
+                          <br><br>
+
+                          <!-- Champ Observation -->
+                          <label for="observation" class="form-label">Observation :</label>
+                          <textarea id="observation" class="form-control" formControlName="observationDetails" required></textarea>
+                          <div *ngIf="observationDetailsControl?.invalid && (observationDetailsControl?.touched || observationDetailsControl?.dirty)">
+                            <small class="text-danger">L'observation est obligatoire et doit contenir au moins 10 caractères.</small>
+                          </div>
+                          <br><br>
+
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card-footer">
+                    <button type="submit" class="btn btn-primary" style="background-color: #2f2594; color: white;" [disabled]="updateForm.invalid">
+                      Enregistrer
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </form>
+        </main>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
