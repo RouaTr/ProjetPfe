@@ -6,7 +6,7 @@ import { Observation } from '../Entity/Observation.Entity';
 import { FunctionalSymptoms } from '../Entity/FunctionalSymptoms.Entity';
 import { MedicalHistory } from '../Entity/MedicalHistory.Entity';
 import { ClinicalSymptoms } from '../Entity/ClinicalSymptoms.Entity';
-
+import { Laboratory } from '../Entity/Laboratory.Entity';
 @Injectable({
   providedIn: 'root'
 })
@@ -127,6 +127,28 @@ getClinicalSymptoms(): Observable<ClinicalSymptoms[]> {
 getClinicalSymptomsByPatientId(patientId: number): Observable<ClinicalSymptoms[]> {
   return this.http.get<ClinicalSymptoms[]>(`${this.apiUrl}/clinicalsymptoms?patientId=${patientId}`);
 }
+  //  **Gestion des Bilans**
+
+  addLaboratory(patientId: number, laboratory: Laboratory): Observable<Laboratory> {
+    const url = `${this.apiUrl}/laboratory?patientId=${patientId}`;
+    return this.http.post<Laboratory>(url, laboratory);
+  }
+
+  updateLaboratory(id: number, patientId: number,laboratory: Laboratory): Observable<Laboratory> {
+    const url = `${this.apiUrl}/laboratory/${id}?patientId=${patientId}`;
+    return this.http.put<Laboratory>(url, laboratory);
+  }
+  findLaboratoryById(id: number): Observable<Laboratory> {
+    return this.http.get<Laboratory>(`${this.apiUrl}/laboratory/${id}`);
+  }
+
+
+  getLaboratory(): Observable<Laboratory[]> {
+    return this.http.get<Laboratory[]>(`${this.apiUrl}/laboratory`);
+  }
+  getLaboratoryByPatientId(patientId: number): Observable<Laboratory[]> {
+    return this.http.get<Laboratory[]>(`${this.apiUrl}/laboratory/patient/${patientId}`);
+  }
 
 
 

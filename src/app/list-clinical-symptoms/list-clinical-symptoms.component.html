@@ -24,7 +24,7 @@
           <a [routerLink]="['/medicalfolder/listclinicalsymptoms', patient?.id]" class="tab">Signes Cliniques</a>
           <a [routerLink]="['/medicalfolder/listfunctionalsymptoms', patient?.id]" class="tab">Signes Fonctionnels</a>
 
-          <a href="laboratory" class="tab">Résultats Biologiques</a>
+          <a [routerLink]="['/medicalfolder/listlaboratory', patient?.id]" class="tab">Résultats Biologiques</a>
           <a [routerLink]="['/medicalfolder/listobservation', patient?.id]" class="tab">Observation</a>
         </div>
       </div>
@@ -35,7 +35,7 @@
           </a>
           <!-- Barre de recherche -->
           <div class="input-group" style="max-width: 300px;">
-            <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher ...">
+            <input type="date" id="searchPatient" class="form-control" placeholder="Rechercher ..." [(ngModel)]="searchDate" (input)="filterByDate()">
             <span class="input-group-text"><i class="ri-search-line"></i></span>
           </div>
         </div>

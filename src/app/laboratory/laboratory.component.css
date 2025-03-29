@@ -1,69 +1,33 @@
-
-
-/* Responsive */
-@media (max-width: 600px) {
-  .mh {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .mh a {
-    width: 80%;
-    text-align: center;
-  }
+h3{
+  color: rgb(4, 4, 96);
+  margin-left: 30px;
 }
-.container {
-  width: 50%;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+button {
+  background-color: #5e4caf; /* Couleur de fond verte */
+  color: white; /* Texte en blanc */
+  padding: 12px 24px; /* Espacement interne (padding) */
+  border: none; /* Retire les bordures */
+  border-radius: 4px; /* Bordures arrondies */
+  font-size: 16px; /* Taille du texte */
+  cursor: pointer; /* Curseur pointeur au survol */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Animation au survol */
 }
 
-h2, h3 {
-  text-align: center;
-  color: #333;
+/* Effet de survol */
+button:hover {
+  background-color: #454ea0; /* Couleur de fond légèrement plus sombre */
+  transform: scale(1.05); /* Agrandir légèrement le bouton au survol */
 }
 
-label {
-  display: block;
-  margin-top: 10px;
-  font-weight: bold;
+/* Effet lorsqu'on clique sur le bouton */
+button:active {
+  background-color: #256de9; /* Couleur de fond encore plus sombre lors du clic */
+  transform: scale(0.98); /* Réduire légèrement la taille du bouton */
 }
 
-input, select, textarea {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-textarea {
-  height: 80px;
-}
-
-.validate-btn {
-  width: 100%;
-  background-color: #28a745;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  margin-top: 15px;
-  cursor: pointer;
-}
-
-.validate-btn:hover {
-  background-color: #218838;
-}
-
-.form-section {
-  margin-top: 20px;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #fff;
+/* Désactiver le bouton */
+button:disabled {
+  background-color: #2926b6; /* Couleur de fond grise lorsque désactivé */
+  cursor: not-allowed;
 }
 

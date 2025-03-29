@@ -1,0 +1,103 @@
+.lbl{
+  color: rgb(147, 27, 9);
+  font-weight: bold;
+}
+/* Personnalisation du champ de date */
+.custom-date {
+  background-color: #fff; /* Fond blanc */
+  border: 1px solid #ccc; /* Bordure gris clair */
+  border-radius: 5px; /* Coins arrondis */
+  padding: 10px; /* Espacement intérieur */
+  width: 300px; /* Largeur à 100% pour s'adapter à la taille du conteneur */
+  font-size: 1rem; /* Taille de police */
+  color: #495057; /* Couleur du texte */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Effet de transition lors du focus */
+}
+
+/* Effet lors du focus sur le champ de date */
+.custom-date:focus {
+  border-color: #007bff; /* Bordure bleue claire au focus */
+  outline: none; /* Retirer le contour par défaut */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Ombre portée bleue */
+}
+
+/* Personnalisation du label */
+.custom-date + label {
+  font-size: 1rem; /* Taille de police pour le label */
+  font-weight: 100px; /* Gras pour le label */
+  margin-bottom: 5px; /* Espacement sous le label */
+  display: inline-block; /* Permet au label de se comporter correctement avec l'input */
+}
+
+/* Style pour le champ de date dans une largeur réduite */
+.custom-date-container {
+  max-width: 350px; /* Largeur maximale pour une meilleure apparence */
+  margin: 0 auto; /* Centrer le champ */
+}
+/* Cadre autour de la div contenant le champ de date */
+.Date {
+  border: 2px solid #020a12; /* Bordure bleue */
+  border-radius: 8px; /* Coins arrondis */
+  padding: 15px; /* Espacement intérieur pour donner de la marge autour du champ */
+  width: 50%; /* Ajuster la largeur du cadre */
+  box-sizing: border-box; /* Assure que padding ne dépasse pas la taille de l'élément */
+  background-color: #f9f9f9; /* Fond clair pour mieux distinguer le cadre */
+  margin: 0 auto; /* Centre horizontalement le cadre */
+  display: flex; /* Utilisation de flexbox */
+  flex-direction: column; /* Alignement vertical des éléments */
+  align-items: center; /* Centrage des éléments à l'intérieur */
+  justify-content: center; /* Centrage du contenu à l'intérieur du cadre */
+  margin-right: 800px;
+}
+
+/* Style pour le champ de date à l'intérieur du cadre */
+.Date input[type="date"] {
+  border: none; /* Retirer la bordure par défaut de l'input */
+  padding: 8px; /* Espacement intérieur du champ */
+  width: 100%; /* S'adapte à la largeur du cadre */
+  font-size: 1rem; /* Taille de police pour une meilleure lisibilité */
+  border-radius: 5px; /* Coins arrondis pour le champ de date */
+}
+
+/* Effet de focus pour le champ de date */
+.Date input[type="date"]:focus {
+  outline: none; /* Retirer le contour par défaut au focus */
+  box-shadow: 0 0 5px rgba(1, 14, 27, 0.5); /* Ombre bleue pour le focus */
+  border: 1px solid #01070e; /* Bordure bleue au focus */
+}
+h3{
+  color: rgb(4, 4, 96);
+  margin-left: 30px;
+}
+button {
+  background-color: #5e4caf; /* Couleur de fond verte */
+  color: white; /* Texte en blanc */
+  padding: 12px 24px; /* Espacement interne (padding) */
+  border: none; /* Retire les bordures */
+  border-radius: 4px; /* Bordures arrondies */
+  font-size: 16px; /* Taille du texte */
+  cursor: pointer; /* Curseur pointeur au survol */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 150px;
+  margin-left: 500px; /* Animation au survol */
+}
+
+/* Effet de survol */
+button:hover {
+  background-color: #454ea0; /* Couleur de fond légèrement plus sombre */
+  transform: scale(1.05); /* Agrandir légèrement le bouton au survol */
+}
+
+/* Effet lorsqu'on clique sur le bouton */
+button:active {
+  background-color: #256de9; /* Couleur de fond encore plus sombre lors du clic */
+  transform: scale(0.98); /* Réduire légèrement la taille du bouton */
+}
+
+/* Désactiver le bouton */
+button:disabled {
+  background-color: #2926b6; /* Couleur de fond grise lorsque désactivé */
+  cursor: not-allowed;
+}
+
+

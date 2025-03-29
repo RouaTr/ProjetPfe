@@ -27,6 +27,8 @@ import { ListMedicalHistoryComponent } from './list-medical-history/list-medical
 import { UpdateMedicalHistoryComponent } from './update-medical-history/update-medical-history.component';
 import { UpdateClinicalSymptomsComponent } from './update-clinical-symptoms/update-clinical-symptoms.component';
 import { ListClinicalSymptomsComponent } from './list-clinical-symptoms/list-clinical-symptoms.component';
+import { ListLaboratoryComponent } from './list-laboratory/list-laboratory.component';
+import { UpdateLaboratoryComponent } from './update-laboratory/update-laboratory.component';
 
 
 @NgModule({
@@ -54,6 +56,8 @@ import { ListClinicalSymptomsComponent } from './list-clinical-symptoms/list-cli
     UpdateMedicalHistoryComponent,
     UpdateClinicalSymptomsComponent,
     ListClinicalSymptomsComponent,
+    ListLaboratoryComponent,
+    UpdateLaboratoryComponent,
   
   ],
   imports: [

@@ -24,7 +24,7 @@
           <a [routerLink]="['/medicalfolder/listclinicalsymptoms', patient?.id]" class="tab">Signes Cliniques</a>
           <a [routerLink]="['/medicalfolder/listfunctionalsymptoms', patient?.id]" class="tab">Signes Fonctionnels</a>
 
-          <a href="laboratory" class="tab">Résultats Biologiques</a>
+          <a [routerLink]="['/medicalfolder/listlaboratory', patient?.id]"  class="tab">Résultats Biologiques</a>
           <a [routerLink]="['/medicalfolder/listobservation', patient?.id]" class="tab">Observation</a>
         </div>
       </div>

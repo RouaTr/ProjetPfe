@@ -13,6 +13,8 @@ export class ListClinicalSymptomsComponent {
   patient: Patient | null = null;
   clinicalsymptoms: ClinicalSymptoms[] = [];
   patientId!: number;
+  searchDate: string = '';
+  filteredClinicalSymptoms: ClinicalSymptoms[] = []; // Liste filtrée
 
 
   constructor(
@@ -33,6 +35,17 @@ export class ListClinicalSymptomsComponent {
       }
     });
   }
+  filterByDate(): void {
+    if (!this.searchDate) {
+      this.filteredClinicalSymptoms = this.clinicalsymptoms; // Affiche tout si la recherche est vide
+    } else {
+      this.filteredClinicalSymptoms = this.clinicalsymptoms.filter(symptom =>
+        symptom.clinicalSymptomsDate instanceof Date &&
+        symptom.clinicalSymptomsDate.toISOString().startsWith(this.searchDate)
+      );
+    }
+  }
+
 
   loadPatientData(): void {
     this.crudService.findPatientById(this.patientId).subscribe({
@@ -53,7 +66,7 @@ export class ListClinicalSymptomsComponent {
           .filter(symptom => symptom.patient?.id === this.patientId)
           .map(symptom => this.filterSymptoms(symptom))
           .filter(symptom => Object.keys(symptom).length > 1);
-
+          this.filteredClinicalSymptoms = [...this.clinicalsymptoms];
         console.log("Signes fonctionnels du patient (filtrés) :", this.clinicalsymptoms);
       },
       error: (err) => {

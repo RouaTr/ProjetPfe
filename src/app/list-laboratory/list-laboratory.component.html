@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Multipurpose, super flexible, powerful, clean modern responsive bootstrap 5 admin template">
+  <title>Dossier Médical</title>
+</head>
+
+<body class="app-wrapper default">
+  <app-menu></app-menu>
+  <div class="app-content">
+    <app-header></app-header>
+    <div class="container-fluid">
+      <div class="container">
+        <h3> Dossier Médical:</h3>
+
+        <div class="tabs">
+          <a [routerLink]="['/medicalfolder', patient?.id]" class="tab">Patient</a>
+          <a [routerLink]="['/medicalfolder/listmedicalhistory', patient?.id]" class="tab">Antécédents</a>
+          <a [routerLink]="['/medicalfolder/listclinicalsymptoms', patient?.id]" class="tab">Signes Cliniques</a>
+          <a [routerLink]="['/medicalfolder/listfunctionalsymptoms', patient?.id]" class="tab">Signes Fonctionnels</a>
+
+          <a [routerLink]="['/medicalfolder/listlaboratory', patient?.id]" class="tab">Résultats Biologiques</a>
+          <a [routerLink]="['/medicalfolder/listobservation', patient?.id]" class="tab">Observation</a>
+        </div>
+      </div>
+      <main>
+        <div class="mb-3 d-flex justify-content-between align-items-center">
+          <a href="/laboratory"  class="btn btn-primary">
+            <i class="ri-user-add-line"></i> + résultats biologiques
+          </a>
+          <!-- Barre de recherche -->
+          <div class="input-group" style="max-width: 300px;">
+            <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher ...">
+            <span class="input-group-text"><i class="ri-search-line"></i></span>
+          </div>
+        </div>
+        <div class="container mt-4">
+
+          <div *ngIf="laboratory.length > 0; else loading">
+            <div class="card" *ngFor="let lab of laboratory">
+              <div class="card-body">
+                <div class="row">
+                  <h5>Chimie</h5><br><br>
+                  <div class="col-lg-6">
+                    <p *ngIf="lab.potassium">
+                      <strong>potassium:</strong> {{ lab.potassium }} <br>3.5-5 mmolL
+                      <span *ngIf="isOutOfRange('potassium', lab.potassium)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.sodium">
+                      <strong>sodium:</strong> {{ lab.sodium }} <br>135-145  mmol/L
+                      <span *ngIf="isOutOfRange('sodium', lab.sodium)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.calcium">
+                      <strong>calcium:</strong> {{ lab.calcium }}<br> 2.25-2.65 mmol/L
+                      <span *ngIf="isOutOfRange('calcium', lab.calcium)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.phosphorus">
+                      <strong>phosphorus:</strong> {{ lab.phosphorus}}<br> 0.8-1.4 mmol/L
+                      <span *ngIf="isOutOfRange('phosphorus', lab.phosphorus)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.urea">
+                      <strong>uree-sang:</strong> {{ lab.urea }} <br>2.5-8 mmol/L
+                      <span *ngIf="isOutOfRange('urea', lab.urea)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.creatinine">
+                      <strong>creatinine:</strong> {{ lab.creatinine }} <br>60-120 mmol/L
+                      <span *ngIf="isOutOfRange('creatinine', lab.urea)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.alat">
+                      <strong>ALAT:</strong> {{ lab.alat }} <br>60-120 UI/L
+                      <span *ngIf="isOutOfRange('creatinine', lab.alat)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+
+                    <p *ngIf="lab.chemistrytestDate"><strong>Date :</strong> {{ lab.chemistrytestDate |
+                      date:'dd/MM/yyyy' }}
+                    </p>
+                  </div>
+                  <div class="col-lg-6">
+                    <p *ngIf="lab.asat">
+                      <strong>ASAT:</strong> {{ lab.asat }} <br>5-40 UI/L
+                      <span *ngIf="isOutOfRange('asat', lab.asat)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.ggt">
+                      <strong>GGT:</strong> {{ lab.ggt }} <br>5-40 UI/L
+                      <span *ngIf="isOutOfRange('ggt', lab.ggt)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.ggt">
+                      <strong>magnesium:</strong> {{ lab.magnesium }} <br>0.74-0.9 mmol/L
+                      <span *ngIf="isOutOfRange('magnesium', lab.magnesium)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.pal">
+                      <strong>magnesium:</strong> {{ lab.pal }} <br>35-140 Ul/L
+                      <span *ngIf="isOutOfRange('pal', lab.pal)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.directBilirubin">
+                      <strong>Bilirubine directe:</strong> {{ lab.directBilirubin}} <br>1-3 umol/L
+                      <span *ngIf="isOutOfRange('directBilirubin', lab.directBilirubin)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.totalBilirubin">
+                      <strong>Bilirubine  totale:</strong> {{ lab.totalBilirubin}} <br>3-17 umol/L
+                      <span *ngIf="isOutOfRange('totalBilirubin', lab.totalBilirubin)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.albumin">
+                      <strong>Albumine:</strong> {{ lab.albumin}} <br>35-45 g/L
+                      <span *ngIf="isOutOfRange('albumin', lab.albumin)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+
+                    <p *ngIf="lab.troponin"><strong>Troponine :</strong> {{ lab.troponin }} ng/mL</p>
+                    <p *ngIf="lab.lipase">
+                      <strong>Lipase:</strong> {{ lab.lipase}} <br>35-45 g/L
+                      <span *ngIf="isOutOfRange('lipase', lab.lipase)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                  </div>
+                  <h5>NFS</h5><br><br>
+                  <div class="col-lg-6">
+                    <p *ngIf="lab.rbc">
+                      <strong>Globules Blancs:</strong> {{ lab.wbc }} <br>4-10 x10^3/mm3
+                      <span *ngIf="isOutOfRange('wbc', lab.wbc)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.neutrophilsAbs">
+                      <strong>GNN#:</strong> {{ lab.wbc }} <br>1.5-7.5 x10^3/mm3
+                      <span *ngIf="isOutOfRange('neutrophilsAbs', lab.neutrophilsAbs)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.eosinophilsAbs">
+                      <strong>EOS#:</strong> {{ lab.wbc }} <br>1.5-7.5 x10^3/mm3
+                      <span *ngIf="isOutOfRange('eosinophilsAbs', lab.eosinophilsAbs)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+
+
+                      <p *ngIf="lab.hemoglobin">
+                        <strong>HGB :</strong> {{ lab.rbc }} <br/>12-17 g/dl
+                        <span *ngIf="isOutOfRange('hemoglobin', lab.hemoglobin)" style="color: red; font-weight: bold;">
+                          ⚠ Valeur hors norme !
+                        </span>
+                      </p>
+                      <p *ngIf="lab.rbc">
+                        <strong>Globules rouges (RBC) :</strong> {{ lab.rbc }} <br/>3.5-5.8 x10^6/mm3
+                        <span *ngIf="isOutOfRange('rbc', lab.rbc)" style="color: red; font-weight: bold;">
+                          ⚠ Valeur hors norme !
+                        </span>
+                      </p>
+                      <p *ngIf="lab.hematocrit">
+                        <strong>HCT:</strong> {{ lab.hematocrit }} <br/>35-55
+                        <span *ngIf="isOutOfRange('hematocrit', lab.hematocrit)" style="color: red; font-weight: bold;">
+                          ⚠ Valeur hors norme !
+                        </span>
+                      </p>
+                      <p *ngIf="lab.mcv">
+                        <strong>VGM:</strong> {{ lab.mcv}} <br/>80-100 fL
+                        <span *ngIf="isOutOfRange('mcv', lab.mcv)" style="color: red; font-weight: bold;">
+                          ⚠ Valeur hors norme !
+                        </span>
+                      </p>
+                      <p *ngIf="lab.mch">
+                        <strong>TMCH:</strong> {{ lab.mch}} <br/>27-32 pg
+                        <span *ngIf="isOutOfRange('mch', lab.mch)" style="color: red; font-weight: bold;">
+                          ⚠ Valeur hors norme !
+                        </span>
+                      </p>
+                      <p *ngIf="lab.mchc">
+                        <strong>CCMH:</strong> {{ lab.mchc}} <br/>30-36 %
+                        <span *ngIf="isOutOfRange('mchc', lab.mchc)" style="color: red; font-weight: bold;">
+                          ⚠ Valeur hors norme !
+                        </span>
+                      </p>
+
+
+                    <p *ngIf="lab.rdwCv"><strong>IDR (RDW-CV) :</strong> {{ lab.rdwCv }} %</p>
+                    <p *ngIf="lab.rdwCv">
+                      <strong>PLT:</strong> {{ lab.platelets}} <br/>130-450 x10^3/mm3
+                      <span *ngIf="isOutOfRange('platelets', lab.platelets)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+
+
+                    <p *ngIf="lab.cbcTestDate"><strong>Date :</strong> {{ lab.cbcTestDate|
+                      date:'dd/MM/yyyy' }}
+                    </p>
+                  </div>
+                  <div class="col-lg-6">
+                    <p *ngIf="lab.mpv">
+                      <strong>VPM:</strong> {{ lab.mpv}} <br/>7-9 fL
+                      <span *ngIf="isOutOfRange('mpv', lab.mpv)" style="color: red; font-weight: bold;">
+                        ⚠ Valeur hors norme !
+                      </span>
+                    </p>
+                    <p *ngIf="lab.monocytesPercentage"><strong>Monocytes (%) :</strong> {{ lab.monocytesPercentage }} %
+                    </p>
+                    <p *ngIf="lab.lymphocytesPercentage"><strong>Lymphocytes (%) :</strong> {{ lab.lymphocytesPercentage
+                      }} %</p>
+                    <p *ngIf="lab.eosinophilsPercentage"><strong>Eosinophiles (%) :</strong> {{
+                      lab.eosinophilsPercentage }} %</p>
+                    <p *ngIf="lab.basophilsPercentage"><strong>Basophiles (%) :</strong> {{ lab.basophilsPercentage }} %
+                    </p>
+                    <p *ngIf="lab.neutrophilsPercentage"><strong>Neutrophiles (%) :</strong> {{
+                      lab.neutrophilsPercentage }} %</p>
+                       <p *ngIf="lab.lymphocytesAbs">
+                        <strong>Lymp#:</strong> {{ lab.lymphocytesAbs}} <br/>1-4 x10^3/µL
+                        <span *ngIf="isOutOfRange('lymphocytesAbs', lab.lymphocytesAbs)" style="color: red; font-weight: bold;">
+                          ⚠ Valeur hors norme !
+                        </span>
+                      </p>
+
+
+                    <p *ngIf="lab.basophilsAbs"><strong>Basophiles absolus :</strong> {{ lab.basophilsAbs }} x10^3/µL
+                    </p>
+                    <p *ngIf="lab.monocytesAbs"><strong>Monocytes absolus :</strong> {{ lab.monocytesAbs }} x10^3/µL</p>
+                  </div>
+                  <h5>Sérologies</h5><br><br>
+                  <div class="col-lg-6">
+                    <p *ngIf="lab.wbc"><strong>Globules blancs (WBC) :</strong> {{ lab.wbc }} x10^3/µL</p>
+                    <p *ngIf="lab.hepatitisAIgG"><strong>Hépatite A IgG :</strong> {{ lab.hepatitisAIgG }}</p>
+                    <p *ngIf="lab.hepatitisAIgM"><strong>Hépatite A IgM :</strong> {{ lab.hepatitisAIgM }}</p>
+                    <p *ngIf="lab.hepatitisBAgHbs"><strong>Antigène HBs :</strong> {{ lab.hepatitisBAgHbs }}</p>
+                    <p *ngIf="lab.hepatitisBAntiHbc"><strong>Anti-HBc :</strong> {{ lab.hepatitisBAntiHbc }}</p>
+                    <p *ngIf="lab.hepatitisBAntiHbs"><strong>Anti-HBs :</strong> {{ lab.hepatitisBAntiHbs }}</p>
+                    <p *ngIf="lab.hepatitisC"><strong>Hépatite C :</strong> {{ lab.hepatitisC }}</p>
+                    <p *ngIf="lab.syphilisTpha"><strong>Syphilis (TPHA) :</strong> {{ lab.syphilisTpha }}</p>
+                    <p *ngIf="lab.syphilisVdrl"><strong>Syphilis (VDRL) :</strong> {{ lab.syphilisVdrl }}</p>
+
+
+                    <p *ngIf="lab.serologytestDate"><strong>Date :</strong> {{ lab.serologytestDate|
+                      date:'dd/MM/yyyy' }}
+                    </p>
+                  </div>
+                  <div class="col-lg-6">
+                    <p *ngIf="lab.cmvIgG"><strong>CMV IgG :</strong> {{ lab.cmvIgG }}</p>
+                    <p *ngIf="lab.cmvIgM"><strong>CMV IgM :</strong> {{ lab.cmvIgM }}</p>
+                    <p *ngIf="lab.toxoplasmosis"><strong>Toxoplasmose :</strong> {{ lab.toxoplasmosis }}</p>
+                    <p *ngIf="lab.leishmaniasis"><strong>Leishmaniose :</strong> {{ lab.leishmaniasis }}</p>
+                    <p *ngIf="lab.tuberculinTest"><strong>Test à la tuberculine :</strong> {{ lab.tuberculinTest }}</p>
+                    <p *ngIf="lab.quantiferonTest"><strong>Test Quantiféron :</strong>
+                  </div>
+                  <h5>Autres</h5><br><br>
+                  <div class="col-lg-6">
+                    <p *ngIf="lab.iono"><strong>Ionogramme :</strong> {{ lab.iono }}</p>
+                    <p *ngIf="lab.vitaminD"><strong>Vitamine D :</strong> {{ lab.vitaminD }} ng/mL</p>
+                    <p *ngIf="lab.urineTestStrips"><strong>Bandelettes urinaires :</strong> {{ lab.urineTestStrips }}</p>
+                    <p *ngIf="lab.fastingBloodGlucose"><strong>Glycémie à jeun :</strong> {{ lab.fastingBloodGlucose }} mg/dL</p>
+
+
+                  </div>
+                  <div class="col-lg-6">
+                    <p *ngIf="lab.hdl"><strong>HDL :</strong> {{ lab.hdl }} mg/dL</p>
+                    <p *ngIf="lab.ldl"><strong>LDL :</strong> {{ lab.ldl }} mg/dL</p>
+                    <p *ngIf="lab.totalCholesterol"><strong>Cholestérol total (CHT) :</strong> {{ lab.totalCholesterol }} mg/dL</p>
+                    <p *ngIf="lab.triglycerides"><strong>Triglycérides (TG) :</strong> {{ lab.triglycerides }} mg/dL</p>
+                  </div>
+                  <p *ngIf="lab.medicaltestDate"><strong>Date d'enregistrement:</strong> {{ lab.medicaltestDate|
+                    date:'dd/MM/yyyy' }}
+                  </p>
+                </div>
+                <button class="btn btn-primary" (click)="updateLaboratory(lab.id)" type="submit">Modifier</button>
+
+              </div>
+            </div>
+          </div>
+
+          <ng-template #loading>
+            <p>Chargement des Bilans...</p>
+          </ng-template>
+
+
+
+
+        </div>
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>

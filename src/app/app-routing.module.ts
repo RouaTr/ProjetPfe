@@ -18,6 +18,8 @@ import { ListMedicalHistoryComponent } from './list-medical-history/list-medical
 import { UpdateMedicalHistoryComponent } from './update-medical-history/update-medical-history.component';
 import { ListClinicalSymptomsComponent } from './list-clinical-symptoms/list-clinical-symptoms.component';
 import { UpdateClinicalSymptomsComponent } from './update-clinical-symptoms/update-clinical-symptoms.component';
+import { ListLaboratoryComponent } from './list-laboratory/list-laboratory.component';
+import { UpdateLaboratoryComponent } from './update-laboratory/update-laboratory.component';
 
 const routes: Routes = [
   {path:'',component:HomeComponent},
@@ -58,6 +60,13 @@ const routes: Routes = [
   { path: 'medicalfolder/listclinicalsymptoms/:patientId', component: ListClinicalSymptomsComponent },
   {path:'listclinicalsymptoms',component:ListClinicalSymptomsComponent},
   { path: 'medicalfolder/listclinicalsymptoms/:patientId/add', component: CliniaclSymptomsComponent},
+  //laboratory
+{path:'laboratory',component:LaboratoryComponent},
+{path: 'medicalfolder/listlaboratory/updatelaboratory/:id',component:UpdateLaboratoryComponent},
+
+  { path: 'medicalfolder/listlaboratory/:patientId', component: ListLaboratoryComponent },
+  {path:'listlaboratory',component:ListLaboratoryComponent},
+  { path: 'medicalfolder/listlaboratory/:patientId/add', component: LaboratoryComponent},
 
 
 

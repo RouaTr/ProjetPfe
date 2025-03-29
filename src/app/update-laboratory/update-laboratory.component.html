@@ -18,7 +18,7 @@
       <div class="container-fluid">
         <app-tabs></app-tabs>
         <main>
-          <form [formGroup]="LaboratoryForm" (ngSubmit)="addNewLaboratory()">
+          <form [formGroup]="updateForm" (ngSubmit)="updateLaboratory()">
             <div class="row m-1">
               <div class="col-12">
                 <div class="card">
@@ -518,3 +518,4 @@
 </body>
 
 </html>
+
