@@ -23,7 +23,7 @@
           <a [routerLink]="['/medicalfolder/listclinicalsymptoms', patient?.id]" class="tab">Signes Cliniques</a>
           <a [routerLink]="['/medicalfolder/listfunctionalsymptoms', patient?.id]" class="tab">Signes Fonctionnels</a>
 
-          <a [routerLink]="['/medicalfolder/listlaboratory', patient?.id]"  class="tab">Résultats Biologiques</a>
+          <a [routerLink]="['/medicalfolder/listlaboratory', patient?.id]" class="tab">Résultats Biologiques</a>
           <a [routerLink]="['/medicalfolder/listobservation', patient?.id]" class="tab">Observation</a>
         </div>
       </div>
@@ -35,7 +35,8 @@
           </a>
           <!-- Barre de recherche -->
           <div class="input-group" style="max-width: 300px;">
-            <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher un patient...">
+            <input type="date" id="searchPatient" class="form-control" placeholder="Rechercher ..."
+              [(ngModel)]="searchDate" (input)="filterByDate()">
             <span class="input-group-text"><i class="ri-search-line"></i></span>
           </div>
         </div>
@@ -61,7 +62,7 @@
                         <th>Action</th>
                       </tr>
                     </thead>
-                    <tbody *ngFor="let medicalhistory of medicalhistory">
+                    <tbody *ngFor="let medicalhistory of filteredMedicalHistory">
                       <tr *ngIf="medicalhistory?.allergyDiagnosisDate">
 
                         <td>{{ medicalhistory?.allergyType}}</td>
@@ -79,7 +80,9 @@
 
                         </td>
 
-                        <td>{{ medicalhistory?.allergyDiagnosisDate}}</td>
+                        <!-- Exemple de formatage de la date dans le HTML -->
+                        <span>{{ medicalhistory.allergyDiagnosisDate | date: 'dd/MM/yyyy' }}</span>
+
                         <td>
                           <div class="dropdown d-inline-block">
                             <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -127,7 +130,7 @@
                         <th>Action</th>
                       </tr>
                     </thead>
-                    <tbody *ngFor="let medicalhistory of medicalhistory">
+                    <tbody *ngFor="let medicalhistory of filteredMedicalHistory">
                       <tr *ngIf="medicalhistory?.vaccineDate">
 
                         <td>{{ medicalhistory?.vaccineCode}}</td>
@@ -140,7 +143,7 @@
 
                         </td>
                         <td>{{ medicalhistory?.vaccineStatus}}</td>
-                        <td>{{ medicalhistory?.vaccineDate}}</td>
+                        <td><span>{{ medicalhistory.vaccineDate | date: 'dd/MM/yyyy' }}</span></td>
                         <td>
                           <div class="dropdown d-inline-block">
                             <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -204,7 +207,7 @@
                           <td>{{ medicalhistory?.medicalTreatmentEndDate}}</td>
                           <td>{{ medicalhistory?.medicalFollowUp}}</td>
                           <td>{{ medicalhistory?.medicalStatus}}</td>
-                          <td>{{ medicalhistory?.medicalDiagnosisDate}}</td>
+                          <td><span>{{ medicalhistory.medicalDiagnosisDate | date: 'dd/MM/yyyy' }}</span></td>
                           <td>
                             <div class="dropdown d-inline-block">
                               <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -253,7 +256,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <ng-container *ngFor="let medicalhistory of medicalhistory">
+                      <ng-container *ngFor="let medicalhistory of filteredMedicalHistory">
                         <tr *ngIf="medicalhistory?.familyDiagnosisDate">
 
                           <td>{{ medicalhistory?.hereditaryDisease}}</td>
@@ -263,8 +266,7 @@
                           <td>
                             {{ medicalhistory?.familyStatus}}
                           </td>
-                          <td>{{ medicalhistory?.familyDiagnosisDate}}</td>
-
+                          <td> <span>{{ medicalhistory.familyDiagnosisDate | date: 'dd/MM/yyyy' }}</span></td>
                           <td>
                             <div class="dropdown d-inline-block">
                               <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -316,7 +318,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <ng-container *ngFor="let medicalhistory of medicalhistory">
+                      <ng-container *ngFor="let medicalhistory of filteredMedicalHistory">
                         <tr *ngIf="medicalhistory?.stiDiagnosisDate">
 
                           <td>{{ medicalhistory?.stiTreatment}}</td>
@@ -328,8 +330,7 @@
                           </td>
                           <td>{{ medicalhistory?.stiFollowUp}}</td>
                           <td>{{ medicalhistory?.stiStatus}}</td>
-                          <td>{{ medicalhistory?.stiDiagnosisDate}}</td>
-
+                          <td><span>{{ medicalhistory.stiDiagnosisDate | date: 'dd/MM/yyyy' }}</span></td>
                           <td>
                             <div class="dropdown d-inline-block">
                               <button class="btn btn-soft-secondary btn-sm dropdown" type="button"

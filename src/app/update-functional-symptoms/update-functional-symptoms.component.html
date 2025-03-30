@@ -131,6 +131,13 @@
                                 formControlName="libidoDisorders"></td>
                             <td><input type="radio" name="libidoDisorders" value="false"
                                 formControlName="libidoDisorders"></td>
+                                <td><h4>Date d'ajout des signes fonctionnels</h4>
+                                  <input type="date" id="date_naissance" name="date_naissance" class="form-control"
+                                  formControlName="functionalSymptomsDate"
+                                  [class.is-invalid]="isInvalidAndTouchedOrDirty(functionalSymptomsDate)">
+                                <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(functionalSymptomsDate)">
+                                  Date d'ajout obligatoire
+                                </small></td>
                           </tr>
                         </tbody>
                       </table>

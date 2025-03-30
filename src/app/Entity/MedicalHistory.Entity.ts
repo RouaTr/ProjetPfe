@@ -46,4 +46,5 @@ export class MedicalHistory {
     // Relation avec Patient
     public patient?: Patient
   ) {}
+  [key: string]: any;
 }

@@ -41,8 +41,9 @@
         </div>
         <div class="container mt-4">
 
-          <div *ngIf="clinicalsymptoms.length > 0; else loading">
-            <div class="card" *ngFor="let symptom of clinicalsymptoms">
+          <div *ngIf="filteredClinicalSymptoms.length > 0; else loading">
+            <div class="card" *ngFor="let symptom of filteredClinicalSymptoms">
+
               <div class="card-body">
                 <h5>Signes Cliniques</h5><br>
 
@@ -67,13 +68,10 @@
 
           <!-- Message de chargement si aucun symptôme n'est trouvé -->
           <ng-template #loading>
-            <p>Chargement des informations des signes cliniques...</p>
+            <p>pas de signes cliniques...</p>
           </ng-template>
 
-          <!-- Affichage d’un message de chargement si aucun symptôme n’est trouvé -->
-          <ng-template #loading>
-            <p>Chargement des informations des signes cliniques...</p>
-          </ng-template>
+
 
 
         </div>

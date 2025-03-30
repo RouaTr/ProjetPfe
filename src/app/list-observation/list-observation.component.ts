@@ -13,7 +13,8 @@ export class ListObservationComponent implements OnInit {
   patient: Patient | null = null;
   observations: Observation[] = [];
   patientId!: number;
-
+ searchDate: string = '';
+  filteredObservation: Observation[] = [];
   constructor(
     private crudService: CrudService,
     private route: ActivatedRoute
@@ -45,15 +46,58 @@ export class ListObservationComponent implements OnInit {
       }
     });
   }
+  filterByDate(): void {
+    if (!this.searchDate) {
+      this.filteredObservation = [...this.observations]; // Afficher tout si la recherche est vide
+    } else {
+      this.filteredObservation = this.observations.filter(symptom => {
+        if (symptom.observationDate instanceof Date) {
+          const formattedDate = symptom.observationDate.toISOString().split('T')[0];
+          return formattedDate === this.searchDate;
+        } else {
+          console.warn("Valeur inattendue pour observationDate :", symptom.observationDate);
+          return false;
+        }
+      });
+    }
+  }
 
   getObservations(): void {
-    this.crudService.getObservationsByPatientId(this.patientId).subscribe({
-      next: (data) => {
-        this.observations = data;
-      },
-      error: (err) => {
-        console.warn('Erreur lors de la récupération des observations :', err);
-      }
-    });
-  }
+     this.crudService.getObservationsByPatientId(this.patientId).subscribe({
+       next: (data) => {
+         this.observations = data
+           .filter(symptom => symptom.patient?.id === this.patientId)
+           .map(symptom => {
+             // Vérifier et convertir clinicalSymptomsDate en objet Date
+             if (symptom.observationDate) {
+               symptom.observationDate = new Date(symptom.observationDate);
+             }
+             return this.filterSymptoms(symptom);
+           })
+           .filter(symptom => Object.keys(symptom).length > 1);
+         this.filteredObservation = [...this.observations];
+         console.log("Signes cliniques filtrés :", this.observations);
+       },
+       error: (err) => {
+         console.warn("Erreur lors de la récupération des signes cliniques :", err);
+       }
+     });
+   }
+
+
+   private filterSymptoms(symptom: Observation): Observation {
+     const filteredSymptom: { [key: string]: any } = {
+       id: symptom.id,
+       observationDate: symptom.observationDate
+     };
+
+     Object.keys(symptom).forEach((key) => {
+       const value = (symptom as any)[key];
+       if (value !== true && value !== null && value !== undefined && key !== 'id' && key !== 'observationDate' && key !== 'patient') {
+         filteredSymptom[key] = value;
+       }
+     });
+
+     return filteredSymptom as Observation;
+   }
 }

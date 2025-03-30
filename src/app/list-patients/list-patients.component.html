@@ -29,10 +29,17 @@
             </a>
 
             <!-- Barre de recherche avec icône -->
+            <!-- Barre de recherche avec icône -->
             <div class="input-group" style="max-width: 300px;">
-              <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher un patient...">
+              <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher un patient..."
+  (input)="searchPatient($event)">
+
+
+
+
               <span class="input-group-text"><i class="ri-search-line"></i></span>
             </div>
+
           </div>
 
           <div class="container-fluid">
@@ -62,7 +69,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let patient of listPatients">
+                        <tr *ngFor="let patient of filteredPatients">
 
                           <td>{{patient.id}}</td>
                           <td>{{patient.lastName}} {{patient.firstName}}</td>

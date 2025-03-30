@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FunctionalSymptoms } from '../Entity/FunctionalSymptoms.Entity';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observation } from '../Entity/Observation.Entity';
 import { Patient } from '../Entity/Patient.Entity';
@@ -49,6 +49,7 @@ export class UpdateFunctionalSymptomsComponent {
       myalgia: new FormControl(''),
       libidoDisorders: new FormControl(''),
       otherSymptoms: new FormControl(''),
+      functionalSymptomsDate: new FormControl('', [Validators.required]),
     });
   }
 
@@ -89,14 +90,30 @@ export class UpdateFunctionalSymptomsComponent {
         visualDisturbances: functionalsymptoms.visualDisturbances,
         myalgia: functionalsymptoms.myalgia,
         libidoDisorders: functionalsymptoms.libidoDisorders,
-        otherSymptoms: functionalsymptoms.otherSymptoms
+        otherSymptoms: functionalsymptoms.otherSymptoms,
+       functionalSymptomsDate: functionalsymptoms.functionalSymptomsDate
       });
 
       console.log("🔹 Patient récupéré :", this.currentFunctionalSymptoms.patient);
     });
   }
+  get functionalSymptomsDate() { return this.updateForm.get('functionalSymptomsDate'); }
 
+  isInvalidAndTouchedOrDirty(control: AbstractControl | null): boolean {
+      return (control as FormControl).invalid && ((control as FormControl).touched || (control as FormControl).dirty);
 
+    }
+  logInvalidFields() {
+    console.log("🔴 Champs invalides dans le formulaire :");
+
+    Object.keys(this.updateForm.controls).forEach(key => {
+      const control = this.updateForm.get(key);
+      if (control?.invalid) {
+        console.log(`❌ Champ : ${key}`);
+        console.log("   ↳ Erreurs :", control.errors);
+      }
+    });
+  }
 
   updateFunctionalSymptoms() {
 

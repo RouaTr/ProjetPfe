@@ -19,6 +19,9 @@ export class ListMedicalHistoryComponent {
   famhistory: MedicalHistory[] = [];
   stts: MedicalHistory[] = [];
   patientId!: number;
+   searchDate: string = '';
+  filteredMedicalHistory: MedicalHistory[] = [];
+  [key: string]: any;
 
   constructor(
     private crudService: CrudService,
@@ -40,6 +43,7 @@ export class ListMedicalHistoryComponent {
     });
   }
 
+
   loadPatientData(): void {
     this.crudService.findPatientById(this.patientId).subscribe({
       next: (data) => {
@@ -51,22 +55,88 @@ export class ListMedicalHistoryComponent {
       }
     });
   }
-
   getMedicalHistory(): void {
     this.crudService.getMedicalHistoryByPatientId(this.patientId).subscribe({
       next: (data) => {
-        this.medicalhistory = data;
-
-        // Filtrer les antécédants pour l'affichage
-        this.allergies = this.medicalhistory.filter(item => item.allergyDiagnosisDate);
-        this.vaccines = this.medicalhistory.filter(item => item.vaccineDate);
-        this.medcondtions = this.medicalhistory.filter(item => item.medicalDiagnosisDate);
-        this.famhistory = this.medicalhistory.filter(item => item.familyDiagnosisDate);
-        this.stts = this.medicalhistory.filter(item => item.stiDiagnosisDate);
+        this.medicalhistory = data
+          .filter(symptom => symptom.patient?.id === this.patientId)
+          .map(symptom => {
+            // Vérifier et convertir chaque date en objet Date
+            ['vaccineDate', 'allergyDiagnosisDate', 'medicalDiagnosisDate', 'familyDiagnosisDate', 'stiDiagnosisDate'].forEach(dateField => {
+              if (symptom[dateField]) {
+                symptom[dateField] = new Date(symptom[dateField]);
+              }
+            });
+            return this.filterSymptoms(symptom);  // Filtrer les symptômes
+          })
+          .filter(symptom => Object.keys(symptom).length > 1);  // Filtrer les objets vides
+        this.filteredMedicalHistory = [...this.medicalhistory];
+        console.log("Signes cliniques filtrés :", this.medicalhistory);
       },
       error: (err) => {
-        console.warn('Erreur lors de la récupération des antécédants :', err);
+        console.warn("Erreur lors de la récupération des signes cliniques :", err);
       }
     });
   }
-}
+
+  private filterSymptoms(symptom: MedicalHistory): { [key: string]: any } {
+    const filteredSymptom: { [key: string]: any } = {
+      id: symptom.id
+    };
+
+    // Liste des clés autorisées
+    const allowedKeys: (keyof MedicalHistory)[] = [
+      'vaccineDate',
+      'allergyDiagnosisDate',
+      'medicalDiagnosisDate',
+      'familyDiagnosisDate',
+      'stiDiagnosisDate'
+    ];
+
+    allowedKeys.forEach((dateField) => {
+      if (symptom[dateField]) {
+        filteredSymptom[dateField] = symptom[dateField];
+      }
+    });
+
+    // Filtrer les autres propriétés dynamiques (en vérifiant les types)
+    Object.keys(symptom).forEach((key) => {
+      const value = symptom[key];
+      if (value !== true && value !== null && value !== undefined && !['id', 'patient'].includes(key)) {
+        filteredSymptom[key] = value;
+      }
+    });
+
+    return filteredSymptom;
+  }
+
+
+  filterByDate(): void {
+    if (!this.searchDate) {
+      this.filteredMedicalHistory = [...this.medicalhistory];  // Afficher tout si la recherche est vide
+    } else {
+      this.filteredMedicalHistory = this.medicalhistory.filter(medicalhistory => {
+        const dateFields: (keyof MedicalHistory)[] = [
+          'vaccineDate',
+          'allergyDiagnosisDate',
+          'medicalDiagnosisDate',
+          'familyDiagnosisDate',
+          'stiDiagnosisDate'
+        ];
+
+        return dateFields.some(dateField => {
+          const date = medicalhistory[dateField];
+          if (date instanceof Date) {
+            const formattedDate = date.toISOString().split('T')[0];
+            return formattedDate === this.searchDate;
+          } else {
+            console.warn(`Valeur inattendue pour ${dateField} :`, date);
+            return false;
+          }
+        });
+      });
+    }
+  }
+
+  }
+

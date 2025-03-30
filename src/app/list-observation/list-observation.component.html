@@ -35,7 +35,7 @@
           </a>
           <!-- Barre de recherche -->
           <div class="input-group" style="max-width: 300px;">
-            <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher un patient...">
+            <input type="date" id="searchPatient" class="form-control" placeholder="Rechercher ..." [(ngModel)]="searchDate" (input)="filterByDate()">
             <span class="input-group-text"><i class="ri-search-line"></i></span>
           </div>
         </div>
@@ -58,10 +58,9 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let observation of observations">
+                      <tr *ngFor="let observation of filteredObservation">
                         <td>{{ observation?.id }}</td>
-                        <td>{{ observation?.observationDate }}</td>
-                        <td>{{ observation?.observationDetails }}</td>
+                        <td><span>{{ observation.observationDate| date: 'dd/MM/yyyy' }}</span></td>                        <td>{{ observation?.observationDetails }}</td>
                         <td>
                           <div class="dropdown d-inline-block">
                             <button class="btn btn-soft-secondary btn-sm dropdown" type="button"

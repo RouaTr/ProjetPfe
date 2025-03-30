@@ -35,14 +35,14 @@
           </a>
           <!-- Barre de recherche -->
           <div class="input-group" style="max-width: 300px;">
-            <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher ...">
+            <input type="date" id="searchPatient" class="form-control" placeholder="Rechercher ..." [(ngModel)]="searchDate" (input)="filterByDate()">
             <span class="input-group-text"><i class="ri-search-line"></i></span>
           </div>
         </div>
         <div class="container mt-4">
 
-          <div *ngIf="laboratory.length > 0; else loading">
-            <div class="card" *ngFor="let lab of laboratory">
+          <div *ngIf="filteredLaboratory.length > 0; else loading">
+            <div class="card" *ngFor="let lab of filteredLaboratory">
               <div class="card-body">
                 <div class="row">
                   <h5>Chimie</h5><br><br>
@@ -155,13 +155,13 @@
                       </span>
                     </p>
                     <p *ngIf="lab.neutrophilsAbs">
-                      <strong>GNN#:</strong> {{ lab.wbc }} <br>1.5-7.5 x10^3/mm3
+                      <strong>GNN#:</strong> {{ lab.neutrophilsAbs }} <br>1.5-7.5 x10^3/mm3
                       <span *ngIf="isOutOfRange('neutrophilsAbs', lab.neutrophilsAbs)" style="color: red; font-weight: bold;">
                         ⚠ Valeur hors norme !
                       </span>
                     </p>
                     <p *ngIf="lab.eosinophilsAbs">
-                      <strong>EOS#:</strong> {{ lab.wbc }} <br>1.5-7.5 x10^3/mm3
+                      <strong>EOS#:</strong> {{ lab.eosinophilsAbs }} <br>1.5-7.5 x10^3/mm3
                       <span *ngIf="isOutOfRange('eosinophilsAbs', lab.eosinophilsAbs)" style="color: red; font-weight: bold;">
                         ⚠ Valeur hors norme !
                       </span>
@@ -169,7 +169,7 @@
 
 
                       <p *ngIf="lab.hemoglobin">
-                        <strong>HGB :</strong> {{ lab.rbc }} <br/>12-17 g/dl
+                        <strong>HGB :</strong> {{ lab.hemoglobin }} <br/>12-17 g/dl
                         <span *ngIf="isOutOfRange('hemoglobin', lab.hemoglobin)" style="color: red; font-weight: bold;">
                           ⚠ Valeur hors norme !
                         </span>

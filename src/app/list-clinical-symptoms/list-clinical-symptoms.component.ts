@@ -37,14 +37,24 @@ export class ListClinicalSymptomsComponent {
   }
   filterByDate(): void {
     if (!this.searchDate) {
-      this.filteredClinicalSymptoms = this.clinicalsymptoms; // Affiche tout si la recherche est vide
+      this.filteredClinicalSymptoms = [...this.clinicalsymptoms]; // Afficher tout si la recherche est vide
     } else {
-      this.filteredClinicalSymptoms = this.clinicalsymptoms.filter(symptom =>
-        symptom.clinicalSymptomsDate instanceof Date &&
-        symptom.clinicalSymptomsDate.toISOString().startsWith(this.searchDate)
-      );
+      this.filteredClinicalSymptoms = this.clinicalsymptoms.filter(symptom => {
+        if (symptom.clinicalSymptomsDate instanceof Date) {
+          const formattedDate = symptom.clinicalSymptomsDate.toISOString().split('T')[0];
+          return formattedDate === this.searchDate;
+        } else {
+          console.warn("Valeur inattendue pour clinicalSymptomsDate :", symptom.clinicalSymptomsDate);
+          return false;
+        }
+      });
     }
   }
+
+
+
+
+
 
 
   loadPatientData(): void {
@@ -64,16 +74,23 @@ export class ListClinicalSymptomsComponent {
       next: (data) => {
         this.clinicalsymptoms = data
           .filter(symptom => symptom.patient?.id === this.patientId)
-          .map(symptom => this.filterSymptoms(symptom))
+          .map(symptom => {
+            // Vérifier et convertir clinicalSymptomsDate en objet Date
+            if (symptom.clinicalSymptomsDate) {
+              symptom.clinicalSymptomsDate = new Date(symptom.clinicalSymptomsDate);
+            }
+            return this.filterSymptoms(symptom);
+          })
           .filter(symptom => Object.keys(symptom).length > 1);
-          this.filteredClinicalSymptoms = [...this.clinicalsymptoms];
-        console.log("Signes fonctionnels du patient (filtrés) :", this.clinicalsymptoms);
+        this.filteredClinicalSymptoms = [...this.clinicalsymptoms];
+        console.log("Signes cliniques filtrés :", this.clinicalsymptoms);
       },
       error: (err) => {
-        console.warn("Erreur lors de la récupération des signes fonctionnels :", err);
+        console.warn("Erreur lors de la récupération des signes cliniques :", err);
       }
     });
   }
+
 
   private filterSymptoms(symptom: ClinicalSymptoms): ClinicalSymptoms {
     const filteredSymptom: { [key: string]: any } = {

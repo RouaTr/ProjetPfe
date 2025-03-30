@@ -14,6 +14,8 @@ export class ListLaboratoryComponent {
   patient: Patient | null = null;
   patientId!: number;
   laboratory: Laboratory[] = [];
+  searchDate: string = '';
+    filteredLaboratory: Laboratory[] = [];
   usualRanges: { [key: string]: { min: number; max: number } } = {
     wbc: { min: 4, max: 10 },
     rbc: { min: 3.5, max: 5.8 },
@@ -74,18 +76,58 @@ export class ListLaboratoryComponent {
       }
     });
   }
+  filterByDate(): void {
+    if (!this.searchDate) {
+      this.filteredLaboratory = [...this.laboratory]; // Afficher tout si la recherche est vide
+    } else {
+      this.filteredLaboratory = this.laboratory.filter(symptom => {
+        if (symptom.medicaltestDate instanceof Date) {
+          const formattedDate = symptom.medicaltestDate.toISOString().split('T')[0];
+          return formattedDate === this.searchDate;
+        } else {
+          console.warn("Valeur inattendue pour medicaltestDate :", symptom.medicaltestDate);
+          return false;
+        }
+      });
+    }
+  }
 
   getLaboratory(): void {
-    this.crudService.getLaboratoryByPatientId(this.patientId).subscribe({
-      next: (data) => {
-        this.laboratory = data.filter(laboratory => laboratory.patient?.id === this.patientId);
-        console.log("bilans du patient :", this.laboratory);
-      },
-      error: (err) => {
-        console.warn("Erreur lors de la récupération des bilans :", err);
+     this.crudService.getLaboratoryByPatientId(this.patientId).subscribe({
+        next: (data) => {
+          this.laboratory = data
+            .filter(symptom => symptom.patient?.id === this.patientId)
+            .map(symptom => {
+              // Vérifier et convertir clinicalSymptomsDate en objet Date
+              if (symptom.medicaltestDate) {
+                symptom.medicaltestDate = new Date(symptom.medicaltestDate);
+              }
+              return this.filterSymptoms(symptom);
+            })
+            .filter(symptom => Object.keys(symptom).length > 1);
+          this.filteredLaboratory = [...this.laboratory];
+          console.log("Signes cliniques filtrés :", this.laboratory);
+        },
+        error: (err) => {
+          console.warn("Erreur lors de la récupération des signes cliniques :", err);
+        }
+      });
+    }
+    private filterSymptoms(symptom: Laboratory): Laboratory {
+        const filteredSymptom: { [key: string]: any } = {
+          id: symptom.id,
+          medicaltestDate: symptom.medicaltestDate
+        };
+
+        Object.keys(symptom).forEach((key) => {
+          const value = (symptom as any)[key];
+          if (value !== true && value !== null && value !== undefined && key !== 'id' && key !== 'medicaltestDate' && key !== 'patient') {
+            filteredSymptom[key] = value;
+          }
+        });
+
+        return filteredSymptom as Laboratory;
       }
-    });
-  }
   isOutOfRange(key: string, value: number): boolean {
     if (this.usualRanges[key]) {
       return value < this.usualRanges[key].min || value > this.usualRanges[key].max;
