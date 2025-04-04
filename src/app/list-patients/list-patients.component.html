@@ -24,15 +24,14 @@
 
         <main>
           <div class="mb-3 d-flex justify-content-between align-items-center">
-            <a href="/newpatient" class="btn btn-primary">
+            <a href="newpatient" class="btn btn-primary">
               <i class="ri-user-add-line"></i> + nouveau dossier médical
             </a>
 
             <!-- Barre de recherche avec icône -->
-            <!-- Barre de recherche avec icône -->
             <div class="input-group" style="max-width: 300px;">
               <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher un patient..."
-  (input)="searchPatient($event)">
+              (input)="searchPatient($event)">
 
 
 
@@ -63,7 +62,7 @@
                           <th>date du début du traitement</th>
                           <th>Durée de la prise</th>
                           <th>date prévue prochaine prise</th>
-                          <th>durée de perte de vue</th>
+                          <th> perte de vue(jours)</th>
 
                           <th>Action</th>
                         </tr>
@@ -74,11 +73,22 @@
                           <td>{{patient.id}}</td>
                           <td>{{patient.lastName}} {{patient.firstName}}</td>
                           <td>{{patient.gender}}</td>
-                          <td>VLZ1400087402</td>
-                          <td>Joseph Parker</td>
-                          <td>Alexis Clarke</td>
-                          <td><span class="badge bg-danger">High</span></td>
-                          <td><span class="badge bg-info-subtle text-info">Re-open</span></td>
+                          <td>{{ patient.latestTreatment?.treatmentName || 'Aucun traitement' }}</td>
+
+                          <td>{{ patient.latestTreatment?.treatmentStartDate| date:'dd/MM/yyyy' }}</td>
+                          <td>{{ patient.latestTreatment?.treatment_intake_duration || 'Aucun traitement' }}</td>
+                          <td>
+                            <span
+                              class="badge"
+                              [ngClass]="{
+                                'bg-danger': patient.nextIntakeColor === 'danger',
+                                'bg-warning': patient.nextIntakeColor === 'warning',
+                                'bg-info-subtle text-info': patient.nextIntakeColor === 'info'
+                              }">
+                              {{ patient.latestTreatment?.next_intake_Date | date:'dd/MM/yyyy' }}
+                            </span>
+                          </td>
+                          <td><span class="badge bg-info-subtle text-info">{{ patient.latestTreatment?.duration_of_visual_loss || 'Aucun traitement' }}j</span></td>
 
                           <td>
                             <div class="dropdown d-inline-block">

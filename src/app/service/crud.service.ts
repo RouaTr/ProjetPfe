@@ -7,6 +7,7 @@ import { FunctionalSymptoms } from '../Entity/FunctionalSymptoms.Entity';
 import { MedicalHistory } from '../Entity/MedicalHistory.Entity';
 import { ClinicalSymptoms } from '../Entity/ClinicalSymptoms.Entity';
 import { Laboratory } from '../Entity/Laboratory.Entity';
+import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +17,7 @@ export class CrudService {
   constructor(private http: HttpClient) {}
 
   //  **Gestion des Patients**
+
   addPatient(patient: Patient): Observable<Patient> {
     console.log("Patient envoyé :", patient);
     return this.http.post<Patient>(`${this.apiUrl}/patients`, patient);
@@ -32,6 +34,10 @@ export class CrudService {
   findPatientById(id: number): Observable<Patient> {
     return this.http.get<Patient>(`${this.apiUrl}/patients/${id}`);
   }
+  doesPatientExists(lastName: string, firstName: string) {
+    return this.http.get<boolean>(`${this.apiUrl}/patients/exists?lastName=${lastName}&firstName=${firstName}`);
+  }
+
 
   //  **Gestion des Observations**
 
@@ -149,7 +155,27 @@ getClinicalSymptomsByPatientId(patientId: number): Observable<ClinicalSymptoms[]
   getLaboratoryByPatientId(patientId: number): Observable<Laboratory[]> {
     return this.http.get<Laboratory[]>(`${this.apiUrl}/laboratory/patient/${patientId}`);
   }
+  //  **Gestion des Traitements**
+  addMedicalTreatment(patientId: number, medicaltratment: MedicalTreatment): Observable<MedicalTreatment> {
+    const url = `${this.apiUrl}/medicaltratment?patientId=${patientId}`;
+    return this.http.post<MedicalTreatment>(url, medicaltratment);
+  }
 
+  updateMedicalTreatment(id: number, patientId: number,medicaltratment: MedicalTreatment): Observable<MedicalTreatment> {
+    const url = `${this.apiUrl}/medicaltratment/${id}?patientId=${patientId}`;
+    return this.http.put<MedicalTreatment>(url, medicaltratment);
+  }
+  findMedicalTreatmentById(id: number): Observable<MedicalTreatment> {
+    return this.http.get<MedicalTreatment>(`${this.apiUrl}/medicaltratment/${id}`);
+  }
+
+
+  getMedicalTreatment(): Observable<MedicalTreatment[]> {
+    return this.http.get<MedicalTreatment[]>(`${this.apiUrl}/medicaltratment`);
+  }
+  getMedicalTreatmentByPatientId(patientId: number): Observable<MedicalTreatment[]> {
+    return this.http.get<MedicalTreatment[]>(`${this.apiUrl}/medicaltratment/patient/${patientId}`);
+  }
 
 
 

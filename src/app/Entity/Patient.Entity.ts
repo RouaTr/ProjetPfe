@@ -1,3 +1,5 @@
+import { MedicalTreatment } from "./MedicalTreatment.Entity";
+
 export class Patient {
   constructor(
     public id?: number,
@@ -6,6 +8,7 @@ export class Patient {
     public birthDate?: Date,
     public gender?: string,
     public phoneNumber?: string,
+
     public city?: string,
     public region?: string,
     public postalCode?: string,
@@ -33,8 +36,12 @@ export class Patient {
     public hlaB5701Typing?: string,
     public screeningCircumstance?: string,
     public viralType?: string,
+    public age_at_HIV_diagnosis?: number,
     public contaminationDate?: Date,
     public cdcStage?: string
   ) {}
+  treatments?: MedicalTreatment[];
+  latestTreatment?: MedicalTreatment;
+  nextIntakeColor?: string;
 }
 

@@ -30,7 +30,7 @@ export class UpdatePatientComponent implements OnInit {
       phoneNumber: new FormControl('', [
         Validators.required,
         Validators.pattern(/^[0-9]{8}$/)
-      ]),
+      ]),age_at_HIV_diagnosis: new FormControl('', [Validators.required]),
       city: new FormControl('', [Validators.required]),
       region: new FormControl(''),
       postalCode: new FormControl('', [Validators.required]),
@@ -80,6 +80,9 @@ export class UpdatePatientComponent implements OnInit {
   get phoneNumberControl(): FormControl {
     return this.updateForm.get('phoneNumber') as FormControl;
   }
+  get age_at_HIV_diagnosis(): FormControl {
+    return this.updateForm.get('age_at_HIV_diagnosis') as FormControl;
+  }
 
    isInvalidAndTouchedOrDirty(control: AbstractControl | null): boolean {
       return (control as FormControl).invalid && ((control as FormControl).touched || (control as FormControl).dirty);
@@ -98,6 +101,7 @@ export class UpdatePatientComponent implements OnInit {
         birthDate: patient.birthDate,
         gender: patient.gender,
         phoneNumber: patient.phoneNumber,
+        age_at_HIV_diagnosis:patient.age_at_HIV_diagnosis,
         city: patient.city,
         region: patient.region,
         postalCode: patient.postalCode,
@@ -158,7 +162,7 @@ export class UpdatePatientComponent implements OnInit {
 
     this.service.updatePatient(this.id, patient).subscribe((res) => {
       console.log(res);
-      this.router.navigate(['/medicalfolder', this.id]);  
+      this.router.navigate(['/medicalfolder', this.id]);
     });
   }
 }

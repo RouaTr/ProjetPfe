@@ -20,6 +20,9 @@ import { ListClinicalSymptomsComponent } from './list-clinical-symptoms/list-cli
 import { UpdateClinicalSymptomsComponent } from './update-clinical-symptoms/update-clinical-symptoms.component';
 import { ListLaboratoryComponent } from './list-laboratory/list-laboratory.component';
 import { UpdateLaboratoryComponent } from './update-laboratory/update-laboratory.component';
+import { AddMedicalTreatmentComponent } from './add-medical-treatment/add-medical-treatment.component';
+import { UpdateMedicalTreatmentComponent } from './update-medical-treatment/update-medical-treatment.component';
+import { ListMedicalTreatmentComponent } from './list-medical-treatment/list-medical-treatment.component';
 
 const routes: Routes = [
   {path:'',component:HomeComponent},
@@ -67,6 +70,13 @@ const routes: Routes = [
   { path: 'medicalfolder/listlaboratory/:patientId', component: ListLaboratoryComponent },
   {path:'listlaboratory',component:ListLaboratoryComponent},
   { path: 'medicalfolder/listlaboratory/:patientId/add', component: LaboratoryComponent},
+   //traitement
+{path:'medicaltreatment',component:AddMedicalTreatmentComponent},
+{path: 'medicalfolder/listmedicaltreatment/updatemedicaltreatment/:id',component:UpdateMedicalTreatmentComponent},
+
+  { path: 'medicalfolder/listmedicaltreatment/:patientId', component: ListMedicalTreatmentComponent },
+  {path:'listmedicaltreatment',component:ListLaboratoryComponent},
+  { path: 'medicalfolder/listmedicaltreatment/:patientId/add', component: AddMedicalTreatmentComponent},
 
 
 

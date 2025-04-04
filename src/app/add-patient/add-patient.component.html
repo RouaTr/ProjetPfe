@@ -16,7 +16,7 @@
     <div class="app-content">
       <app-header></app-header>
       <div class="container-fluid">
-        <app-tabs></app-tabs>
+        <app-tabs ></app-tabs>
         <main>
           <form (ngSubmit)="addNewPatient()" [formGroup]="PatientForm">
             <div class="row m-1">
@@ -380,7 +380,15 @@
 
                           </select>
                         </div>
-
+                        <div class="mb-3">
+                          <label for="age_at_HIV_diagnosis" class="form-label">age_at_HIV_diagnosis</label>
+                          <input type="text" id="age_at_HIV_diagnosis" name="age_at_HIV_diagnosis" class="form-control" pattern="[0-9]{2}"
+                            maxlength="4" required formControlName="age_at_HIV_diagnosis"
+                            [class.is-invalid]="isInvalidAndTouchedOrDirty(age_at_HIV_diagnosis)">
+                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(age_at_HIV_diagnosis)">
+                            champ requis
+                          </small>
+                        </div>
                         <div class="mb-3">
                           <label for="date_naissance" class="form-label">Date contamination</label>
                           <input type="date" id="date_naissance" name="date_naissance" class="custom-date"
@@ -407,6 +415,11 @@
               </div>
             </div>
           </form>
+          <div *ngIf="messageCommande" class="alert alert-danger" style="color: rgb(18, 11, 11); font-weight: bold;">
+            {{ messageCommande }}
+          </div>
+
+
         </main>
       </div>
     </div>
