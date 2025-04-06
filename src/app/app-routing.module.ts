@@ -23,6 +23,8 @@ import { UpdateLaboratoryComponent } from './update-laboratory/update-laboratory
 import { AddMedicalTreatmentComponent } from './add-medical-treatment/add-medical-treatment.component';
 import { UpdateMedicalTreatmentComponent } from './update-medical-treatment/update-medical-treatment.component';
 import { ListMedicalTreatmentComponent } from './list-medical-treatment/list-medical-treatment.component';
+import { UpdateTreatmentByPharmacyComponent } from './update-treatment-by-pharmacy/update-treatment-by-pharmacy.component';
+import { ListOfMedicalPrescriptionsComponent } from './list-of-medical-prescriptions/list-of-medical-prescriptions.component';
 
 const routes: Routes = [
   {path:'',component:HomeComponent},
@@ -74,9 +76,14 @@ const routes: Routes = [
 {path:'medicaltreatment',component:AddMedicalTreatmentComponent},
 {path: 'medicalfolder/listmedicaltreatment/updatemedicaltreatment/:id',component:UpdateMedicalTreatmentComponent},
 
-  { path: 'medicalfolder/listmedicaltreatment/:patientId', component: ListMedicalTreatmentComponent },
-  {path:'listmedicaltreatment',component:ListLaboratoryComponent},
-  { path: 'medicalfolder/listmedicaltreatment/:patientId/add', component: AddMedicalTreatmentComponent},
+  { path: 'listmedicaltreatment/:patientId', component: ListMedicalTreatmentComponent },
+  {path:'listmedicaltreatment',component:ListMedicalTreatmentComponent},
+  { path: 'listmedicaltreatment/:patientId/add', component: AddMedicalTreatmentComponent},
+  //pharmacie
+  {path:'listofmedicalprescriptions',component:ListOfMedicalPrescriptionsComponent},
+
+  { path: 'listofmedicalprescriptions/:patientId', component: ListOfMedicalPrescriptionsComponent },
+  { path: 'updatetreatmentbypharmacie/:treatmentId', component: UpdateTreatmentByPharmacyComponent },
 
 
 

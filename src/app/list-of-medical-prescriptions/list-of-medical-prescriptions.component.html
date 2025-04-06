@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
+  data-sidebar-image="none" data-preloader="disable">
+
+<head>
+
+  <meta charset="utf-8" />
+  <title>Liste des patients</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+  <meta content="Themesbrand" name="author" />
+
+</head>
+
+<body>
+
+
+  <div class="app-wrapper default">
+    <app-menu></app-menu>
+    <div class="app-content">
+      <app-header></app-header>
+
+      <div class="container-fluid">
+
+        <main>
+          <div class="mb-3 d-flex justify-content-between align-items-center">
+
+
+            <!-- Barre de recherche avec icône -->
+            <div class="input-group" style="max-width: 300px;">
+              <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher un patient..."
+                (input)="searchPatient($event)">
+
+              <span class="input-group-text"><i class="ri-search-line"></i></span>
+            </div>
+
+          </div>
+
+          <div class="container-fluid">
+
+
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">Liste des ordonnance VIH </h5>
+                  </div>
+                  <div class="card-body">
+                    <table id="scroll-horizontal" class="table nowrap align-middle" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Nom Patient</th>
+                          <th>sexe</th>
+                          <th>Nom du traitement</th>
+                          <th>date du début du traitement</th>
+                          <th>Durée de la prise</th>
+                          <th>date prévue prochaine prise</th>
+                          <th>statut de livraison</th>
+
+
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <!-- 🟡 1. Patients NON délivrés -->
+                        <ng-container *ngFor="let patient of filteredPatients">
+                          <tr *ngIf="patient.latestTreatment && !patient.latestTreatment.delivered">
+                            <td>{{patient.id}}</td>
+                            <td>{{patient.lastName}} {{patient.firstName}}</td>
+                            <td>{{patient.gender}}</td>
+                            <td>{{ patient.latestTreatment?.treatmentName || 'Aucun traitement' }}</td>
+                            <td>{{ patient.latestTreatment?.treatmentStartDate| date:'dd/MM/yyyy' }}</td>
+                            <td>{{ patient.latestTreatment?.treatment_intake_duration || 'Aucun traitement' }}</td>
+                            <td>
+                              <span class="badge" [ngClass]="{
+                                  'bg-danger': patient.nextIntakeColor === 'danger',
+                                  'bg-warning': patient.nextIntakeColor === 'warning',
+                                  'bg-info-subtle text-info': patient.nextIntakeColor === 'info'
+                                }">
+                                {{ patient.latestTreatment?.next_intake_Date | date:'dd/MM/yyyy' }}
+                              </span>
+                            </td>
+                            <td>
+                              <select class="form-select form-select-sm" [(ngModel)]="patient.latestTreatment.delivered"
+                                (change)="updateDeliveryStatus(patient)">
+                                <option [ngValue]="false"> Non Délivré </option>
+                                <option [ngValue]="true">Délivré</option>
+                              </select>
+                            </td>
+                            <td>
+                              <div class="dropdown d-inline-block">
+                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
+                                  data-bs-toggle="dropdown" aria-expanded="false">
+                                  <i class="ri-more-fill align-middle"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                  <li>
+                                    <a [routerLink]="['/updatetreatmentbypharmacie', patient.latestTreatment.treatmentId]"
+                                      class="dropdown-item">
+                                      <i class="ri-eye-fill align-bottom me-2 text-muted"></i> modifier Traitement
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </td>
+                          </tr>
+                        </ng-container>
+
+                        <!-- ✅ 2. Patients DÉLIVRÉS -->
+                        <ng-container *ngFor="let patient of filteredPatients">
+                          <tr *ngIf="patient.latestTreatment?.delivered">
+                            <!-- même contenu ici que ci-dessus -->
+                            <td>{{patient.id}}</td>
+                            <td>{{patient.lastName}} {{patient.firstName}}</td>
+                            <td>{{patient.gender}}</td>
+                            <td>{{ patient.latestTreatment?.treatmentName || 'Aucun traitement' }}</td>
+                            <td>{{ patient.latestTreatment?.treatmentStartDate| date:'dd/MM/yyyy' }}</td>
+                            <td>{{ patient.latestTreatment?.treatment_intake_duration || 'Aucun traitement' }}</td>
+                            <td>
+                              <span class="badge" [ngClass]="{
+                                  'bg-danger': patient.nextIntakeColor === 'danger',
+                                  'bg-warning': patient.nextIntakeColor === 'warning',
+                                  'bg-info-subtle text-info': patient.nextIntakeColor === 'info'
+                                }">
+                                {{ patient.latestTreatment?.next_intake_Date | date:'dd/MM/yyyy' }}
+                              </span>
+                            </td>
+                            <td>
+                              <select class="form-select form-select-sm" [(ngModel)]="patient.latestTreatment.delivered"
+                                (change)="updateDeliveryStatus(patient)">
+                                <option [ngValue]="false">Non délivré</option>
+                                <option [ngValue]="true">Délivré</option>
+                              </select>
+                            </td>
+
+                            <td>
+                              <div class="dropdown d-inline-block">
+                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
+                                  data-bs-toggle="dropdown" aria-expanded="false">
+                                  <i class="ri-more-fill align-middle"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                  <li>
+                                    <a [routerLink]="['/updatetreatmentbypharmacie', patient.latestTreatment.treatmentId]"
+                                      class="dropdown-item">
+                                      <i class="ri-eye-fill align-bottom me-2 text-muted"></i> modifier Traitement
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </td>
+                          </tr>
+                        </ng-container>
+
+                      </tbody>
+
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </main>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+</html>

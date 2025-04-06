@@ -32,6 +32,8 @@ import { UpdateLaboratoryComponent } from './update-laboratory/update-laboratory
 import { AddMedicalTreatmentComponent } from './add-medical-treatment/add-medical-treatment.component';
 import { UpdateMedicalTreatmentComponent } from './update-medical-treatment/update-medical-treatment.component';
 import { ListMedicalTreatmentComponent } from './list-medical-treatment/list-medical-treatment.component';
+import { UpdateTreatmentByPharmacyComponent } from './update-treatment-by-pharmacy/update-treatment-by-pharmacy.component';
+import { ListOfMedicalPrescriptionsComponent } from './list-of-medical-prescriptions/list-of-medical-prescriptions.component';
 
 
 @NgModule({
@@ -64,6 +66,8 @@ import { ListMedicalTreatmentComponent } from './list-medical-treatment/list-med
     AddMedicalTreatmentComponent,
     UpdateMedicalTreatmentComponent,
     ListMedicalTreatmentComponent,
+    UpdateTreatmentByPharmacyComponent,
+    ListOfMedicalPrescriptionsComponent,
   
   ],
   imports: [

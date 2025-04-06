@@ -112,7 +112,7 @@
                         </div>
 
                         <div class="mb-3">
-                          <label for="duration_of_visual_loss" class="form-label">durée de perte de vue</label>
+                          <label for="duration_of_visual_loss" class="form-label">durée de perte de vue(en jours)</label>
                           <input type="number" id="duration_of_visual_loss" formControlName="duration_of_visual_loss"
                             class="form-control"
                             >
@@ -131,13 +131,13 @@
 
 
                           </select>
-                         
+
                         </div>
 
                       </div>
                     </div>
                     <div class="card-footer">
-                      <button type="submit">Enregistrer</button>
+                      <button type="submit">Enregistrer et envoyer a la pharmacie </button>
 
                     </div>
                   </div>
@@ -145,10 +145,14 @@
               </div>
             </div>
           </form>
-          <div *ngIf="messageCommande" class="alert alert-danger" style="color: rgb(21, 2, 2); font-weight: bold;">
-            {{ messageCommande }}
+          <div class="card-footer">
+
+
           </div>
         </main>
+        <div *ngIf="messageCommande" class="alert alert-danger" style="color: rgb(21, 2, 2); font-weight: bold;">
+          {{ messageCommande }}
+        </div>
       </div>
     </div>
   </div>

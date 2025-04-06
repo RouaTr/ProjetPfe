@@ -44,6 +44,8 @@ export class ListLaboratoryComponent {
     albumin: { min:35, max: 45},
     phosphorus: { min:0.8, max: 1.4},
     magnesium: { min:0.74, max: 0.9},
+    cd4Count:{ min: 200 , max: Infinity},
+    viralLoad:{ min:0, max: 50},
   };
   constructor(
     private crudService: CrudService,

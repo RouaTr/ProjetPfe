@@ -16,9 +16,8 @@
     <div class="app-content">
       <app-header></app-header>
       <div class="container-fluid">
-      
         <main>
-          <form (ngSubmit)="updateMedicalTreatment()" [formGroup]="updateForm">
+          <form (ngSubmit)="updateTreatment()" [formGroup]="updateForm">
             <div class="row m-1">
               <div class="col-12">
                 <div class="card">
@@ -34,7 +33,7 @@
                         <div class="mb-3">
                           <label for="example-select" class="form-label">Nom du Traitement</label>
                           <select class="form-select" id="example-select" formControlName="treatmentName"
-                            [class.is-invalid]="isInvalidAndTouchedOrDirty(treatmentName)">
+                           >
                             <option>selectionner</option>
                             <option>Ténofovir (TDF)/ Lamivudine (3TC)/ Doltégravir (DTG) = TLD</option>
                             <option>Tenofovir (TDF)/Lamivudine (3TC)/Efavirenz (EFV) = AVONZA</option>
@@ -64,37 +63,23 @@
 
 
                           </select>
-                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(treatmentName)">
-                            champs requis
-                          </small>
+
                         </div>
 
                         <div class="mb-3">
                           <label for="treatmentStartDate" class="form-label">Date de début du Traitement</label>
                           <input type="Date" id="treatmentStartDate" formControlName="treatmentStartDate"
-                            class="form-control" [class.is-invalid]="isInvalidAndTouchedOrDirty(treatmentStartDate)">
-                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(treatmentStartDate)">
-                            champs requis
-                          </small>
+                            class="form-control" >
+
 
                         </div>
-                        <div class="mb-3">
-                          <label for="treatmentRegistrationDate" class="form-label">Date d'enregistrement</label>
-                          <input type="Date" id="treatmentRegistrationDate" formControlName="treatmentRegistrationDate"
-                            class="form-control" [class.is-invalid]="isInvalidAndTouchedOrDirty(treatmentStartDate)">
-                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(treatmentStartDate)">
-                            champs requis
-                          </small>
 
-                        </div>
                         <div class="mb-3">
                           <label for="treatment_intake_duration" class="form-label">Durée de La prise </label>
                           <input type="number" id="treatment_intake_duration"
                             formControlName="treatment_intake_duration" class="form-control"
-                            [class.is-invalid]="isInvalidAndTouchedOrDirty(treatment_intake_duration)">
-                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(treatment_intake_duration)">
-                            champs requis
-                          </small>
+                            >
+
                         </div>
 
                       </div>
@@ -104,35 +89,14 @@
                         <div class="mb-3">
                           <label for="next_intake_Date" class="form-label">Rendez-Vous Prochain</label>
                           <input type="Date" id="next_intake_Date" formControlName="next_intake_Date"
-                            class="form-control" [class.is-invalid]="isInvalidAndTouchedOrDirty(next_intake_Date)">
-                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(next_intake_Date)">
-                            champs requis
-                          </small>
+                            class="form-control" >
 
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="duration_of_visual_loss" class="form-label">durée de perte de vue(en jours)</label>
-                          <input type="number" id="duration_of_visual_loss" formControlName="duration_of_visual_loss"
-                            class="form-control"
-                            >
 
                         </div>
 
 
-                        <div class="mb-3">
-                          <label for="example-select" class="form-label">statut de sortie</label>
-                          <select class="form-select" id="example-select" formControlName="status"
-                            >
-                            <option>selectionner</option>
-                            <option>Décédé</option>
-                            <option>file active</option>
-                            <option>Transféré sortant/Référé</option>
 
 
-                          </select>
-
-                        </div>
 
                       </div>
                     </div>
@@ -154,4 +118,5 @@
 </body>
 
 </html>
+
 

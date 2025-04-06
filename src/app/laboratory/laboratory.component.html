@@ -115,9 +115,9 @@
                           <input type="number" id="lipase" formControlName="lipase" class="form-control">
                         </div>
                         <div class="mb-3">
-                        <label for="date" class="form-label">Date de test chimique :</label>
-                          <input type="date" id="date" class="form-control" formControlName="chemistrytestDate" >
-                          </div>
+                          <label for="date" class="form-label">Date de test chimique :</label>
+                          <input type="date" id="date" class="form-control" formControlName="chemistrytestDate">
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -295,9 +295,9 @@
 
                         <div class="mb-3">
                           <label for="date" class="form-label">Date de test NFS :</label>
-                            <input type="date" id="date" class="form-control" formControlName="cbcTestDate" >
-                            <div >
-                            </div>
+                          <input type="date" id="date" class="form-control" formControlName="cbcTestDate">
+                          <div>
+                          </div>
                         </div>
 
                       </div>
@@ -448,10 +448,14 @@
 
                         <div class="mb-3">
                           <label for="chestXRay" class="form-label">Radiothorax</label>
-                          <input type="text" id="chestXRay" formControlName="chestXRay" class="form-control" >
+                          <input type="text" id="chestXRay" formControlName="chestXRay" class="form-control">
 
                         </div>
+                        <div class="mb-3">
+                          <label for="date" class="form-label">Date test sérologie:</label>
+                          <input type="date" id="date" class="form-control" formControlName="serologytestDate">
 
+                        </div>
 
 
                       </div>
@@ -473,11 +477,7 @@
                           <label for="viralLoad" class="form-label">Charge virale</label>
                           <input type="number" id="viralLoad" formControlName="viralLoad" class="form-control">
                         </div>
-                        <div class="mb-3">
-                          <label for="date" class="form-label">Date de test NFS :</label>
-                            <input type="date" id="date" class="form-control" formControlName="serologytestDate" >
 
-                        </div>
                       </div>
 
                       <div class="col-lg-6">
@@ -495,10 +495,10 @@
                       </div>
                       <div class="mb-3">
                         <label for="date" class="form-label">Date d'enregistrement :</label>
-                          <input type="date" id="date" class="form-control" formControlName="medicaltestDate" required>
-                          <div *ngIf="medicaltestDate?.invalid && (medicaltestDate?.touched || medicaltestDate?.dirty)">
-                            <small class="text-danger">La date est obligatoire.</small>
-                          </div>
+                        <input type="date" id="date" class="form-control" formControlName="medicaltestDate" required>
+                        <div *ngIf="medicaltestDate?.invalid && (medicaltestDate?.touched || medicaltestDate?.dirty)">
+                          <small class="text-danger">La date est obligatoire.</small>
+                        </div>
                       </div>
                     </div>
                   </div>

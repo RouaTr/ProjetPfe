@@ -10,6 +10,7 @@ export class MedicalTreatment {
     public duration_of_visual_loss?: number,
     public status?: string,
     public treatmentRegistrationDate?: Date,
+    public  delivered?: boolean,
     public patient?: Patient
   ) {}
 }

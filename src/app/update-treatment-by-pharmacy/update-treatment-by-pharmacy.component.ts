@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
 import { Patient } from '../Entity/Patient.Entity';
 import { CrudService } from '../service/crud.service';
 
 @Component({
-  selector: 'app-update-medical-treatment',
-  templateUrl: './update-medical-treatment.component.html',
-  styleUrls: ['./update-medical-treatment.component.css']
+  selector: 'app-update-treatment-by-pharmacy',
+  templateUrl: './update-treatment-by-pharmacy.component.html',
+  styleUrls: ['./update-treatment-by-pharmacy.component.css']
 })
-export class UpdateMedicalTreatmentComponent {
+export class UpdateTreatmentByPharmacyComponent {
 
 updateForm: FormGroup;
   id!: number;
@@ -29,9 +29,7 @@ updateForm: FormGroup;
       treatmentStartDate: new FormControl('', [Validators.required]),
       treatment_intake_duration: new FormControl('', [Validators.required]),
       next_intake_Date: new FormControl('', [Validators.required]),
-     duration_of_visual_loss: new FormControl(''),
-     treatmentRegistrationDate: new FormControl('', [Validators.required]),
-      status: new FormControl(''),
+
     });
   }
 
@@ -39,9 +37,7 @@ updateForm: FormGroup;
   get treatmentStartDate() { return this.updateForm.get('treatmentStartDate'); }
   get treatment_intake_duration() { return this.updateForm.get('treatment_intake_duration'); }
   get next_intake_Date() { return this.updateForm.get('next_intake_Date'); }
-  get duration_of_visual_loss() { return this.updateForm.get('duration_of_visual_loss'); }
-  get treatmentRegistrationDate() { return this.updateForm.get('treatmentRegistrationDate'); }
-  get status() { return this.updateForm.get('status'); }
+
   ngOnInit(): void {
     const storedId = localStorage.getItem('selectedPatientId');
     if (storedId) {
@@ -57,7 +53,7 @@ updateForm: FormGroup;
     this.updateForm.get('treatment_intake_duration')?.valueChanges.subscribe(() => {
       this.calculateNextAppointment();
     });
-    this.id = Number(this.route.snapshot.params['id']);
+    this.id = Number(this.route.snapshot.params['treatmentId']);
 
     this.service.findMedicalTreatmentById(this.id).subscribe((medicaltreatment) => {
       console.log("🔹 Observation récupérée depuis l'API :", medicaltreatment);
@@ -75,9 +71,8 @@ updateForm: FormGroup;
         treatmentStartDate: medicaltreatment.treatmentStartDate,
         treatment_intake_duration: medicaltreatment.treatment_intake_duration,
         next_intake_Date: medicaltreatment.next_intake_Date,
-        duration_of_visual_loss: medicaltreatment.duration_of_visual_loss,
-        treatmentRegistrationDate: medicaltreatment.treatmentRegistrationDate,
-        status: medicaltreatment.status,
+
+
       });
 
       console.log("🔹 Patient récupéré :", this.currentMedicalTreatment.patient);
@@ -102,7 +97,7 @@ updateForm: FormGroup;
 
   }
 
-  updateMedicalTreatment() {
+  updateTreatment() {
     this.updateForm.markAllAsTouched();
     if (this.updateForm.invalid) {
       console.log("🚨 Formulaire invalide !");
@@ -116,7 +111,8 @@ updateForm: FormGroup;
     }
 
     this.patientId = this.currentMedicalTreatment.patient.id; // ✅ Récupération correcte de l'ID du patient
-
+    const storedId = localStorage.getItem('selectedPatientId');
+    console.log("🔹 ID patient récupéré :", storedId);
     let data = this.updateForm.value;
     let medicaltreatment = new MedicalTreatment();
     Object.assign(medicaltreatment, data);
@@ -128,7 +124,7 @@ updateForm: FormGroup;
     this.service.updateMedicalTreatment(this.id, this.patientId, medicaltreatment).subscribe({
       next: (res) => {
         console.log("✅ traitement mis à jour avec succès :", res);
-        this.router.navigate(['/listmedicaltreatment', this.patientId]);
+        this.router.navigate(['/listofmedicalprescriptions']);
       },
       error: (err) => {
         console.error("⚠️ Erreur lors de la mise à jour :", err);
@@ -148,4 +144,5 @@ updateForm: FormGroup;
   }
 
 }
+
 

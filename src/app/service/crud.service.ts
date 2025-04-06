@@ -156,26 +156,30 @@ getClinicalSymptomsByPatientId(patientId: number): Observable<ClinicalSymptoms[]
     return this.http.get<Laboratory[]>(`${this.apiUrl}/laboratory/patient/${patientId}`);
   }
   //  **Gestion des Traitements**
-  addMedicalTreatment(patientId: number, medicaltratment: MedicalTreatment): Observable<MedicalTreatment> {
-    const url = `${this.apiUrl}/medicaltratment?patientId=${patientId}`;
-    return this.http.post<MedicalTreatment>(url, medicaltratment);
+  addMedicalTreatment(patientId: number, medicaltreatment: MedicalTreatment): Observable<MedicalTreatment> {
+    const url = `${this.apiUrl}/medicaltreatment?patientId=${patientId}`;
+    return this.http.post<MedicalTreatment>(url, medicaltreatment);
   }
 
-  updateMedicalTreatment(id: number, patientId: number,medicaltratment: MedicalTreatment): Observable<MedicalTreatment> {
-    const url = `${this.apiUrl}/medicaltratment/${id}?patientId=${patientId}`;
-    return this.http.put<MedicalTreatment>(url, medicaltratment);
+  updateMedicalTreatment(id: number, patientId: number,medicaltreatment: MedicalTreatment): Observable<MedicalTreatment> {
+    const url = `${this.apiUrl}/medicaltreatment/${id}?patientId=${patientId}`;
+    return this.http.put<MedicalTreatment>(url, medicaltreatment);
   }
   findMedicalTreatmentById(id: number): Observable<MedicalTreatment> {
-    return this.http.get<MedicalTreatment>(`${this.apiUrl}/medicaltratment/${id}`);
+    return this.http.get<MedicalTreatment>(`${this.apiUrl}/medicaltreatment/${id}`);
   }
 
 
   getMedicalTreatment(): Observable<MedicalTreatment[]> {
-    return this.http.get<MedicalTreatment[]>(`${this.apiUrl}/medicaltratment`);
+    return this.http.get<MedicalTreatment[]>(`${this.apiUrl}/medicaltreatment`);
   }
   getMedicalTreatmentByPatientId(patientId: number): Observable<MedicalTreatment[]> {
-    return this.http.get<MedicalTreatment[]>(`${this.apiUrl}/medicaltratment/patient/${patientId}`);
+    return this.http.get<MedicalTreatment[]>(`${this.apiUrl}/medicaltreatment/patient/${patientId}`);
   }
+  addPharmacyTreatment(data: any) {
+    return this.http.post('/medicaltreatment', data); // ou le bon endpoint côté backend
+  }
+
 
 
 

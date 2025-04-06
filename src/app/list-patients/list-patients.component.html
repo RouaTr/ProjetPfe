@@ -62,8 +62,9 @@
                           <th>date du début du traitement</th>
                           <th>Durée de la prise</th>
                           <th>date prévue prochaine prise</th>
+                          <th>Numéro de Téléphone</th>
                           <th> perte de vue(jours)</th>
-
+                          <th>Statut</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -88,7 +89,9 @@
                               {{ patient.latestTreatment?.next_intake_Date | date:'dd/MM/yyyy' }}
                             </span>
                           </td>
-                          <td><span class="badge bg-info-subtle text-info">{{ patient.latestTreatment?.duration_of_visual_loss || 'Aucun traitement' }}j</span></td>
+                          <td>{{patient.phoneNumber}}</td>
+                          <td><span class="badge bg-info-subtle text-info">{{ patient.latestTreatment?.duration_of_visual_loss }}j</span></td>
+                          <td><span >{{ patient.latestTreatment?.status }}</span></td>
 
                           <td>
                             <div class="dropdown d-inline-block">
@@ -100,7 +103,7 @@
                                 <li><a [routerLink]="['/medicalfolder', patient.id]" class="dropdown-item"><i
                                       class="ri-eye-fill align-bottom me-2 text-muted"></i> Consulter dossier médical
                                   </a></li>
-                                <li><a class="dropdown-item edit-item-btn"><i
+                                <li><a class="dropdown-item edit-item-btn" [routerLink]="['/listmedicaltreatment', patient.id]"><i
                                       class="ri-pencil-fill align-bottom me-2 text-muted"></i> Prescrire un
                                     traitement</a></li>
                                 <li>

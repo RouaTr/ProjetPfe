@@ -97,7 +97,7 @@ export class AddMedicalTreatmentComponent {
         this.messageCommande = `<div class="alert alert-success" role="alert">
           Traitement ajoutée avec succès !
         </div>`;
-        this.router.navigate([`/medicalfolder/listmedicaltreatment/${this.patientId}`]);
+        this.router.navigate([`/listmedicaltreatment/${this.patientId}`]);
 
       },
       err => {
