@@ -183,4 +183,10 @@ getClinicalSymptomsByPatientId(patientId: number): Observable<ClinicalSymptoms[]
 
 
 
+generateOrdonnance(patientId: number): Observable<Blob> {
+  return this.http.get(`${this.apiUrl}/report/ordonnance/${patientId}`, { responseType: 'blob' });
+}
+
+
+
 }

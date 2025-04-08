@@ -62,6 +62,19 @@ export class ListPatientsComponent {
       });
     });
   }
+  onGenerateOrdonnance(patientId: number): void {
+    this.service.generateOrdonnance(patientId).subscribe(
+      (pdfBlob: Blob) => {
+        // Créez une URL à partir du blob PDF
+        const fileURL = URL.createObjectURL(pdfBlob);
+        // Ouvrir le PDF dans une nouvelle fenêtre ou onglet
+        window.open(fileURL);
+      },
+      (error) => {
+        console.error('Erreur lors de la génération du rapport :', error);
+      }
+    );
+  }
 
 
   searchPatient(event: Event): void {

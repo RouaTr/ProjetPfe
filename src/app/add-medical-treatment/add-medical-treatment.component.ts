@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CrudService } from '../service/crud.service';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-add-medical-treatment',
@@ -9,19 +10,24 @@ import { Router } from '@angular/router';
   styleUrls: ['./add-medical-treatment.component.css']
 })
 export class AddMedicalTreatmentComponent {
-
- messageCommande = "";
- MedicalTreatmentForm: FormGroup;
+  messageCommande = "";
+  MedicalTreatmentForm: FormGroup;
   patientId: number | null = null; // Initialisation correcte
-
-  constructor(private service: CrudService, private router: Router, private fb: FormBuilder) {
+  patientName: string = '';  // Définition de la propriété patientName
+  patientLastName: string = '';
+  constructor(
+    private service: CrudService,
+    private router: Router,
+    private fb: FormBuilder,
+    private http: HttpClient
+  ) {
     let formControls = {
       treatmentName: new FormControl('', [Validators.required]),
       treatmentStartDate: new FormControl('', [Validators.required]),
       treatment_intake_duration: new FormControl('', [Validators.required]),
       next_intake_Date: new FormControl('', [Validators.required]),
-     duration_of_visual_loss: new FormControl(''),
-     treatmentRegistrationDate: new FormControl('', [Validators.required]),
+      duration_of_visual_loss: new FormControl(''),
+      treatmentRegistrationDate: new FormControl('', [Validators.required]),
       status: new FormControl(''),
     };
 
@@ -33,6 +39,21 @@ export class AddMedicalTreatmentComponent {
     if (storedId) {
       this.patientId = parseInt(storedId, 10);
       console.log("🔹 ID du patient récupéré :", this.patientId);
+
+      // Récupérer les informations du patient en fonction de l'ID
+      this.service.findPatientById(this.patientId).subscribe(
+        (patient) => {
+          // Supposons que 'patient' contient le prénom et le nom du patient
+          this.patientName = patient.firstName;
+          this.patientLastName = patient.lastName;
+
+          // Optionnellement, tu peux les ajouter au formulaire ou les utiliser dans le reste du processus
+          console.log(`Nom du patient: ${this.patientLastName}, Prénom du patient: ${this.patientName}`);
+        },
+        (error) => {
+          console.error("Erreur lors de la récupération des informations du patient", error);
+        }
+      );
     } else {
       console.error("⚠️ Aucun patient sélectionné !");
     }
@@ -44,6 +65,11 @@ export class AddMedicalTreatmentComponent {
       this.calculateNextAppointment();
     });
   }
+
+  // Fonction pour générer l'ordonnance avec les informations du patient
+ 
+
+
   calculateNextAppointment() {
     const startDate = this.MedicalTreatmentForm.get('treatmentStartDate')?.value;
     const duration = this.MedicalTreatmentForm.get('treatment_intake_duration')?.value;
@@ -65,12 +91,12 @@ export class AddMedicalTreatmentComponent {
   get next_intake_Date() { return this.MedicalTreatmentForm.get('next_intake_Date'); }
   get duration_of_visual_loss() { return this.MedicalTreatmentForm.get('duration_of_visual_loss'); }
   get treatmentRegistrationDate() { return this.MedicalTreatmentForm.get('treatmentRegistrationDate'); }
-
   get status() { return this.MedicalTreatmentForm.get('status'); }
+
   isInvalidAndTouchedOrDirty(control: AbstractControl | null): boolean {
     return (control as FormControl).invalid && ((control as FormControl).touched || (control as FormControl).dirty);
-
   }
+
   addNewMedicalTreatment() {
     this.MedicalTreatmentForm.markAllAsTouched();
     if (this.MedicalTreatmentForm.invalid) {
@@ -95,10 +121,9 @@ export class AddMedicalTreatmentComponent {
       res => {
         console.log('Réponse du serveur:', res);
         this.messageCommande = `<div class="alert alert-success" role="alert">
-          Traitement ajoutée avec succès !
+          Traitement ajouté avec succès !
         </div>`;
         this.router.navigate([`/listmedicaltreatment/${this.patientId}`]);
-
       },
       err => {
         console.error('Erreur:', err);
@@ -108,6 +133,7 @@ export class AddMedicalTreatmentComponent {
       }
     );
   }
+
   logInvalidFields() {
     console.log(" Champs invalides dans le formulaire :");
 
@@ -120,4 +146,3 @@ export class AddMedicalTreatmentComponent {
     });
   }
 }
-

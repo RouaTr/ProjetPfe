@@ -106,7 +106,13 @@
                                 <li><a class="dropdown-item edit-item-btn" [routerLink]="['/listmedicaltreatment', patient.id]"><i
                                       class="ri-pencil-fill align-bottom me-2 text-muted"></i> Prescrire un
                                     traitement</a></li>
+                                    <li>
+                                      <button class="bt" (click)="onGenerateOrdonnance(patient.id)">
+                                        Générer ordonnance
+                                      </button>
+                                    </li>
                                 <li>
+
                                   <a class="dropdown-item remove-item-btn">
                                     <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Analyser les
                                     tendances

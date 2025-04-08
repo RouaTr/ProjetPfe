@@ -1,4 +1,9 @@
 button{
   background-color: rgb(98, 153, 198);
-  
+
+}
+.bt{
+  background-color: rgb(255, 255, 255);
+  margin-left: 30px;
+  border: none;
 }
