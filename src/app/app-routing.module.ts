@@ -25,6 +25,9 @@ import { UpdateMedicalTreatmentComponent } from './update-medical-treatment/upda
 import { ListMedicalTreatmentComponent } from './list-medical-treatment/list-medical-treatment.component';
 import { UpdateTreatmentByPharmacyComponent } from './update-treatment-by-pharmacy/update-treatment-by-pharmacy.component';
 import { ListOfMedicalPrescriptionsComponent } from './list-of-medical-prescriptions/list-of-medical-prescriptions.component';
+import { AddPractitionnerComponent } from './add-practitionner/add-practitionner.component';
+import { AddPharmacistComponent } from './add-pharmacist/add-pharmacist.component';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   {path:'',component:HomeComponent},
@@ -42,11 +45,17 @@ const routes: Routes = [
 
   {path:'medicalfolder/listobservation/:patientId',component:ListObservationComponent},
   {path: 'medicalfolder/listobservation/:patientId/add', component: ObservationComponent},
-
+  {
+    path: 'observation/:patientId',
+    component: ObservationComponent
+  },
 //functSymptoms
   {path:'functionalsymptoms',component:FonctionnalSymptomsComponent},
   {path: 'medicalfolder/listfunctionalsymptoms/updatefunctionalsymptoms/:id',component:UpdateFunctionalSymptomsComponent},
-
+  {
+    path: 'functionalsymptoms/:patientId',
+    component: FonctionnalSymptomsComponent
+  },
   { path: 'medicalfolder/listfunctionalsymptoms/:patientId', component: ListFunctionalSymptomsComponent },
   {path:'listfunctionalsymptoms',component:ListFunctionalSymptomsComponent},
   { path: 'medicalfolder/listfunctionalsymptoms/:patientId/add', component: FonctionnalSymptomsComponent},
@@ -57,7 +66,10 @@ const routes: Routes = [
   { path: 'medicalfolder/listmedicalhistory/:patientId', component: ListMedicalHistoryComponent },
   {path:'listmedicalhistory',component:ListMedicalHistoryComponent},
   { path: 'medicalfolder/listmedicalhistory/:patientId/add', component: MedicalHistoryComponent},
-
+  {
+    path: 'medicalhistory/:patientId',
+    component: MedicalHistoryComponent
+  },
 //clinicalSymptoms
 {path:'clinicalsymptoms',component:CliniaclSymptomsComponent},
 {path: 'medicalfolder/listclinicalsymptoms/updateclinicalsymptoms/:id',component:UpdateClinicalSymptomsComponent},
@@ -65,6 +77,10 @@ const routes: Routes = [
   { path: 'medicalfolder/listclinicalsymptoms/:patientId', component: ListClinicalSymptomsComponent },
   {path:'listclinicalsymptoms',component:ListClinicalSymptomsComponent},
   { path: 'medicalfolder/listclinicalsymptoms/:patientId/add', component: CliniaclSymptomsComponent},
+  {
+    path: 'clinicalsymptoms/:patientId',
+    component: CliniaclSymptomsComponent
+  },
   //laboratory
 {path:'laboratory',component:LaboratoryComponent},
 {path: 'medicalfolder/listlaboratory/updatelaboratory/:id',component:UpdateLaboratoryComponent},
@@ -72,9 +88,17 @@ const routes: Routes = [
   { path: 'medicalfolder/listlaboratory/:patientId', component: ListLaboratoryComponent },
   {path:'listlaboratory',component:ListLaboratoryComponent},
   { path: 'medicalfolder/listlaboratory/:patientId/add', component: LaboratoryComponent},
+  {
+    path: 'laboratory/:patientId',
+    component: LaboratoryComponent
+  },
    //traitement
 {path:'medicaltreatment',component:AddMedicalTreatmentComponent},
 {path: 'medicalfolder/listmedicaltreatment/updatemedicaltreatment/:id',component:UpdateMedicalTreatmentComponent},
+{
+  path: 'medicaltreatment/:patientId',
+  component: AddMedicalTreatmentComponent
+},
 
   { path: 'listmedicaltreatment/:patientId', component: ListMedicalTreatmentComponent },
   {path:'listmedicaltreatment',component:ListMedicalTreatmentComponent},
@@ -84,6 +108,11 @@ const routes: Routes = [
 
   { path: 'listofmedicalprescriptions/:patientId', component: ListOfMedicalPrescriptionsComponent },
   { path: 'updatetreatmentbypharmacie/:treatmentId', component: UpdateTreatmentByPharmacyComponent },
+
+//Login/register
+{ path: 'addPractitionner', component: AddPractitionnerComponent },
+{ path: 'addPharmacist', component: AddPharmacistComponent },
+{ path: 'login', component: LoginComponent },
 
 
 

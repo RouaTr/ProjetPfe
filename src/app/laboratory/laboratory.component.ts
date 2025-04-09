@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CrudService } from '../service/crud.service';
 
 @Component({
@@ -12,8 +12,9 @@ export class LaboratoryComponent {
  messageCommande = "";
   LaboratoryForm: FormGroup;
   patientId: number | null = null; // Initialisation correcte
-
-  constructor(private service: CrudService, private router: Router, private fb: FormBuilder) {
+  patientName: string = '';  // Définition de la propriété patientName
+  patientLastName: string = '';
+  constructor(private service: CrudService, private router: Router, private fb: FormBuilder,  private route: ActivatedRoute) {
     let formControls = {
       medicaltestDate: new FormControl('', [Validators.required]),
       chemistrytestDate: new FormControl(''),
@@ -99,13 +100,27 @@ export class LaboratoryComponent {
   }
 
   ngOnInit(): void {
-    const storedId = localStorage.getItem('selectedPatientId');
-    if (storedId) {
-      this.patientId = parseInt(storedId, 10);
-      console.log("🔹 ID du patient récupéré :", this.patientId);
-    } else {
-      console.error("⚠️ Aucun patient sélectionné !");
-    }
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('patientId');
+      if (id) {
+        this.patientId = +id;
+        console.log("🔹 ID du patient récupéré depuis l'URL :", this.patientId);
+
+        // Charger le patient
+        this.service.findPatientById(this.patientId).subscribe(
+          (patient) => {
+            this.patientName = patient.firstName;
+            this.patientLastName = patient.lastName;
+          },
+          (error) => {
+            console.error("Erreur lors de la récupération du patient :", error);
+          }
+        );
+      } else {
+        console.error("⚠️ Aucun ID patient dans l'URL !");
+      }
+    });
+
   }
 
   get medicaltestDate() { return this.LaboratoryForm.get('medicaltestDate'); }

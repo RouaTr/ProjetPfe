@@ -31,12 +31,13 @@
       </div>
       <main>
         <div class="mb-3 d-flex justify-content-between align-items-center">
-          <a href="/clinicalsymptoms" class="btn btn-primary">
+          <a [routerLink]="['/clinicalsymptoms', patient?.id]" class="btn btn-primary">
             <i class="ri-user-add-line"></i> + signes Cliniques
           </a>
           <!-- Barre de recherche -->
           <div class="input-group" style="max-width: 300px;">
-            <input type="date" id="searchPatient" class="form-control" placeholder="Rechercher ..." [(ngModel)]="searchDate" (input)="filterByDate()">
+            <input type="date" id="searchPatient" class="form-control" placeholder="Rechercher ..."
+              [(ngModel)]="searchDate" (input)="filterByDate()">
             <span class="input-group-text"><i class="ri-search-line"></i></span>
           </div>
         </div>
@@ -57,11 +58,14 @@
                 <p *ngIf="symptom.digestive"><strong>Digestif :</strong> {{ symptom.digestive }}</p>
                 <p *ngIf="symptom.lipodystrophy"><strong>Lipodystrophie :</strong> {{ symptom.lipodystrophy }}</p>
                 <p *ngIf="symptom.genitourinary"><strong>Génito-Urinaire :</strong> {{ symptom.genitourinary }}</p>
-                <p *ngIf="symptom.ophthalmological"><strong>Ophtalmologique :</strong> {{ symptom.ophthalmological }}</p>
+                <p *ngIf="symptom.ophthalmological"><strong>Ophtalmologique :</strong> {{ symptom.ophthalmological }}
+                </p>
                 <p *ngIf="symptom.pulmonary"><strong>Pulmonaire :</strong> {{ symptom.pulmonary }}</p>
                 <p *ngIf="symptom.puberty"><strong>Puberté :</strong> {{ symptom.puberty }}</p>
-                <p *ngIf="symptom.clinicalSymptomsDate"><strong>Date :</strong> {{ symptom.clinicalSymptomsDate | date:'dd/MM/yyyy' }}</p>
-                <button class="btn btn-primary" (click)="updateClinicalSymptoms(symptom.id)" type="submit">Modifier</button>
+                <p *ngIf="symptom.clinicalSymptomsDate"><strong>Date :</strong> {{ symptom.clinicalSymptomsDate |
+                  date:'dd/MM/yyyy' }}</p>
+                <button class="btn btn-primary" (click)="updateClinicalSymptoms(symptom.id)"
+                  type="submit">Modifier</button>
 
               </div>
             </div>

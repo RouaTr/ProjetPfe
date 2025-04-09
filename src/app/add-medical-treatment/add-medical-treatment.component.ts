@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CrudService } from '../service/crud.service';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -19,7 +19,7 @@ export class AddMedicalTreatmentComponent {
     private service: CrudService,
     private router: Router,
     private fb: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,  private route: ActivatedRoute
   ) {
     let formControls = {
       treatmentName: new FormControl('', [Validators.required]),
@@ -35,28 +35,27 @@ export class AddMedicalTreatmentComponent {
   }
 
   ngOnInit(): void {
-    const storedId = localStorage.getItem('selectedPatientId');
-    if (storedId) {
-      this.patientId = parseInt(storedId, 10);
-      console.log("🔹 ID du patient récupéré :", this.patientId);
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('patientId');
+      if (id) {
+        this.patientId = +id;
+        console.log("🔹 ID du patient récupéré depuis l'URL :", this.patientId);
 
-      // Récupérer les informations du patient en fonction de l'ID
-      this.service.findPatientById(this.patientId).subscribe(
-        (patient) => {
-          // Supposons que 'patient' contient le prénom et le nom du patient
-          this.patientName = patient.firstName;
-          this.patientLastName = patient.lastName;
+        // Charger le patient
+        this.service.findPatientById(this.patientId).subscribe(
+          (patient) => {
+            this.patientName = patient.firstName;
+            this.patientLastName = patient.lastName;
+          },
+          (error) => {
+            console.error("Erreur lors de la récupération du patient :", error);
+          }
+        );
+      } else {
+        console.error("⚠️ Aucun ID patient dans l'URL !");
+      }
+    });
 
-          // Optionnellement, tu peux les ajouter au formulaire ou les utiliser dans le reste du processus
-          console.log(`Nom du patient: ${this.patientLastName}, Prénom du patient: ${this.patientName}`);
-        },
-        (error) => {
-          console.error("Erreur lors de la récupération des informations du patient", error);
-        }
-      );
-    } else {
-      console.error("⚠️ Aucun patient sélectionné !");
-    }
     this.MedicalTreatmentForm.get('treatmentStartDate')?.valueChanges.subscribe(() => {
       this.calculateNextAppointment();
     });
@@ -67,7 +66,7 @@ export class AddMedicalTreatmentComponent {
   }
 
   // Fonction pour générer l'ordonnance avec les informations du patient
- 
+
 
 
   calculateNextAppointment() {

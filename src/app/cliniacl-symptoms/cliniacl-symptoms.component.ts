@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CrudService } from '../service/crud.service';
 
 @Component({
@@ -12,7 +12,8 @@ export class CliniaclSymptomsComponent implements OnInit {
   ClinicalSymptomsForm: FormGroup;
   patientId: number | null = null;
   messageCommande = "";
-
+  patientName: string = '';  // Définition de la propriété patientName
+  patientLastName: string = '';
   // Liste des options par catégorie
   options: { [key: string]: string[] } = {
     generalSigns: [
@@ -78,7 +79,7 @@ export class CliniaclSymptomsComponent implements OnInit {
   };
   optionsKeys: string[] = [];
 
-  constructor(private service: CrudService, private router: Router, private fb: FormBuilder) {
+  constructor(private service: CrudService, private router: Router, private fb: FormBuilder,  private route: ActivatedRoute) {
     let formControls = {
       generalSigns: new FormArray(this.options['generalSigns'].map(() => new FormControl(false))),
       dermatological: new FormArray(this.options['dermatological'].map(() => new FormControl(false))),
@@ -102,13 +103,27 @@ export class CliniaclSymptomsComponent implements OnInit {
 
   ngOnInit(): void {
     this.optionsKeys = Object.keys(this.options);
-    const storedId = localStorage.getItem('selectedPatientId');
-    if (storedId) {
-      this.patientId = parseInt(storedId, 10);
-      console.log("🔹 ID du patient récupéré :", this.patientId);
-    } else {
-      console.error("⚠️ Aucun patient sélectionné !");
-    }
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('patientId');
+      if (id) {
+        this.patientId = +id;
+        console.log("🔹 ID du patient récupéré depuis l'URL :", this.patientId);
+
+        // Charger le patient
+        this.service.findPatientById(this.patientId).subscribe(
+          (patient) => {
+            this.patientName = patient.firstName;
+            this.patientLastName = patient.lastName;
+          },
+          (error) => {
+            console.error("Erreur lors de la récupération du patient :", error);
+          }
+        );
+      } else {
+        console.error("⚠️ Aucun ID patient dans l'URL !");
+      }
+    });
+
   }
 
 

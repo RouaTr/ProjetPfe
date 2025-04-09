@@ -43,11 +43,11 @@ export class ListPatientsComponent {
 
         // 🔽 Après avoir assigné les traitements à tous les patients
         this.filteredPatients = this.listPatients
-          .filter(p => p.latestTreatment?.next_intake_Date) // garder ceux qui ont une date
-          .sort((a, b) =>
-            new Date(a.latestTreatment!.next_intake_Date!).getTime() -
-            new Date(b.latestTreatment!.next_intake_Date!).getTime()
-          );
+        .sort((a, b) =>
+          new Date(a.latestTreatment?.next_intake_Date || 0).getTime() -
+          new Date(b.latestTreatment?.next_intake_Date || 0).getTime()
+        );
+
 
         // Ajouter la couleur selon la position
         this.filteredPatients.forEach((patient, index) => {
