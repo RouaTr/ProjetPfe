@@ -37,6 +37,8 @@ import { ListOfMedicalPrescriptionsComponent } from './list-of-medical-prescript
 import { AddPractitionnerComponent } from './add-practitionner/add-practitionner.component';
 import { AddPharmacistComponent } from './add-pharmacist/add-pharmacist.component';
 import { LoginComponent } from './login/login.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 @NgModule({
@@ -74,6 +76,8 @@ import { LoginComponent } from './login/login.component';
     AddPractitionnerComponent,
     AddPharmacistComponent,
     LoginComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
   
   ],
   imports: [

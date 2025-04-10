@@ -8,11 +8,15 @@ import { MedicalHistory } from '../Entity/MedicalHistory.Entity';
 import { ClinicalSymptoms } from '../Entity/ClinicalSymptoms.Entity';
 import { Laboratory } from '../Entity/Laboratory.Entity';
 import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
+import { Practitionner} from '../Entity/Practitionner.Entity';
+import { JwtHelperService } from "@auth0/angular-jwt";
+
 @Injectable({
   providedIn: 'root'
 })
 export class CrudService {
   apiUrl = 'http://localhost:8081/api';
+  loginUserUrl='http://localhost:8081/api/practitionner/login'
 
   constructor(private http: HttpClient) {}
 
@@ -185,6 +189,51 @@ getClinicalSymptomsByPatientId(patientId: number): Observable<ClinicalSymptoms[]
 
 generateOrdonnance(patientId: number): Observable<Blob> {
   return this.http.get(`${this.apiUrl}/report/ordonnance/${patientId}`, { responseType: 'blob' });
+}
+//  **Gestion practitionner**
+
+
+addPractitionner(practitionner:Practitionner):Observable<Practitionner>
+{
+ return this.http.post<any>(this.apiUrl+"/practitionner",practitionner);
+}
+
+
+getPractitionner(): Observable<Practitionner[]> {
+  return this.http.get<Practitionner[]>(`${this.apiUrl}/practitionner`);
+}
+
+updatePractitionner(id: number, practitionner: Practitionner): Observable<Practitionner> {
+  return this.http.put<Practitionner>(`${this.apiUrl}/practitionner/${id}`,practitionner);
+}
+
+findPractitionnerById(id: number): Observable<Practitionner> {
+  return this.http.get<Practitionner>(`${this.apiUrl}/practitionner/${id}`);
+}
+doesPractitionnerExists(practitionnerLastName: string, practitionnerFirstName: string) {
+  return this.http.get<boolean>(`${this.apiUrl}/practitionner/exists?practitionnerLastName=${practitionnerLastName}&practitionnerFirstName=${practitionnerFirstName}`);
+}
+loginPractitionner(practitionner:Practitionner){
+  return this.http.post<any>(this.loginUserUrl, practitionner);
+}
+getUserInfo() {
+  var token = localStorage.getItem("myToken");
+  const helper = new JwtHelperService();
+  const decodedToken = helper.decodeToken(token);
+  const expirationDate = helper.getTokenExpirationDate(token);
+  const isExpired = helper.isTokenExpired(token);
+  var decoded: any
+  return decodedToken?.data
+}
+isLoggedIn(){
+
+  let token = localStorage.getItem("myToken");
+
+  if (token) {
+    return true ;
+  } else {
+    return false;
+  }
 }
 
 
