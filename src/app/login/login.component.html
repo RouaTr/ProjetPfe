@@ -82,7 +82,7 @@
 
             <p class="text-center">
               <span>Mot de passe oublié?</span>
-              <a href="forgortPassword">
+              <a href="forgot-password">
                 <span class="login">Réinitialisez votre mot de passe</span>
               </a>
             </p>
@@ -90,7 +90,9 @@
 
           </div>
         </div>
-        <!-- Register Card -->
+        <div *ngIf="messageCommande" class="alert alert-danger" style="color: rgb(18, 11, 11); font-weight: bold;">
+          {{ messageCommande }}
+        </div>
 
       </div>
     </div>

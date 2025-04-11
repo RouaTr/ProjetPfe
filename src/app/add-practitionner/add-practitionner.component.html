@@ -79,9 +79,19 @@
                   </div>
                   <span class="input-group-text cursor-pointer"><i class="ri-eye-off-line"></i></span>
                 </div>
-              </div>
+              </div><br>
+              <div class="form-floating form-floating-outline">
+                <select class="form-control" id="example-select" formControlName="practitionnerRole">
 
-              <input type="hidden" name="role" value="medecin">
+                  <option >medecin</option>
+                  <option >pharmacien</option>
+                  <option hidden>admin</option>
+
+                </select>
+
+                <label for="password">Role</label>
+              </div>
+              <input type="hidden" name="practitionnerRole" value="medecin">
 
               <button class="bt" type="submit">
                 Sign up
@@ -90,7 +100,7 @@
 
             <p class="text-center">
               <span>Vous Avez Déja Un Compte?</span>
-              <a href="login">
+              <a href="">
                 <span class="login">Login</span>
               </a>
             </p>
@@ -98,6 +108,9 @@
 
 
 
+          </div>
+          <div *ngIf="messageCommande" class="alert alert-danger" style="color: rgb(18, 11, 11); font-weight: bold;">
+            {{ messageCommande }}
           </div>
         </div>
         <!-- Register Card -->

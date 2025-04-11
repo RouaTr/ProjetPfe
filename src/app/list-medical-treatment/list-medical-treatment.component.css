@@ -2,6 +2,10 @@ button{
   background-color: rgb(98, 153, 198);
 
 }
+body{
+  background-color: rgb(226, 236, 249);
+;
+}
 .tabs {
 
   display: flex;
@@ -33,4 +37,5 @@ button{
   color: blue;
   border-radius: 5px;
 }
+
 

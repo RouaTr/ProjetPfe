@@ -25,7 +25,7 @@ messageCommande = "";
       ]],
       practitionnerEmail: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
-      practitionnerRole: new FormControl(''),
+      practitionnerRole: new FormControl('',[Validators.required]),
 
 
     }
@@ -89,6 +89,7 @@ messageCommande = "";
           res => {
             console.log(" practitionner ajouté avec succès :", res);
             this.messageCommande = " Praticien ajouté avec succès !";
+            this.router.navigate([``]);
 
             if (res && res.id) {
               localStorage.setItem('selectedPractitionnerId', res.id.toString());

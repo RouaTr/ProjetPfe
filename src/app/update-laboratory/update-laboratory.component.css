@@ -99,5 +99,9 @@ button:disabled {
   background-color: #2926b6; /* Couleur de fond grise lorsque désactivé */
   cursor: not-allowed;
 }
+body{
+  background-color: rgb(226, 236, 249);
+;
+}
 
 

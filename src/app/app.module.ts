@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -35,10 +35,15 @@ import { ListMedicalTreatmentComponent } from './list-medical-treatment/list-med
 import { UpdateTreatmentByPharmacyComponent } from './update-treatment-by-pharmacy/update-treatment-by-pharmacy.component';
 import { ListOfMedicalPrescriptionsComponent } from './list-of-medical-prescriptions/list-of-medical-prescriptions.component';
 import { AddPractitionnerComponent } from './add-practitionner/add-practitionner.component';
-import { AddPharmacistComponent } from './add-pharmacist/add-pharmacist.component';
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { HeaderPharmacyComponent } from './header-pharmacy/header-pharmacy.component';
+import { MenuPharmacyComponent } from './menu-pharmacy/menu-pharmacy.component';
+import { UpdatePractitionnerComponent } from './update-practitionner/update-practitionner.component';
+import { ManagePractitionnerAccessComponent } from './manage-practitionner-access/manage-practitionner-access.component';
+import { HeaderAdminComponent } from './header-admin/header-admin.component';
+import { MenuAdminComponent } from './menu-admin/menu-admin.component';
 
 
 @NgModule({
@@ -74,11 +79,16 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     UpdateTreatmentByPharmacyComponent,
     ListOfMedicalPrescriptionsComponent,
     AddPractitionnerComponent,
-    AddPharmacistComponent,
     LoginComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-  
+    HeaderPharmacyComponent,
+    MenuPharmacyComponent,
+    UpdatePractitionnerComponent,
+    ManagePractitionnerAccessComponent,
+    HeaderAdminComponent,
+    MenuAdminComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -87,7 +97,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [  { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService,],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

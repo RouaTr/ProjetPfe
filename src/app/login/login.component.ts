@@ -10,62 +10,78 @@ import { CrudService } from '../service/crud.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  messageCommande=""
-  loginForm: FormGroup
-    constructor(
-      private fb: FormBuilder,
-      private service:CrudService,
-      private router:Router
+  messageCommande = "";
+  loginForm: FormGroup;
 
-    ) {
-      let formControls = {
+  constructor(
+    private fb: FormBuilder,
+    private service: CrudService,
+    private router: Router
+  ) {
+    let formControls = {
       practitionnerEmail: new FormControl('', [Validators.required, Validators.email]),
-          password: new FormControl('', [Validators.required]),
-      }
+      password: new FormControl('', [Validators.required]),
+    };
 
-      this.loginForm = this.fb.group(formControls)
-    }
+    this.loginForm = this.fb.group(formControls);
+  }
 
-    get practitionnerEmail() { return this.loginForm.get('practitionnerEmail') }
-    get password() { return this.loginForm.get('password') }
-    ngOnInit(): void {
-    }
+  get practitionnerEmail() { return this.loginForm.get('practitionnerEmail'); }
+  get password() { return this.loginForm.get('password'); }
 
-    login() {
-      let data = this.loginForm.value;
-      console.log(data);
-      let practitionner = new Practitionner(null,null,null,null,data.practitionnerEmail,data.password,null);
-      console.log(practitionner);
-      if (
+  ngOnInit(): void {
+    console.log('LoginComponent initialized');
+  }
 
-        data.practitionnerEmail == 0 ||
-        data.password == 0
-      )
-      {
-        this.messageCommande = `<div class="alert alert-warning" role="alert">
-          service en panne!!!!
-        </div>`
+  login() {
+    console.log('Login function called');
+    let data = this.loginForm.value;
+    console.log('Login form data:', data);  // Vérifie si les données sont récupérées correctement
 
-      } else {
+    let practitionner = new Practitionner(null, null, null, null, data.practitionnerEmail, data.password, null);
 
-        this.service.loginPractitionner(practitionner).subscribe(
-          res=>{
-            console.log(res);
+    if (!data.practitionnerEmail || !data.password) {
+      console.log('Fields are missing');
+      this.messageCommande = `<div class="alert alert-warning" role="alert">Veuillez remplir tous les champs.</div>`;
+    } else {
+      console.log('Sending login request to service...');
+      this.service.loginPractitionner(practitionner).subscribe(
+        res => {
+          console.log('Response from backend:', res);  // Vérifie la réponse du backend
+          if (res.token) {
             let token = res.token;
-            localStorage.setItem("myToken",res.token);
-            localStorage.setItem("role",res.role);
-            this.router.navigate(['']).then(()=>window.location.reload());
-        },
+            localStorage.setItem("myToken", token);
+            console.log('Token saved in localStorage:', token);
 
-          err=>{
-            console.log(err);
-            this.messageCommande = `<div class="alert alert-warning" role="alert">
-            service en panne!!!!
-          </div>`
+            localStorage.setItem("practitionnerRole", res.practitionnerRole);
+            console.log('Role saved in localStorage:', res.practitionnerRole);
 
+            // Redirige vers la page appropriée en fonction du rôle
+            if (res.practitionnerRole === 'admin') {
+              console.log('Redirecting to admin...');
+              this.router.navigate(['manageaccess']);
+            } else if (res.practitionnerRole === 'medecin') {
+              console.log('Redirecting to medecin...');
+              this.router.navigate(['home']);
+            } else if (res.practitionnerRole === 'pharmacien') {
+              console.log('Redirecting to pharmacien...');
+              this.router.navigate(['/listofmedicalprescriptions']);
+            } else {
+              console.log('Unrecognized role, redirecting to login...');
+              this.router.navigate(['']);  // Redirige si le rôle n'est pas reconnu
+            }
+
+
+          } else {
+            console.log('No token received');
+            this.messageCommande = `<div class="alert alert-warning" role="alert">Invalid credentials or missing token!</div>`;
           }
-        )
-
-      }
-      }}
-
+        },
+        err => {
+          console.log('Error response from backend:', err);  // Vérifie l'erreur renvoyée par le backend
+          this.messageCommande = `<div class="alert alert-warning" role="alert"> Service en panne! </div>`;
+        }
+      );
+    }
+  }
+}

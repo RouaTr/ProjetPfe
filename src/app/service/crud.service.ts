@@ -9,16 +9,17 @@ import { ClinicalSymptoms } from '../Entity/ClinicalSymptoms.Entity';
 import { Laboratory } from '../Entity/Laboratory.Entity';
 import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
 import { Practitionner} from '../Entity/Practitionner.Entity';
-import { JwtHelperService } from "@auth0/angular-jwt";
+import { JwtHelperService } from '@auth0/angular-jwt';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class CrudService {
   apiUrl = 'http://localhost:8081/api';
-  loginUserUrl='http://localhost:8081/api/practitionner/login'
+  loginUserUrl='http://localhost:8081/api/practitionner/login';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {}
 
   //  **Gestion des Patients**
 
@@ -216,15 +217,36 @@ doesPractitionnerExists(practitionnerLastName: string, practitionnerFirstName: s
 loginPractitionner(practitionner:Practitionner){
   return this.http.post<any>(this.loginUserUrl, practitionner);
 }
-getUserInfo() {
-  var token = localStorage.getItem("myToken");
-  const helper = new JwtHelperService();
-  const decodedToken = helper.decodeToken(token);
-  const expirationDate = helper.getTokenExpirationDate(token);
-  const isExpired = helper.isTokenExpired(token);
-  var decoded: any
-  return decodedToken?.data
+getPendingPractitionners() {
+  return this.http.get<any[]>(`http://localhost:8081/api/practitionner?status=pending`);
 }
+
+updatePractitionnerRole(id: number, role: string) {
+  const url = `http://localhost:8081/api/practitionner/${id}/role`;
+  const params = { newRole: role };  // Ajouter 'newRole' en tant que paramètre dans l'URL
+  return this.http.put(url, null, { params });  // Utilisation de 'params' au lieu de 'body'
+}
+
+
+
+
+
+getUserInfo() {
+  const token = localStorage.getItem('myToken');
+  if (token) {
+    const decodedToken = this.jwtHelper.decodeToken(token);
+    console.log('Token décodé:', decodedToken);
+    // Assure-toi que les données que tu veux récupérer existent
+    const userDetails = decodedToken; // Ou définis explicitement les propriétés
+    console.log('Détails de l\'utilisateur:', userDetails);
+    return userDetails;
+  }
+  return null;
+}
+
+
+
+
 isLoggedIn(){
 
   let token = localStorage.getItem("myToken");
@@ -234,6 +256,25 @@ isLoggedIn(){
   } else {
     return false;
   }
+}
+requestPasswordReset(email: string): Observable<any> {
+  return this.http.post<any>(
+    `http://localhost:8081/api/practitionner/forgot-password`,
+    { email }
+  );
+}
+
+resetPassword(token: string, newPassword: string): Observable<any> {
+  const url = `http://localhost:8081/api/practitionner/reset-password?token=${encodeURIComponent(token)}&newPassword=${encodeURIComponent(newPassword)}`;
+
+  return this.http.post<any>(url, {}, { headers: { 'Content-Type': 'application/json' } });
+}
+
+
+validatePractitionner(id: number, newRole: string) {
+  const url = `http://localhost:8081/api/practitionner/${id}/validate`;
+  const params = { newRole };
+  return this.http.put(url, null, { params, responseType: 'text' });
 }
 
 

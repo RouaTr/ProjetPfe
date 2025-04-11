@@ -18,8 +18,7 @@
 
   <meta name="description"
     content="Materialize – is the most developer friendly &amp; highly customizable Admin Dashboard Template." />
-  <meta name="keywords"
-   >
+  <meta name="keywords">
 
 
 </head>
@@ -37,70 +36,67 @@
         <div class="card p-md-7 p-1">
           <!-- Logo -->
           <div class="app-brand justify-content-center mt-5">
-            <a  class="app-brand-link gap-2">
+            <a class="app-brand-link gap-2">
               <span class="app-brand-logo demo">
 
               </span>
-              <span class="app-brand-text demo text-heading fw-semibold">MediVIH</span>
+              <span class="app-brand-text demo text-heading fw-semibold">Modifier Votre Compte</span>
             </a>
           </div>
           <!-- /Logo -->
           <div class="card-body mt-1">
-            <h4 class="mb-2">Créez Votre Compte  🚀</h4>
+            <h4 class="mb-2">Créez Votre Compte 🚀</h4>
 
-            <form id="formAuthentication" class="mb-3">
+            <form id="formAuthentication" class="mb-3" (ngSubmit)="updatePractitionner()"
+              [formGroup]="updateForm">
               <div class="form-floating form-floating-outline mb-3">
                 <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username"
-                  autofocus>
+                  autofocus formControlName="practitionnerLastName">
                 <label for="username">Nom</label>
               </div>
               <div class="form-floating form-floating-outline mb-3">
                 <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username"
-                  autofocus>
+                  autofocus formControlName="practitionnerFirstName">
                 <label for="username">Prénom</label>
               </div>
               <div class="form-floating form-floating-outline mb-3">
-                <input type="number" class="form-control" id="username" name="username" placeholder="Enter your username"
-                  autofocus>
-                <label for="username">Numéro de Téléphone</label>
+                <input type="text" class="form-control" id="practitionnerPhoneNumber" name="practitionnerPhoneNumber"
+                  placeholder="practitionnerPhoneNumber" autofocus formControlName="practitionnerPhoneNumber">
+                <label for="practitionnerPhoneNumber">Numéro de Téléphone</label>
               </div>
               <div class="form-floating form-floating-outline mb-3">
-                <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email"
+                  formControlName="practitionnerEmail">
                 <label for="email">Email</label>
               </div>
               <div class="mb-3form-password-toggle">
                 <div class="input-group input-group-merge">
                   <div class="form-floating form-floating-outline">
-                    <input type="password" id="password" class="form-control" name="password"
+                    <input type="password" id="password" class="form-control" name="password" formControlName="password"
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                       aria-describedby="password" />
                     <label for="password">Mot de Passe</label>
                   </div>
                   <span class="input-group-text cursor-pointer"><i class="ri-eye-off-line"></i></span>
                 </div>
-              </div>
+              </div><br>
 
-              <input type="hidden" name="role" value="pharmacien">
 
-              <button class="bt">
-                Sign up
+              <button class="bt" type="submit">
+                enregistrer
               </button>
             </form>
 
-            <p class="text-center">
-              <span>Vous Avez Déja Un Compte?</span>
-              <a href="auth-login-basic.html">
-                <span class="login">Login</span>
-              </a>
-            </p>
 
 
 
 
           </div>
-        </div>
-        <!-- Register Card -->
 
+        </div>
+        <div *ngIf="messageCommande" class="alert alert-danger" style="color: rgb(18, 11, 11); font-weight: bold;">
+          {{ messageCommande }}
+        </div>
       </div>
     </div>
   </div>

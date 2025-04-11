@@ -1,0 +1,14 @@
+nav{
+  background-color: rgb(216, 216, 216);
+}
+h1{
+  color: rgb(13, 14, 13);
+  font-family: "Times New Roman", Times, serif;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+  padding: 10px;
+
+}

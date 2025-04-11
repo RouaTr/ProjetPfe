@@ -66,9 +66,8 @@ export class ObservationComponent implements OnInit {
     this.service.addObservation(this.patientId, data).subscribe(
       res => {
         console.log('Réponse du serveur:', res);
-        this.messageCommande = `<div class="alert alert-success" role="alert">
-          Observation ajoutée avec succès !
-        </div>`;
+        this.messageCommande = `
+          Observation ajoutée avec succès !`;
         this.router.navigate([`/medicalfolder/listobservation/${this.patientId}`]);
 
       },

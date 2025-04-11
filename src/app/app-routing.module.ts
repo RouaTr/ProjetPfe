@@ -26,99 +26,101 @@ import { ListMedicalTreatmentComponent } from './list-medical-treatment/list-med
 import { UpdateTreatmentByPharmacyComponent } from './update-treatment-by-pharmacy/update-treatment-by-pharmacy.component';
 import { ListOfMedicalPrescriptionsComponent } from './list-of-medical-prescriptions/list-of-medical-prescriptions.component';
 import { AddPractitionnerComponent } from './add-practitionner/add-practitionner.component';
-import { AddPharmacistComponent } from './add-pharmacist/add-pharmacist.component';
-import { LoginComponent } from './login/login.component';
+
 import { AuthGuard } from './service/Auth.service';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { LoginComponent } from './login/login.component';
+import { ManagePractitionnerAccessComponent } from './manage-practitionner-access/manage-practitionner-access.component';
+import { UpdatePractitionnerComponent } from './update-practitionner/update-practitionner.component';
 
 const routes: Routes = [
-  {path:'',component:HomeComponent,canActivate:[AuthGuard]},
-  {path:'forgortPassword',component:ForgotPasswordComponent},
-  {path:'resetPassword',component:ResetPasswordComponent},
+  {path:'home',component:HomeComponent,canActivate:[AuthGuard] ,data: { role: 'medecin' } },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
 
-  {path:'newpatient',component:AddPatientComponent,canActivate:[AuthGuard]},
-  {path:'listpatient',component:ListPatientsComponent,canActivate:[AuthGuard]},
+  {path:'newpatient',component:AddPatientComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
+  {path:'listpatient',component:ListPatientsComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
 
-  {path:'medicalfolder/:id',component:MedicalFolderComponent,canActivate:[AuthGuard]},
-  {path:'updatePatient/:id',component:UpdatePatientComponent,canActivate:[AuthGuard]},
+  {path:'medicalfolder/:id',component:MedicalFolderComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
+  {path:'updatePatient/:id',component:UpdatePatientComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
 
-  {path:'laboratory',component:LaboratoryComponent,canActivate:[AuthGuard]},
+  {path:'laboratory',component:LaboratoryComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
 //observation
-  {path:'observation',component:ObservationComponent,canActivate:[AuthGuard]},
-  {path:'listobservation',component:ListObservationComponent,canActivate:[AuthGuard]},
-  {path: 'medicalfolder/listobservation/updateobservation/:id',component:UpdateObservationComponent,canActivate:[AuthGuard]},
+  {path:'observation',component:ObservationComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
+  {path:'listobservation',component:ListObservationComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
+  {path: 'medicalfolder/listobservation/updateobservation/:id',component:UpdateObservationComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
 
-  {path:'medicalfolder/listobservation/:patientId',component:ListObservationComponent,canActivate:[AuthGuard]},
-  {path: 'medicalfolder/listobservation/:patientId/add', component: ObservationComponent,canActivate:[AuthGuard]},
+  {path:'medicalfolder/listobservation/:patientId',component:ListObservationComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
+  {path: 'medicalfolder/listobservation/:patientId/add', component: ObservationComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
   {
     path: 'observation/:patientId',
-    component: ObservationComponent,canActivate:[AuthGuard]
+    component: ObservationComponent,canActivate:[AuthGuard],data: { role: 'medecin' }
   },
 //functSymptoms
-  {path:'functionalsymptoms',component:FonctionnalSymptomsComponent,canActivate:[AuthGuard]},
-  {path: 'medicalfolder/listfunctionalsymptoms/updatefunctionalsymptoms/:id',component:UpdateFunctionalSymptomsComponent,canActivate:[AuthGuard]},
+  {path:'functionalsymptoms',component:FonctionnalSymptomsComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
+  {path: 'medicalfolder/listfunctionalsymptoms/updatefunctionalsymptoms/:id',component:UpdateFunctionalSymptomsComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
   {
     path: 'functionalsymptoms/:patientId',
-    component: FonctionnalSymptomsComponent,canActivate:[AuthGuard]
+    component: FonctionnalSymptomsComponent,canActivate:[AuthGuard],data: { role: 'medecin' }
   },
-  { path: 'medicalfolder/listfunctionalsymptoms/:patientId', component: ListFunctionalSymptomsComponent ,canActivate:[AuthGuard]},
-  {path:'listfunctionalsymptoms',component:ListFunctionalSymptomsComponent},
-  { path: 'medicalfolder/listfunctionalsymptoms/:patientId/add', component: FonctionnalSymptomsComponent,canActivate:[AuthGuard]},
+  { path: 'medicalfolder/listfunctionalsymptoms/:patientId', component: ListFunctionalSymptomsComponent ,canActivate:[AuthGuard],data: { role: 'medecin' }},
+  {path:'listfunctionalsymptoms',component:ListFunctionalSymptomsComponent,data: { role: 'medecin' }},
+  { path: 'medicalfolder/listfunctionalsymptoms/:patientId/add', component: FonctionnalSymptomsComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
 //MedHistory
-  {path:'medicalhistory',component:MedicalHistoryComponent,canActivate:[AuthGuard]},
-  {path: 'medicalfolder/listmedicalhistory/updatemedicalhistory/:id',component:UpdateMedicalHistoryComponent,canActivate:[AuthGuard]},
+  {path:'medicalhistory',component:MedicalHistoryComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
+  {path: 'medicalfolder/listmedicalhistory/updatemedicalhistory/:id',component:UpdateMedicalHistoryComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
 
-  { path: 'medicalfolder/listmedicalhistory/:patientId', component: ListMedicalHistoryComponent ,canActivate:[AuthGuard]},
+  { path: 'medicalfolder/listmedicalhistory/:patientId', component: ListMedicalHistoryComponent ,canActivate:[AuthGuard],data: { role: 'medecin' }},
   {path:'listmedicalhistory',component:ListMedicalHistoryComponent},
-  { path: 'medicalfolder/listmedicalhistory/:patientId/add', component: MedicalHistoryComponent,canActivate:[AuthGuard]},
+  { path: 'medicalfolder/listmedicalhistory/:patientId/add', component: MedicalHistoryComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
   {
     path: 'medicalhistory/:patientId',
-    component: MedicalHistoryComponent,canActivate:[AuthGuard]
+    component: MedicalHistoryComponent,canActivate:[AuthGuard],data: { role: 'medecin' }
   },
 //clinicalSymptoms
 {path:'clinicalsymptoms',component:CliniaclSymptomsComponent},
-{path: 'medicalfolder/listclinicalsymptoms/updateclinicalsymptoms/:id',component:UpdateClinicalSymptomsComponent,canActivate:[AuthGuard]},
+{path: 'medicalfolder/listclinicalsymptoms/updateclinicalsymptoms/:id',component:UpdateClinicalSymptomsComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
 
-  { path: 'medicalfolder/listclinicalsymptoms/:patientId', component: ListClinicalSymptomsComponent,canActivate:[AuthGuard] },
+  { path: 'medicalfolder/listclinicalsymptoms/:patientId', component: ListClinicalSymptomsComponent,canActivate:[AuthGuard],data: { role: 'medecin' } },
   {path:'listclinicalsymptoms',component:ListClinicalSymptomsComponent},
-  { path: 'medicalfolder/listclinicalsymptoms/:patientId/add', component: CliniaclSymptomsComponent,canActivate:[AuthGuard]},
+  { path: 'medicalfolder/listclinicalsymptoms/:patientId/add', component: CliniaclSymptomsComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
   {
     path: 'clinicalsymptoms/:patientId',
-    component: CliniaclSymptomsComponent,canActivate:[AuthGuard]
+    component: CliniaclSymptomsComponent,canActivate:[AuthGuard],data: { role: 'medecin' }
   },
   //laboratory
-{path:'laboratory',component:LaboratoryComponent,canActivate:[AuthGuard]},
-{path: 'medicalfolder/listlaboratory/updatelaboratory/:id',component:UpdateLaboratoryComponent,canActivate:[AuthGuard]},
+{path: 'medicalfolder/listlaboratory/updatelaboratory/:id',component:UpdateLaboratoryComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
 
-  { path: 'medicalfolder/listlaboratory/:patientId', component: ListLaboratoryComponent ,canActivate:[AuthGuard]},
+  { path: 'medicalfolder/listlaboratory/:patientId', component: ListLaboratoryComponent ,canActivate:[AuthGuard],data: { role: 'medecin' }},
   {path:'listlaboratory',component:ListLaboratoryComponent},
-  { path: 'medicalfolder/listlaboratory/:patientId/add', component: LaboratoryComponent,canActivate:[AuthGuard]},
+  { path: 'medicalfolder/listlaboratory/:patientId/add', component: LaboratoryComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
   {
     path: 'laboratory/:patientId',
-    component: LaboratoryComponent,canActivate:[AuthGuard]
+    component: LaboratoryComponent,canActivate:[AuthGuard],data: { role: 'medecin' }
   },
    //traitement
-{path:'medicaltreatment',component:AddMedicalTreatmentComponent,canActivate:[AuthGuard]},
-{path: 'medicalfolder/listmedicaltreatment/updatemedicaltreatment/:id',component:UpdateMedicalTreatmentComponent,canActivate:[AuthGuard]},
+{path:'medicaltreatment',component:AddMedicalTreatmentComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
+{path: 'medicalfolder/listmedicaltreatment/updatemedicaltreatment/:id',component:UpdateMedicalTreatmentComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
 {
   path: 'medicaltreatment/:patientId',
-  component: AddMedicalTreatmentComponent,canActivate:[AuthGuard]
+  component: AddMedicalTreatmentComponent,canActivate:[AuthGuard],data: { role: 'medecin' }
 },
 
-  { path: 'listmedicaltreatment/:patientId', component: ListMedicalTreatmentComponent,canActivate:[AuthGuard] },
-  {path:'listmedicaltreatment',component:ListMedicalTreatmentComponent,canActivate:[AuthGuard]},
-  { path: 'listmedicaltreatment/:patientId/add', component: AddMedicalTreatmentComponent,canActivate:[AuthGuard]},
+  { path: 'listmedicaltreatment/:patientId', component: ListMedicalTreatmentComponent,canActivate:[AuthGuard] ,data: { role: 'medecin' }},
+  {path:'listmedicaltreatment',component:ListMedicalTreatmentComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
+  { path: 'listmedicaltreatment/:patientId/add', component: AddMedicalTreatmentComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
   //pharmacie
-  {path:'listofmedicalprescriptions',component:ListOfMedicalPrescriptionsComponent},
+  {path:'listofmedicalprescriptions',component:ListOfMedicalPrescriptionsComponent ,canActivate:[AuthGuard],data: { role: 'pharmacien' }},
 
-  { path: 'listofmedicalprescriptions/:patientId', component: ListOfMedicalPrescriptionsComponent },
-  { path: 'updatetreatmentbypharmacie/:treatmentId', component: UpdateTreatmentByPharmacyComponent },
+  { path: 'listofmedicalprescriptions/:patientId', component: ListOfMedicalPrescriptionsComponent,canActivate:[AuthGuard],data: { role: 'pharmacien' } },
+  { path: 'updatetreatmentbypharmacie/:treatmentId', component: UpdateTreatmentByPharmacyComponent,canActivate:[AuthGuard],data: { role: 'pharmacien' } },
 
 //Login/register
 { path: 'addPractitionner', component: AddPractitionnerComponent },
-{ path: 'addPharmacist', component: AddPharmacistComponent },
-{ path: 'login', component: LoginComponent },
+{ path: 'updatePractitionner/:id', component: UpdatePractitionnerComponent },
+{ path: '', component: LoginComponent },
+{ path: 'manageaccess', component: ManagePractitionnerAccessComponent, canActivate:[AuthGuard] ,data: { role: 'admin' }},
 
 
 

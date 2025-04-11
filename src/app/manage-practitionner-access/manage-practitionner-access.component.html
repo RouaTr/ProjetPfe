@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
+  data-sidebar-image="none" data-preloader="disable">
+
+<head>
+
+  <meta charset="utf-8" />
+  <title>Liste des patients</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+  <meta content="Themesbrand" name="author" />
+
+</head>
+
+<body>
+
+
+  <div class="app-wrapper default">
+    <app-menu-admin></app-menu-admin>
+    <div class="app-content">
+      <app-header-admin></app-header-admin>
+      <div class="container-fluid">
+
+        <main>
+
+
+
+
+          <div class="container-fluid">
+
+
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">Liste des praticiens </h5>
+                  </div>
+                  <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th>Nom du Praticien</th>
+                          <th>Email</th>
+                          <th>Rôle</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let p of pendingPractitionners">
+                          <td>{{ p.practitionnerFirstName }} {{ p.practitionnerLastName }}</td>
+                          <td>{{ p.practitionnerEmail }}</td>
+                          <td>
+                            <label for="role-{{p.id}}" class="sr-only">Sélectionner un rôle pour {{ p.practitionnerFirstName }} {{ p.practitionnerLastName }}</label>
+                            <select [(ngModel)]="p.selectedRole" (ngModelChange)="validatePractitionner(p.id, p.selectedRole)" id="role-{{p.id}}">
+                              <option value="" disabled selected>Choisir un rôle</option>
+                              <option value="medecin">Médecin</option>
+                              <option value="pharmacien">Pharmacien</option>
+                              <option value="admin">Admin</option>
+                            </select>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </main>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+</html>

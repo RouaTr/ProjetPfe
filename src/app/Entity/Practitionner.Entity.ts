@@ -9,5 +9,6 @@ export class Practitionner {
     public  practitionnerEmail?: string,
     public password?: string,
     public practitionnerRole?: string,
+    public status?: string,
 
   ) {}}
