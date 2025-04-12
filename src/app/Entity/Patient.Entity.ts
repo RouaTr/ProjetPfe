@@ -1,4 +1,5 @@
 import { MedicalTreatment } from "./MedicalTreatment.Entity";
+import { Practitionner } from "./Practitionner.Entity";
 
 export class Patient {
   constructor(
@@ -43,5 +44,6 @@ export class Patient {
   treatments?: MedicalTreatment[];
   latestTreatment?: MedicalTreatment;
   nextIntakeColor?: string;
+  practitionner?: Practitionner;
 }
 

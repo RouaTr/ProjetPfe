@@ -147,22 +147,44 @@ export class UpdatePatientComponent implements OnInit {
   }
   updatePatient() {
     this.updateForm.markAllAsTouched();
+
     if (this.updateForm.invalid) {
       console.log("🚨 Formulaire invalide !");
       this.logInvalidFields(); // 🔍 Afficher les erreurs des champs invalides
       return;
     }
-    let data = this.updateForm.value;
 
+    let data = this.updateForm.value;
     let patient = new Patient();
     Object.assign(patient, data);
     patient.id = this.id;
 
-    console.log(patient);
+    // Récupération de l'email du praticien depuis localStorage
+    const practitionnerEmail = localStorage.getItem("practitionnerEmail");
 
-    this.service.updatePatient(this.id, patient).subscribe((res) => {
-      console.log(res);
-      this.router.navigate(['/medicalfolder', this.id]);
-    });
+    if (practitionnerEmail) {
+      // Si le patient a un praticien associé, on lui attribue l'email du praticien
+      if (!patient.practitionner) {
+        patient.practitionner = { practitionnerEmail }; // Si le praticien n'existe pas, on crée un objet avec l'email
+      } else {
+        patient.practitionner.practitionnerEmail = practitionnerEmail;  // Sinon, on met à jour l'email du praticien
+      }
+
+      // Appel à la méthode updatePatient du service pour mettre à jour le patient
+      this.service.updatePatient(this.id, patient, practitionnerEmail).subscribe(
+        (res) => {
+          console.log("Patient mis à jour avec succès", res);
+          this.router.navigate(['/medicalfolder', this.id]);
+        },
+        (err) => {
+          console.log("Erreur lors de la mise à jour du patient", err);
+        }
+      );
+    } else {
+      console.log("Erreur : L'email du praticien n'est pas disponible.");
+    }
   }
+
+
+
 }

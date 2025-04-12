@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Patient } from '../Entity/Patient.Entity';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observation } from '../Entity/Observation.Entity';
 import { FunctionalSymptoms } from '../Entity/FunctionalSymptoms.Entity';
 import { MedicalHistory } from '../Entity/MedicalHistory.Entity';
@@ -23,18 +23,34 @@ export class CrudService {
 
   //  **Gestion des Patients**
 
-  addPatient(patient: Patient): Observable<Patient> {
-    console.log("Patient envoyé :", patient);
-    return this.http.post<Patient>(`${this.apiUrl}/patients`, patient);
-  }
-
   getPatients(): Observable<Patient[]> {
     return this.http.get<Patient[]>(`${this.apiUrl}/patients`);
   }
 
-  updatePatient(id: number, patient: Patient): Observable<Patient> {
-    return this.http.put<Patient>(`${this.apiUrl}/patients/${id}`, patient);
+
+  addPatient(patientData: any, practitionnerEmail: string): Observable<any> {
+    const url =  `http://localhost:8081/api/patients?practitionnerEmail=${practitionnerEmail}`;
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    return this.http.post<any>(url, patientData, { headers });
   }
+  getPatientsByPractitionner(practitionnerEmail: string): Observable<any> {
+    const params = new HttpParams().set('practitionnerEmail', practitionnerEmail);
+    return this.http.get(`${this.apiUrl}/patients/by-practitionner`, { params });
+  }
+
+
+
+
+
+  updatePatient(id: number, patient: Patient, practitionnerEmail: string): Observable<Patient> {
+    const url = `http://localhost:8081/api/patients/${id}?practitionnerEmail=${practitionnerEmail}`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    return this.http.put<Patient>(url, patient, { headers });
+  }
+
+
+
 
   findPatientById(id: number): Observable<Patient> {
     return this.http.get<Patient>(`${this.apiUrl}/patients/${id}`);
@@ -236,13 +252,19 @@ getUserInfo() {
   if (token) {
     const decodedToken = this.jwtHelper.decodeToken(token);
     console.log('Token décodé:', decodedToken);
-    // Assure-toi que les données que tu veux récupérer existent
-    const userDetails = decodedToken; // Ou définis explicitement les propriétés
-    console.log('Détails de l\'utilisateur:', userDetails);
-    return userDetails;
+
+    // Enregistrer l'email et d'autres détails dans localStorage
+    localStorage.setItem('practitionnerEmail', decodedToken.practitionnerEmail);
+    localStorage.setItem('userDetails', JSON.stringify(decodedToken)); // Optionnel: stocker l'objet entier
+
+    console.log('Détails de l\'utilisateur:', decodedToken);
+    return decodedToken;
   }
   return null;
 }
+
+
+
 
 
 
@@ -276,6 +298,18 @@ validatePractitionner(id: number, newRole: string) {
   const params = { newRole };
   return this.http.put(url, null, { params, responseType: 'text' });
 }
+
+
+private getPractitionnerIdFromToken(): number {
+  const token = localStorage.getItem('myToken');
+  if (token) {
+    const decodedToken = this.jwtHelper.decodeToken(token);
+    return decodedToken.id; // Assurez-vous que l'ID du praticien est stocké dans le token
+  }
+  return null;
+}
+
+
 
 
 

@@ -21,47 +21,57 @@ export class ListPatientsComponent {
   ngOnInit(): void {
     this.role = localStorage.getItem("role") as string;
 
-    // Récupérer tous les patients et tous les traitements en une seule fois
-    this.service.getPatients().subscribe(patients => {
-      this.listPatients = patients;
+    const practitionnerEmail = localStorage.getItem('practitionnerEmail');
+    console.log('Practitionner Email:', practitionnerEmail);
 
-      this.service.getMedicalTreatment().subscribe(treatments => {
-        this.listPatients.forEach(patient => {
-          // Filtrer les traitements pour ce patient
-          const patientTreatments = treatments.filter(t => t.patient?.id === patient.id);
+    const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+    console.log('User Details:', userDetails);
 
-          if (patientTreatments.length > 0) {
-            // Trier les traitements par date
-            patientTreatments.sort((a, b) =>
-              new Date(b.treatmentRegistrationDate).getTime() - new Date(a.treatmentRegistrationDate).getTime()
+    if (practitionnerEmail) {
+      // Pass the practitionerEmail to the service method
+      this.service.getPatientsByPractitionner(practitionnerEmail).subscribe(patients => {
+        this.listPatients = patients;
+
+        this.service.getMedicalTreatment().subscribe(treatments => {
+          this.listPatients.forEach(patient => {
+            // Filtrer les traitements pour ce patient
+            const patientTreatments = treatments.filter(t => t.patient?.id === patient.id);
+
+            if (patientTreatments.length > 0) {
+              // Trier les traitements par date
+              patientTreatments.sort((a, b) =>
+                new Date(b.treatmentRegistrationDate).getTime() - new Date(a.treatmentRegistrationDate).getTime()
+              );
+              patient.latestTreatment = patientTreatments[0];
+            } else {
+              patient.latestTreatment = null;
+            }
+          });
+
+          // 🔽 Après avoir assigné les traitements à tous les patients
+          this.filteredPatients = this.listPatients
+            .sort((a, b) =>
+              new Date(a.latestTreatment?.next_intake_Date || 0).getTime() -
+              new Date(b.latestTreatment?.next_intake_Date || 0).getTime()
             );
-            patient.latestTreatment = patientTreatments[0];
-          } else {
-            patient.latestTreatment = null;
-          }
-        });
 
-        // 🔽 Après avoir assigné les traitements à tous les patients
-        this.filteredPatients = this.listPatients
-        .sort((a, b) =>
-          new Date(a.latestTreatment?.next_intake_Date || 0).getTime() -
-          new Date(b.latestTreatment?.next_intake_Date || 0).getTime()
-        );
-
-
-        // Ajouter la couleur selon la position
-        this.filteredPatients.forEach((patient, index) => {
-          if (index < 2) {
-            (patient as any).nextIntakeColor = 'danger'; // 🔴
-          } else if (index < 4) {
-            (patient as any).nextIntakeColor = 'warning'; // 🟠
-          } else {
-            (patient as any).nextIntakeColor = 'info'; // 🟡
-          }
+          // Ajouter la couleur selon la position
+          this.filteredPatients.forEach((patient, index) => {
+            if (index < 2) {
+              (patient as any).nextIntakeColor = 'danger'; // 🔴
+            } else if (index < 4) {
+              (patient as any).nextIntakeColor = 'warning'; // 🟠
+            } else {
+              (patient as any).nextIntakeColor = 'info'; // 🟡
+            }
+          });
         });
       });
-    });
+    } else {
+      console.error("Practitioner email is not available.");
+    }
   }
+
   onGenerateOrdonnance(patientId: number): void {
     this.service.generateOrdonnance(patientId).subscribe(
       (pdfBlob: Blob) => {

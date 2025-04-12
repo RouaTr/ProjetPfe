@@ -123,26 +123,33 @@ export class AddPatientComponent {
           data.contaminationDate, data.cdcStage
         );
 
-        this.crudService.addPatient(patient).subscribe(
-          res => {
-            console.log(" Patient ajouté avec succès :", res);
-            this.messageCommande = " Patient ajouté avec succès !";
+        const practitionnerEmail = localStorage.getItem("practitionnerEmail");
 
-            if (res && res.id) {
-              localStorage.setItem('selectedPatientId', res.id.toString());
+        if (practitionnerEmail) {
+          this.crudService.addPatient(patient, practitionnerEmail).subscribe(
+            res => {
+              console.log("Patient ajouté avec succès :", res);
+              this.messageCommande = " Patient ajouté avec succès !";
+
+              if (res && res.id) {
+                localStorage.setItem('selectedPatientId', res.id.toString());
+              }
+
+              // Optionally, navigate to another page
+              // this.router.navigate(['/patients']);
+            },
+            err => {
+              console.log("Erreur serveur :", err);
+              this.messageCommande = "Problème de serveur !";
             }
-
-           
-          },
-          err => {
-            console.log(" Erreur serveur :", err);
-            this.messageCommande = " Problème de serveur !";
-          }
-        );
+          );
+        } else {
+          console.log("Erreur : L'email du praticien n'est pas disponible.");
+        }
       },
       err => {
-        console.log(" Erreur lors de la vérification du patient :", err);
-        this.messageCommande = " Problème lors de la vérification du patient !";
+        console.log("Erreur lors de la vérification du patient :", err);
+        this.messageCommande = "Problème lors de la vérification du patient !";
       }
     );
   }
