@@ -1,76 +1,73 @@
 import { Component } from '@angular/core';
-import { CrudService } from '../service/crud.service';
-import { Patient } from '../Entity/Patient.Entity';
 import { Router } from '@angular/router';
 import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
+import { Patient } from '../Entity/Patient.Entity';
+import { CrudService } from '../service/crud.service';
 
 @Component({
-  selector: 'app-list-patients',
-  templateUrl: './list-patients.component.html',
-  styleUrls: ['./list-patients.component.css']
+  selector: 'app-list-of-all-patients',
+  templateUrl: './list-of-all-patients.component.html',
+  styleUrls: ['./list-of-all-patients.component.css']
 })
-export class ListPatientsComponent {
+export class ListOfAllPatientsComponent {
 
-  role: string;
+ patientId?: number;
+ role: string;
   listPatients: Patient[] = [];
   filteredPatients: Patient[] = [];
   treatments: MedicalTreatment[] = [];
+  id?: number;
 
   constructor(private service: CrudService, private router: Router) { }
 
   ngOnInit(): void {
     this.role = localStorage.getItem("role") as string;
 
-    const practitionnerEmail = localStorage.getItem('practitionnerEmail');
-    console.log('Practitionner Email:', practitionnerEmail);
+    // Récupérer tous les patients et tous les traitements en une seule fois
+    this.service.getPatients().subscribe(patients => {
+      this.listPatients = patients;
+      console.log(this.listPatients);
 
-    const userDetails = JSON.parse(localStorage.getItem('userDetails'));
-    console.log('User Details:', userDetails);
+      this.service.getMedicalTreatment().subscribe(treatments => {
+        this.listPatients.forEach(patient => {
+          // Filtrer les traitements pour ce patient
+          const patientTreatments = treatments.filter(t => t.patient?.id === patient.id);
 
-    if (practitionnerEmail) {
-      // Pass the practitionerEmail to the service method
-      this.service.getPatientsByPractitionner(practitionnerEmail).subscribe(patients => {
-        this.listPatients = patients;
-
-        this.service.getMedicalTreatment().subscribe(treatments => {
-          this.listPatients.forEach(patient => {
-            // Filtrer les traitements pour ce patient
-            const patientTreatments = treatments.filter(t => t.patient?.id === patient.id);
-
-            if (patientTreatments.length > 0) {
-              // Trier les traitements par date
-              patientTreatments.sort((a, b) =>
-                new Date(b.treatmentRegistrationDate).getTime() - new Date(a.treatmentRegistrationDate).getTime()
-              );
-              patient.latestTreatment = patientTreatments[0];
-            } else {
-              patient.latestTreatment = null;
-            }
-          });
-
-          // 🔽 Après avoir assigné les traitements à tous les patients
-          this.filteredPatients = this.listPatients
-            .sort((a, b) =>
-              new Date(a.latestTreatment?.next_intake_Date || 0).getTime() -
-              new Date(b.latestTreatment?.next_intake_Date || 0).getTime()
+          if (patientTreatments.length > 0) {
+            // Trier les traitements par date
+            patientTreatments.sort((a, b) =>
+              new Date(b.treatmentRegistrationDate).getTime() - new Date(a.treatmentRegistrationDate).getTime()
             );
+            patient.latestTreatment = patientTreatments[0];
+          } else {
+            patient.latestTreatment = null;
+          }
+        });
 
-          // Ajouter la couleur selon la position
-          this.filteredPatients.forEach((patient, index) => {
-            if (index < 2) {
-              (patient as any).nextIntakeColor = 'danger'; // 🔴
-            } else if (index < 4) {
-              (patient as any).nextIntakeColor = 'warning'; // 🟠
-            } else {
-              (patient as any).nextIntakeColor = 'info'; // 🟡
-            }
-          });
+        // 🔽 Après avoir assigné les traitements à tous les patients
+        this.filteredPatients = this.listPatients
+          .filter(p => p.latestTreatment?.next_intake_Date) // garder ceux qui ont une date
+          .sort((a, b) =>
+            new Date(a.latestTreatment!.next_intake_Date!).getTime() -
+            new Date(b.latestTreatment!.next_intake_Date!).getTime()
+          );
+
+        // Ajouter la couleur selon la position
+        this.filteredPatients.forEach((patient, index) => {
+          if (index < 2) {
+            (patient as any).nextIntakeColor = 'danger'; // 🔴
+          } else if (index < 4) {
+            (patient as any).nextIntakeColor = 'warning'; // 🟠
+          } else {
+            (patient as any).nextIntakeColor = 'info'; // 🟡
+          }
         });
       });
-    } else {
-      console.error("Practitioner email is not available.");
-    }
+    });
+
+
   }
+
 
   onGenerateOrdonnance(patientId: number): void {
     this.service.generateOrdonnance(patientId).subscribe(
@@ -124,4 +121,7 @@ export class ListPatientsComponent {
       this.filteredPatients = this.listPatients;
     }
   }
+
 }
+
+

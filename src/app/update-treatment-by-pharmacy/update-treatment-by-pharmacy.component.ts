@@ -25,7 +25,7 @@ updateForm: FormGroup;
     private route: ActivatedRoute
   ) {
     this.updateForm = this.fb.group({
-   treatmentName: new FormControl('', [Validators.required]),
+      treatmentName: new FormControl({ value: '', disabled: true }),
       treatmentStartDate: new FormControl('', [Validators.required]),
       treatment_intake_duration: new FormControl('', [Validators.required]),
       next_intake_Date: new FormControl('', [Validators.required]),
@@ -33,7 +33,6 @@ updateForm: FormGroup;
     });
   }
 
-  get treatmentName() { return this.updateForm.get('treatmentName'); }
   get treatmentStartDate() { return this.updateForm.get('treatmentStartDate'); }
   get treatment_intake_duration() { return this.updateForm.get('treatment_intake_duration'); }
   get next_intake_Date() { return this.updateForm.get('next_intake_Date'); }
@@ -113,7 +112,7 @@ updateForm: FormGroup;
     this.patientId = this.currentMedicalTreatment.patient.id; // ✅ Récupération correcte de l'ID du patient
     const storedId = localStorage.getItem('selectedPatientId');
     console.log("🔹 ID patient récupéré :", storedId);
-    let data = this.updateForm.value;
+    let data = this.updateForm.getRawValue();
     let medicaltreatment = new MedicalTreatment();
     Object.assign(medicaltreatment, data);
     medicaltreatment.treatmentId= this.id;

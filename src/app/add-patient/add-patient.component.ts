@@ -16,6 +16,7 @@ export class AddPatientComponent {
 
   constructor(private crudService: CrudService, private router: Router, private fb: FormBuilder) {
     let formControls = {
+      medicalRecordNumber:new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
       firstName: new FormControl('', [Validators.required]),
       birthDate: new FormControl('', [Validators.required]),
@@ -82,6 +83,9 @@ export class AddPatientComponent {
   get age_at_HIV_diagnosis(): FormControl {
     return this.PatientForm.get('age_at_HIV_diagnosis') as FormControl;
   }
+  get medicalRecordNumber(): FormControl {
+    return this.PatientForm.get('medicalRecordNumber') as FormControl;
+  }
   isInvalidAndTouchedOrDirty(control: AbstractControl | null): boolean {
     return (control as FormControl).invalid && ((control as FormControl).touched || (control as FormControl).dirty);
 
@@ -111,7 +115,7 @@ export class AddPatientComponent {
         }
 
         // Création et ajout du patient
-        let patient = new Patient(undefined, lastName, firstName, data.birthDate, data.gender,
+        let patient = new Patient(undefined, data.medicalRecordNumber, lastName, firstName, data.birthDate, data.gender,
           data.phoneNumber, data.city, data.region, data.postalCode,
           data.address, data.nationality, data.weight, data.height,
           data.maritalStatus, data.children, data.housing, data.housingType,

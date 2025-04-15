@@ -4,6 +4,7 @@ import { Practitionner } from "./Practitionner.Entity";
 export class Patient {
   constructor(
     public id?: number,
+    public medicalRecordNumber?: string,
     public lastName?: string,
     public firstName?: string,
     public birthDate?: Date,

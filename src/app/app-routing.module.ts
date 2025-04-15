@@ -33,6 +33,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { LoginComponent } from './login/login.component';
 import { ManagePractitionnerAccessComponent } from './manage-practitionner-access/manage-practitionner-access.component';
 import { UpdatePractitionnerComponent } from './update-practitionner/update-practitionner.component';
+import { ListOfAllPatientsComponent } from './list-of-all-patients/list-of-all-patients.component';
 
 const routes: Routes = [
   {path:'home',component:HomeComponent,canActivate:[AuthGuard] ,data: { role: 'medecin' } },
@@ -56,7 +57,10 @@ const routes: Routes = [
   {
     path: 'observation/:patientId',
     component: ObservationComponent,canActivate:[AuthGuard],data: { role: 'medecin' }
+
   },
+  {path:'listofallpatients',component:ListOfAllPatientsComponent ,canActivate:[AuthGuard],data: { role: 'medecin' }},
+
 //functSymptoms
   {path:'functionalsymptoms',component:FonctionnalSymptomsComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
   {path: 'medicalfolder/listfunctionalsymptoms/updatefunctionalsymptoms/:id',component:UpdateFunctionalSymptomsComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},

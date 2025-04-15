@@ -23,6 +23,7 @@ export class UpdatePatientComponent implements OnInit {
     private route: ActivatedRoute  // ActivatedRoute pour récupérer l'ID
   ) {
     this.updateForm = this.fb.group({
+      medicalRecordNumber:new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
       firstName: new FormControl('', [Validators.required]),
       birthDate: new FormControl('', [Validators.required]),
@@ -83,6 +84,9 @@ export class UpdatePatientComponent implements OnInit {
   get age_at_HIV_diagnosis(): FormControl {
     return this.updateForm.get('age_at_HIV_diagnosis') as FormControl;
   }
+  get medicalRecordNumber(): FormControl {
+    return this.updateForm.get('medicalRecordNumber') as FormControl;
+  }
 
    isInvalidAndTouchedOrDirty(control: AbstractControl | null): boolean {
       return (control as FormControl).invalid && ((control as FormControl).touched || (control as FormControl).dirty);
@@ -96,6 +100,7 @@ export class UpdatePatientComponent implements OnInit {
       console.log(patient);
 
       this.updateForm.patchValue({
+        medicalRecordNumber: patient.medicalRecordNumber,
         lastName: patient.lastName,
         firstName: patient.firstName,
         birthDate: patient.birthDate,
@@ -130,7 +135,7 @@ export class UpdatePatientComponent implements OnInit {
         screeningCircumstance: patient.screeningCircumstance,
         viralType: patient.viralType,
         contaminationDate: patient.contaminationDate,
-        cdcStage: patient.cdcStage
+        cdcStage: patient.cdcStage,
       });
     });
   }
@@ -164,10 +169,15 @@ export class UpdatePatientComponent implements OnInit {
 
     if (practitionnerEmail) {
       // Si le patient a un praticien associé, on lui attribue l'email du praticien
-      if (!patient.practitionner) {
-        patient.practitionner = { practitionnerEmail }; // Si le praticien n'existe pas, on crée un objet avec l'email
+      if (patient.practitionner) {
+        // Si le médecin traitant du patient n'est pas le même que celui connecté
+        if (patient.practitionner.practitionnerEmail !== practitionnerEmail) {
+          // On ne modifie pas le médecin traitant
+          delete patient.practitionner; // On supprime le médecin traitant du patient
+        }
       } else {
-        patient.practitionner.practitionnerEmail = practitionnerEmail;  // Sinon, on met à jour l'email du praticien
+        // Si le patient n'a pas encore de médecin traitant, on lui attribue celui connecté
+        patient.practitionner = { practitionnerEmail };
       }
 
       // Appel à la méthode updatePatient du service pour mettre à jour le patient
@@ -183,7 +193,8 @@ export class UpdatePatientComponent implements OnInit {
     } else {
       console.log("Erreur : L'email du praticien n'est pas disponible.");
     }
-  }
+}
+
 
 
 

@@ -44,6 +44,7 @@ import { UpdatePractitionnerComponent } from './update-practitionner/update-prac
 import { ManagePractitionnerAccessComponent } from './manage-practitionner-access/manage-practitionner-access.component';
 import { HeaderAdminComponent } from './header-admin/header-admin.component';
 import { MenuAdminComponent } from './menu-admin/menu-admin.component';
+import { ListOfAllPatientsComponent } from './list-of-all-patients/list-of-all-patients.component';
 
 
 @NgModule({
@@ -88,6 +89,7 @@ import { MenuAdminComponent } from './menu-admin/menu-admin.component';
     ManagePractitionnerAccessComponent,
     HeaderAdminComponent,
     MenuAdminComponent,
+    ListOfAllPatientsComponent,
 
   ],
   imports: [

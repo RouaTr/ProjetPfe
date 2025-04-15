@@ -28,41 +28,10 @@
                   <div class="card-body">
                     <div class="row">
                       <div class="col-lg-6">
-
-
                         <div class="mb-3">
-                          <label for="example-select" class="form-label">Nom du Traitement</label>
-                          <select class="form-select" id="example-select" formControlName="treatmentName"
-                           >
-                            <option>selectionner</option>
-                            <option>Ténofovir (TDF)/ Lamivudine (3TC)/ Doltégravir (DTG) = TLD</option>
-                            <option>Tenofovir (TDF)/Lamivudine (3TC)/Efavirenz (EFV) = AVONZA</option>
-                            <option>Zidovudine (AZT)/Lamivudine (3TC) + Lopinavir/Ritonavir (Lop/r) = COMBIVIR+ ALUVIA
-                            </option>
-                            <option>Zidovudine (AZT)/Lamivudine (3TC) + Atazanavir/Ritonavir (ATV/r) = COMBIVIR+
-                              REYATAZ/RITONAVIR</option>
-                            <option>Abacavir (ABC)/Lamivudine (3TC) + Atazanavir/Ritonavir (ATV/r) = KIVEXA+
-                              REYATAZ/RITONAVIR</option>
-                            <option>Zidovudine (AZT)/Lamivudine (3TC) + Darunavir/ritonavir + Dolutégravir (DTG) =
-                              COMBIVIR + PREZISTA/RITONAVIR+ DTG</option>
-                            <option>Abacavir (ABC)/Lamivudine (3TC) + Darunavir/ritonavir = KIVEXA + PREZISTA/RITONAVIR
-                            </option>
-                            <option>Ténofvir (TDF)/Emtricitabine(FTC) + Atazanavir/Ritonavir (ATV/r) = TRUVADA +
-                              REYATAZ/RITONAVIR</option>
-                            <option>Atazanavir/Ritonavir (ATV/r) + Ténofovir (TDF)/ Lamivudine (3TC)/ Dolutégravir (DTG)
-                              = REYATAZ/RITONAVIR+ TLD</option>
-                            <option>Atazanavir/Ritonavir (ATV/r) + Dolutégravir (DTG) = REYATAZ/RITONAVIR+ DTG</option>
-                            <option>Atazanavir/Ritonavir (ATV/r) + Dolutegravir (DTG) + Abacavir (ABC) =
-                              REYATAZ/RITONAVIR+ DTG+ ZIAGEN</option>
-                            <option>Darunavir/ritonavir+ Tenofovir (TDF)/ Lamivudine (3TC)/ Dolutegravir (DTG) =
-                              PREZISTA/RITONAVIR+TLD</option>
-                            <option>Darunavir/ritonavir+ Tenofovir (TDF)/ Lamivudine (3TC)/ Dolutegravir (DTG) +
-                              Dolutegravir (DTG)= PREZISTA/RITONAVIR+TLD*</option>
-                            <option>Zidovudine (AZT)/Lamivudine (3TC) + Dolutegravir (DTG) = COMBIVIR + DTG</option>
-                            <option>Abacavir (ABC)/Lamivudine (3TC) + Dolutégravir (DTG) = KIVEXA + DTG</option>
+                          <label for="treatmentStartDate" class="form-label">Date de début du Traitement</label>
+                          <input type="text" formControlName="treatmentName" class="form-control" [disabled]="true">
 
-
-                          </select>
 
                         </div>
 
@@ -75,7 +44,7 @@
                         </div>
 
                         <div class="mb-3">
-                          <label for="treatment_intake_duration" class="form-label">Durée de La prise </label>
+                          <label for="treatment_intake_duration" class="form-label">Durée de traitement </label>
                           <input type="number" id="treatment_intake_duration"
                             formControlName="treatment_intake_duration" class="form-control"
                             >

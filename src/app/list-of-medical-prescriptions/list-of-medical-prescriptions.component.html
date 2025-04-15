@@ -48,12 +48,10 @@
                     <table id="scroll-horizontal" class="table nowrap align-middle" style="width:100%">
                       <thead>
                         <tr>
-                          <th>ID</th>
                           <th>Nom Patient</th>
-                          <th>sexe</th>
                           <th>Nom du traitement</th>
                           <th>date du début du traitement</th>
-                          <th>Durée de la prise</th>
+                          <th>Durée de traitement </th>
                           <th>date prévue prochaine prise</th>
                           <th>statut de livraison</th>
 
@@ -66,9 +64,7 @@
                         <!-- 🟡 1. Patients NON délivrés -->
                         <ng-container *ngFor="let patient of filteredPatients">
                           <tr *ngIf="patient.latestTreatment && !patient.latestTreatment.delivered">
-                            <td>{{patient.id}}</td>
                             <td>{{patient.lastName}} {{patient.firstName}}</td>
-                            <td>{{patient.gender}}</td>
                             <td>{{ patient.latestTreatment?.treatmentName || 'Aucun traitement' }}</td>
                             <td>{{ patient.latestTreatment?.treatmentStartDate| date:'dd/MM/yyyy' }}</td>
                             <td>{{ patient.latestTreatment?.treatment_intake_duration || 'Aucun traitement' }}</td>
@@ -111,9 +107,8 @@
                         <ng-container *ngFor="let patient of filteredPatients">
                           <tr *ngIf="patient.latestTreatment?.delivered">
                             <!-- même contenu ici que ci-dessus -->
-                            <td>{{patient.id}}</td>
+
                             <td>{{patient.lastName}} {{patient.firstName}}</td>
-                            <td>{{patient.gender}}</td>
                             <td>{{ patient.latestTreatment?.treatmentName || 'Aucun traitement' }}</td>
                             <td>{{ patient.latestTreatment?.treatmentStartDate| date:'dd/MM/yyyy' }}</td>
                             <td>{{ patient.latestTreatment?.treatment_intake_duration || 'Aucun traitement' }}</td>

@@ -63,11 +63,12 @@ export class AuthGuard implements CanActivate {
         '/medicaltreatment/:patientId',
         '/listmedicaltreatment/:patientId',
         '/listmedicaltreatment/:patientId/add',
+        '/listofallpatients',
       ],
       pharmacien: [
         '/listofmedicalprescriptions',
         '/listofmedicalprescriptions/:patientId',
-        '/updatetreatmentbypharmacie/:treatmentId'
+        '/updatetreatmentbypharmacie/:treatmentId',
       ],
       admin: [
         '/',
@@ -93,6 +94,6 @@ export class AuthGuard implements CanActivate {
       this.router.navigate(['/']);
       return false;
     }
-    
+
   }
 }
