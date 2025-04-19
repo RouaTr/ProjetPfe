@@ -31,7 +31,7 @@
             <!-- Barre de recherche avec icône -->
             <div class="input-group" style="max-width: 300px;">
               <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher un patient..."
-              (input)="searchPatient($event)">
+                (input)="searchPatient($event)">
 
 
 
@@ -79,9 +79,7 @@
                           <td>{{ patient.latestTreatment?.treatmentStartDate| date:'dd/MM/yyyy' }}</td>
                           <td>{{ patient.latestTreatment?.treatment_intake_duration || 'Aucun traitement' }}</td>
                           <td>
-                            <span
-                              class="badge"
-                              [ngClass]="{
+                            <span class="badge" [ngClass]="{
                                 'bg-danger': patient.nextIntakeColor === 'danger',
                                 'bg-warning': patient.nextIntakeColor === 'warning',
                                 'bg-info-subtle text-info': patient.nextIntakeColor === 'info'
@@ -90,8 +88,9 @@
                             </span>
                           </td>
                           <td>{{patient.phoneNumber}}</td>
-                          <td><span class="badge bg-info-subtle text-info">{{ patient.latestTreatment?.duration_of_visual_loss }}j</span></td>
-                          <td><span >{{ patient.latestTreatment?.status }}</span></td>
+                          <td><span class="badge bg-info-subtle text-info">{{
+                              patient.latestTreatment?.duration_of_visual_loss }}j</span></td>
+                          <td><span>{{ patient.latestTreatment?.status }}</span></td>
 
                           <td>
                             <div class="dropdown d-inline-block">
@@ -103,13 +102,14 @@
                                 <li><a [routerLink]="['/medicalfolder', patient.id]" class="dropdown-item"><i
                                       class="ri-eye-fill align-bottom me-2 text-muted"></i> Consulter dossier médical
                                   </a></li>
-                                <li><a class="dropdown-item edit-item-btn" [routerLink]="['/listmedicaltreatment', patient.id]"><i
+                                <li><a class="dropdown-item edit-item-btn"
+                                    [routerLink]="['/listmedicaltreatment', patient.id]"><i
                                       class="ri-pencil-fill align-bottom me-2 text-muted"></i> Traitements</a></li>
-                                    <li>
-                                      <button class="bt" (click)="onGenerateOrdonnance(patient.id)">
-                                        Générer ordonnance
-                                      </button>
-                                    </li>
+                                <li>
+                                  <button class="bt" (click)="onGenerateOrdonnance(patient.id)">
+                                    Générer ordonnance
+                                  </button>
+                                </li>
                                 <li>
 
                                   <a class="dropdown-item remove-item-btn">

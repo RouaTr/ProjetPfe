@@ -1,0 +1,36 @@
+h3{
+  color: rgb(4, 4, 96);
+  margin-left: 30px;
+}
+body{
+  background-color: rgb(244, 248, 244);
+;
+}
+button {
+  background-color: #3ea272; /* Couleur de fond verte */
+  color: white; /* Texte en blanc */
+  padding: 12px 24px; /* Espacement interne (padding) */
+  border: none; /* Retire les bordures */
+  border-radius: 4px; /* Bordures arrondies */
+  font-size: 16px; /* Taille du texte */
+  cursor: pointer; 
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Effet de survol */
+button:hover {
+  background-color: #454ea0;
+  transform: scale(1.05);
+}
+
+/* Effet lorsqu'on clique sur le bouton */
+button:active {
+  background-color: #256de9; /* Couleur de fond encore plus sombre lors du clic */
+  transform: scale(0.98); /* Réduire légèrement la taille du bouton */
+}
+
+/* Désactiver le bouton */
+button:disabled {
+  background-color: #2926b6; /* Couleur de fond grise lorsque désactivé */
+  cursor: not-allowed;
+}

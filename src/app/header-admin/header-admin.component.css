@@ -21,4 +21,8 @@ a .d-flex p {
   text-transform: capitalize; /* Mettre en majuscule la première lettre de chaque mot */
   text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
+.app-content {
+  padding-top: 80px; /* ajuste selon la hauteur du header */
+}
+
 

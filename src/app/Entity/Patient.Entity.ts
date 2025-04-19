@@ -10,7 +10,7 @@ export class Patient {
     public birthDate?: Date,
     public gender?: string,
     public phoneNumber?: string,
-
+    public age?: number,
     public city?: string,
     public region?: string,
     public postalCode?: string,

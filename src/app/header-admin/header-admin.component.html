@@ -1,87 +1,71 @@
-<div class="app-content">
-  <div class="">
-
-    <!-- Header Section starts -->
-    <header class="header-main">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-6 col-sm-4 d-flex align-items-center header-left p-0">
-
-          </div>
-
-          <div class="col-6 col-sm-8 d-flex align-items-center justify-content-end header-right p-0">
-
-            <ul class="d-flex align-items-center">
-
-
-
-
-
-
-
-
-
-              <li class="header-profile">
-                <a aria-controls="profilecanvasRight" class="d-block head-icon" data-bs-target="#profilecanvasRight" *ngIf="userDetails"
-                data-bs-toggle="offcanvas" href="#" role="button">
-               <div class="d-flex align-items-center">
-                 <img alt="avatar" class="b-r-50 h-35 w-35 bg-dark" src="assets/images/avtar/admin.jpg">
-                 <p class="f-s-12 mb-0 text-secondary ms-2">Admin {{ userDetails?.practitionnerFirstName }}</p>
-               </div>
-             </a>
-
-
-                <div aria-labelledby="profilecanvasRight" class="offcanvas offcanvas-end header-profile-canvas"
-                  id="profilecanvasRight" tabindex="-1">
-                  <div class="offcanvas-body app-scroll">
-                    <ul class="">
-                      <li class="d-flex gap-3 mb-3" >
-                        <div class="d-flex-center">
-                          <span class="h-45 w-45 d-flex-center b-r-10 position-relative">
-                            <img alt="" class="img-fluid b-r-10" src="assets/images/avtar/admin.jpg">
-
-                          </span>
-                        </div>
-                        <div class="text-center mt-2" *ngIf="userDetails">
-                          <h6 class="mb-0"> {{ userDetails?.practitionnerLastName }} {{ userDetails?.practitionnerFirstName }} <img alt="instagram-check-mark" class="w-20 h-20"
-                              src="assets/images/profile-app/01.png"></h6>
-                          <p class="f-s-12 mb-0 text-secondary">{{ userDetails?.practitionnerEmail }}
-                          </p>
-                        </div>
-                      </li>
-
-
-                      <li>
-                        <a class="f-w-500" href="setting.html" target="_blank">
-                          <i class="iconoir-settings pe-1 f-s-20"></i> Modifier Mon Compte
-                        </a>
-                      </li>
-                      <li class="app-divider-v dotted py-1"></li>
-                      <li>
-
-                      </li>
-
-
-                      <li>
-                        <a class="mb-0 btn btn-light-danger btn-sm justify-content-center " (click)="logout()"
-                          role="button">
-                          <i class="ph-duotone  ph-sign-out pe-1 f-s-20"></i> Me déconnecter
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+<header
+class="bg-dark text-white p-3 fixed-top"  id="layout-navbar"
+>
+  <div class="container-fluid">
+    <div class="row w-100">
+      <div class="col-6 col-sm-4 d-flex align-items-center header-left p-0">
+        <!-- Left side content (logo, etc.) -->
       </div>
-    </header>
-    <!-- Header Section ends -->
 
-    <!-- Body main section starts -->
+      <div class="col-6 col-sm-8 d-flex align-items-center justify-content-end header-right p-0">
+        <ul class="d-flex align-items-center">
+          <li class="header-profile">
+            <a
+              aria-controls="profilecanvasRight"
+              class="d-block head-icon"
+              data-bs-target="#profilecanvasRight"
+              *ngIf="userDetails"
+              data-bs-toggle="offcanvas"
+              href="#"
+              role="button"
+            >
+              <div class="d-flex align-items-center">
+                <img alt="avatar" class="b-r-50 h-35 w-35 bg-dark" src="assets/images/avtar/woman.jpg" />
+                <p class="f-s-12 mb-0 text-secondary ms-2">Bonjour Docteur {{ userDetails?.practitionnerFirstName }}</p>
+              </div>
+            </a>
 
+            <div
+              aria-labelledby="profilecanvasRight"
+              class="offcanvas offcanvas-end header-profile-canvas"
+              id="profilecanvasRight"
+              tabindex="-1"
+            >
+              <div class="offcanvas-body app-scroll">
+                <ul class="">
+                  <li class="d-flex gap-3 mb-3">
+                    <div class="d-flex-center">
+                      <span class="h-45 w-45 d-flex-center b-r-10 position-relative">
+                        <img alt="" class="img-fluid b-r-10" src="assets/images/avtar/woman.jpg" />
+                      </span>
+                    </div>
+                    <div class="text-center mt-2" *ngIf="userDetails">
+                      <h6 class="mb-0">
+                        {{ userDetails?.practitionnerLastName }} {{ userDetails?.practitionnerFirstName }}
+                        <img alt="instagram-check-mark" class="w-20 h-20" src="assets/images/profile-app/01.png" />
+                      </h6>
+                      <p class="f-s-12 mb-0 text-secondary">{{ userDetails?.practitionnerEmail }}</p>
+                    </div>
+                  </li>
+
+                  <li>
+                    <a class="f-w-500" [routerLink]="['/updatePractitionner', userDetails.id]" target="_blank">
+                      <i class="iconoir-settings pe-1 f-s-20"></i> Modifier Mon Compte
+                    </a>
+                  </li>
+                  <li class="app-divider-v dotted py-1"></li>
+                  <li></li>
+                  <li>
+                    <a class="mb-0 btn btn-light-danger btn-sm justify-content-center" (click)="logout()" role="button">
+                      <i class="ph-duotone ph-sign-out pe-1 f-s-20"></i> Me déconnecter
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
-</div>
-
-
+</header>

@@ -14,13 +14,6 @@
             <ul class="d-flex align-items-center">
 
 
-
-
-
-
-
-
-
               <li class="header-profile">
                 <a aria-controls="profilecanvasRight" class="d-block head-icon" data-bs-target="#profilecanvasRight" *ngIf="userDetails"
                 data-bs-toggle="offcanvas" href="#" role="button">
@@ -52,7 +45,7 @@
 
 
                       <li>
-                        <a class="f-w-500" href="setting.html" target="_blank">
+                        <a class="f-w-500" [routerLink]="['/updatePractitionner', userDetails.id]" target="_blank">
                           <i class="iconoir-settings pe-1 f-s-20"></i> Modifier Mon Compte
                         </a>
                       </li>

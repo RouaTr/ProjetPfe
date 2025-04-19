@@ -31,7 +31,9 @@ export class UpdatePatientComponent implements OnInit {
       phoneNumber: new FormControl('', [
         Validators.required,
         Validators.pattern(/^[0-9]{8}$/)
-      ]),age_at_HIV_diagnosis: new FormControl('', [Validators.required]),
+      ]),
+      age: new FormControl('', [Validators.required]),
+      age_at_HIV_diagnosis: new FormControl(''),
       city: new FormControl('', [Validators.required]),
       region: new FormControl(''),
       postalCode: new FormControl('', [Validators.required]),
@@ -81,8 +83,8 @@ export class UpdatePatientComponent implements OnInit {
   get phoneNumberControl(): FormControl {
     return this.updateForm.get('phoneNumber') as FormControl;
   }
-  get age_at_HIV_diagnosis(): FormControl {
-    return this.updateForm.get('age_at_HIV_diagnosis') as FormControl;
+  get age(): FormControl {
+    return this.updateForm.get('age') as FormControl;
   }
   get medicalRecordNumber(): FormControl {
     return this.updateForm.get('medicalRecordNumber') as FormControl;
@@ -104,6 +106,7 @@ export class UpdatePatientComponent implements OnInit {
         lastName: patient.lastName,
         firstName: patient.firstName,
         birthDate: patient.birthDate,
+        age: patient.age,
         gender: patient.gender,
         phoneNumber: patient.phoneNumber,
         age_at_HIV_diagnosis:patient.age_at_HIV_diagnosis,
@@ -155,45 +158,40 @@ export class UpdatePatientComponent implements OnInit {
 
     if (this.updateForm.invalid) {
       console.log("🚨 Formulaire invalide !");
-      this.logInvalidFields(); // 🔍 Afficher les erreurs des champs invalides
+      this.logInvalidFields();
       return;
     }
 
-    let data = this.updateForm.value;
-    let patient = new Patient();
-    Object.assign(patient, data);
-    patient.id = this.id;
+    let formData = this.updateForm.value;
 
-    // Récupération de l'email du praticien depuis localStorage
+    // ✅ Fusionner les données du formulaire avec les anciennes données
+    let updatedPatient = { ...this.currentPatient, ...formData };
+    updatedPatient.id = this.id;
+
     const practitionnerEmail = localStorage.getItem("practitionnerEmail");
 
     if (practitionnerEmail) {
-      // Si le patient a un praticien associé, on lui attribue l'email du praticien
-      if (patient.practitionner) {
-        // Si le médecin traitant du patient n'est pas le même que celui connecté
-        if (patient.practitionner.practitionnerEmail !== practitionnerEmail) {
-          // On ne modifie pas le médecin traitant
-          delete patient.practitionner; // On supprime le médecin traitant du patient
+      if (updatedPatient.practitionner) {
+        if (updatedPatient.practitionner.practitionnerEmail !== practitionnerEmail) {
+          delete updatedPatient.practitionner;
         }
       } else {
-        // Si le patient n'a pas encore de médecin traitant, on lui attribue celui connecté
-        patient.practitionner = { practitionnerEmail };
+        updatedPatient.practitionner = { practitionnerEmail };
       }
 
-      // Appel à la méthode updatePatient du service pour mettre à jour le patient
-      this.service.updatePatient(this.id, patient, practitionnerEmail).subscribe(
+      this.service.updatePatient(this.id, updatedPatient, practitionnerEmail).subscribe(
         (res) => {
-          console.log("Patient mis à jour avec succès", res);
+          console.log("✅ Patient mis à jour avec succès", res);
           this.router.navigate(['/medicalfolder', this.id]);
         },
         (err) => {
-          console.log("Erreur lors de la mise à jour du patient", err);
+          console.log("❌ Erreur lors de la mise à jour du patient", err);
         }
       );
     } else {
-      console.log("Erreur : L'email du praticien n'est pas disponible.");
+      console.log("⚠️ Erreur : L'email du praticien n'est pas disponible.");
     }
-}
+  }
 
 
 

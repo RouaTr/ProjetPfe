@@ -86,7 +86,7 @@ export class ListOfAllPatientsComponent {
 
   searchPatient(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
-    const searchValue = inputElement.value.trim().toLowerCase(); // Valeur de la recherche en minuscule
+    const searchValue = inputElement.value.trim().toLowerCase(); 
 
     if (searchValue) {
       // Convertir en minuscules et diviser les mots-clés

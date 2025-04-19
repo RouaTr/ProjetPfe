@@ -2,3 +2,84 @@ body{
   background-color: rgb(226, 236, 249);
 ;
 }
+.main-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+app-menu {
+  width: 250px; /* ou la largeur que tu veux */
+  height: 100vh;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.content {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+.container-xl {
+ width: 1210px;
+ margin-left: 300px;
+
+
+}
+main{
+  background-color: rgb(237, 247, 255);
+ height:725px;
+}
+.img-fluid{
+  width: 250px;
+}
+h3{
+  margin-left: 90px;
+  margin-top: 10px;
+  color: brown
+  ;
+}
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+
+.elegant-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: 'Roboto', sans-serif; /* Police moderne et élégante */
+    font-size: 14px; /* Taille de texte plus petite */
+}
+
+.elegant-table th, .elegant-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.elegant-table th {
+    background-color: #669ec3;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 500; /* Police plus lourde pour l'en-tête */
+}
+
+.elegant-table tr:nth-child(even) {
+    background-color: #f4f6f7;
+}
+
+.elegant-table tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.elegant-table tbody tr:hover {
+    background-color: #5e150a;
+    color: white;
+}
+
+.elegant-table tbody tr {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.col-lg-3{
+  margin-top: 70px;
+}
+
+

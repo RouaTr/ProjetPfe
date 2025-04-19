@@ -25,6 +25,7 @@ export class AddPatientComponent {
         Validators.required,
         Validators.pattern(/^[0-9]{8}$/)
       ]],
+      age:new FormControl('', [Validators.required]),
       city: new FormControl('', [Validators.required]),
       region: new FormControl(''),
       postalCode: new FormControl('', [Validators.required]),
@@ -80,8 +81,8 @@ export class AddPatientComponent {
   get phoneNumberControl(): FormControl {
     return this.PatientForm.get('phoneNumber') as FormControl;
   }
-  get age_at_HIV_diagnosis(): FormControl {
-    return this.PatientForm.get('age_at_HIV_diagnosis') as FormControl;
+  get age(): FormControl {
+    return this.PatientForm.get('age') as FormControl;
   }
   get medicalRecordNumber(): FormControl {
     return this.PatientForm.get('medicalRecordNumber') as FormControl;
@@ -116,7 +117,7 @@ export class AddPatientComponent {
 
         // Création et ajout du patient
         let patient = new Patient(undefined, data.medicalRecordNumber, lastName, firstName, data.birthDate, data.gender,
-          data.phoneNumber, data.city, data.region, data.postalCode,
+          data.phoneNumber,data.age, data.city, data.region, data.postalCode,
           data.address, data.nationality, data.weight, data.height,
           data.maritalStatus, data.children, data.housing, data.housingType,
           data.educationLevel, data.smoking, data.alcohol, data.drugUse,
