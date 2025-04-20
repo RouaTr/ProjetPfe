@@ -36,4 +36,11 @@ button{
 h5{
   color: #7a0f26;
 }
+.a{
+  display: flex;
+  gap: 20px;
+}
+.scan-button {
+  color: white !important;
+}
 

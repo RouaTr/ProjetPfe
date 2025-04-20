@@ -1,6 +1,9 @@
-body{
-  background-color: rgb(226, 236, 249);
-;
+html, body {
+  margin: 0; /* Élimine les marges par défaut */
+  padding: 0; /* Élimine les paddings par défaut */
+  height: 100%; /* Assure que html et body prennent toute la hauteur disponible */
+  background-color: rgb(226, 236, 249); /* Applique la couleur de fond sur toute la page */
+
 }
 .main-layout {
   display: flex;
@@ -13,9 +16,14 @@ app-menu {
   height: 100vh;
   flex-shrink: 0;
   position: relative;
-  z-index: 1;
+  z-index: 10;
 }
 
+
+app-header {
+  position: relative;
+  z-index: 5;
+}
 .content {
   flex-grow: 1;
   overflow-y: auto;
@@ -23,15 +31,17 @@ app-menu {
 .container-xl {
  width: 1210px;
  margin-left: 300px;
+ gap: 0px;
 
 
 }
 main{
   background-color: rgb(237, 247, 255);
- height:725px;
+
+
 }
 .img-fluid{
-  width: 250px;
+  width: 220px;
 }
 h3{
   margin-left: 90px;
@@ -79,7 +89,12 @@ h3{
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 .col-lg-3{
-  margin-top: 70px;
+  margin-top: 30px;
 }
+
+
+
+
+
 
 

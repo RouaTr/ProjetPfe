@@ -1,56 +1,45 @@
 <main>
-<app-header></app-header>
-<app-menu></app-menu>
+  <app-menu></app-menu>
+  <app-header></app-header>
 
-<div class="container-xl py-5 mt-5">
-  <div class="row g-4">
-    <!-- Welcome Card -->
-    <div class="col-lg-9 col-md-12 order-0">
-      <div class="card shadow-sm rounded-4 mb-4">
-        <div class="row g-0 align-items-center">
-          <div class="col-md-7">
-            <div class="card-body">
-              <h5 class="card-title text-primary">Bonjour Docteur! 👋</h5>
-              <p class="mb-4">
-                👋✨ Bienvenue chez MediVIH ! 🏥❤️
-              </p>
-              <div role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-              <a routerLink="/listpatient" class="btn btn-outline-primary btn-sm">Mes Patients</a>
-            </div>
-          </div>
-          <div class="col-md-5 text-center">
-            <img
-              src="assets/img/illustrations/doctor.jpg"
-              height="140"
-              alt="Staff Manager"
-              class="img-fluid"
-              data-app-dark-img="illustrations/man-with-laptop-dark.png"
-              data-app-light-img="illustrations/man-with-laptop-light.png"
-            />
-          </div>
-        </div>
-      </div>
 
-      <div class="row g-4">
-        <div class="col-lg-6">
-          <div class="card shadow-sm rounded-3 h-100">
-            <div class="card-header d-flex justify-content-between">
-              <div>
-                <h5 class="mb-0">Répartition🚹 Hommes / 🚺 Femmes</h5>
+  <div class="container-xl py-5 mt-5">
+    <div class="row g-2"> <!-- Réduit l'espacement entre les éléments -->
+      <!-- Welcome Card -->
+      <div class="col-lg-9 col-md-12 order-0">
+        <div class="card shadow-sm rounded-4 mb-4">
+          <div class="row g-0 align-items-center">
+            <div class="col-md-7">
+              <div class="card-body">
+                <h5 class="card-title text-primary">Bonjour Docteur! 👋</h5>
+                <p class="mb-4">👋✨ Bienvenue chez MediVIH ! 🏥❤️</p>
+                <div role="status"><span class="visually-hidden">Loading...</span></div>
+                <a routerLink="/listpatient" class="btn btn-outline-primary btn-sm">Mes Patients</a>
               </div>
             </div>
-            <div class="card-body">
-              <div style="width: 200px; margin: auto;">
-                <canvas id="genderChart"></canvas>
-              </div>
-
-</div>
+            <div class="col-md-5 text-center">
+              <img src="assets/img/illustrations/doctor.jpg" height="140" alt="Staff Manager" class="img-fluid"
+                data-app-dark-img="illustrations/man-with-laptop-dark.png"
+                data-app-light-img="illustrations/man-with-laptop-light.png" />
+            </div>
           </div>
         </div>
 
-
+        <div class="row g-2"> <!-- Réduit également l'espacement ici -->
+          <div class="col-lg-6">
+            <div class="card shadow-sm rounded-3 h-100">
+              <div class="card-header d-flex justify-content-between">
+                <div>
+                  <h5 class="mb-0">Répartition🚹 Hommes / 🚺 Femmes</h5>
+                </div>
+              </div>
+              <div class="card-body">
+                <div style="width: 200px; margin: auto;">
+                  <canvas id="genderChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- Employee Card 2 -->
           <div class="col-lg-6">
@@ -72,9 +61,9 @@
                     </thead>
                     <tbody>
                       <tr *ngFor="let appointment of upcomingAppointments">
-                        <td>{{ appointment.patientName }} {{ appointment.patientSurname }}</td> <!-- Utilise le nom du patient -->
-                        <td>{{ appointment.phone }}</td> <!-- Utilise le prénom du patient -->
-                        <td >{{ appointment.nextIntakeDate | date:'dd/MM/yyyy' }}</td> <!-- Affiche la date du rendez-vous -->
+                        <td>{{ appointment.patientName }} {{ appointment.patientSurname }}</td>
+                        <td>{{ appointment.phone }}</td>
+                        <td>{{ appointment.nextIntakeDate | date:'dd/MM/yyyy' }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -84,51 +73,78 @@
                   <p>Aucun rendez-vous à venir.</p>
                 </div>
               </div>
-
             </div>
           </div>
-        </div>
 
-    </div>
+          <div class="row g-"> <!-- Réduit l'espacement dans cette section -->
+            <!-- Patients Card -->
+            <div class="col-lg-4 col-md-4 col-sm-12">
+              <div class="card shadow-sm rounded-3">
+                <div class="card-body">
+                  <span class="fw-semibold d-block mt-2">Patients de l'hopital🦠:</span>
+                  <h3 class="card-title">{{totalPatientsHospital}}</h3>
+                </div>
+              </div>
+            </div>
 
-    <!-- Stats Cards -->
-    <div class="col-lg-3 col-md-6 order-1">
-      <div class="row g-3">
-        <!-- Employees Card -->
-        <div class="col-12">
-          <div class="card shadow-sm rounded-3">
-            <div class="card-body">
+            <!-- Patients Hommes Card -->
+            <div class="col-lg-4 col-md-4 col-sm-12">
+              <div class="card shadow-sm rounded-3">
+                <div class="card-body">
+                  <span class="fw-semibold d-block mt-2">Total Patients Hommes 🧑‍🦱:</span>
+                  <h3 class="card-title">{{totalMaleInHospital}}</h3>
+                </div>
+              </div>
+            </div>
 
-              <span class="fw-semibold d-block mt-2">Total des Patients🦠:</span>
-              <h3 class="card-title">{{totalPatients}}</h3>
+            <!-- Patients Femmes Card -->
+            <div class="col-lg-4 col-md-4 col-sm-12">
+              <div class="card shadow-sm rounded-3">
+                <div class="card-body">
+                  <span class="fw-semibold d-block mt-2">Total Patients Femmes👩‍🦰:</span>
+                  <h3 class="card-title">{{totalFemaleInHospital}}</h3>
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
+      </div>
 
-        <!-- Trainings -->
-        <div class="col-12">
-          <div class="card shadow-sm rounded-3">
-            <div class="card-body">
-
-              <span class="fw-semibold d-block mt-2">Total Hommes 🧑‍🦱:</span>
-              <h3 class="card-title">{{maleNumber}}</h3>
-
+      <!-- Stats Cards -->
+      <div class="col-lg-3 col-md-6 order-1">
+        <div class="row g-3">
+          <!-- Mes Patients Card -->
+          <div class="col-12">
+            <div class="card shadow-sm rounded-3">
+              <div class="card-body">
+                <span class="fw-semibold d-block mt-2">Mes Patients🦠:</span>
+                <h3 class="card-title">{{totalPatients}}</h3>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Salary -->
-        <div class="col-12">
-          <div class="card shadow-sm rounded-3">
-            <div class="card-body">
+          <!-- Mes Patients Hommes Card -->
+          <div class="col-12">
+            <div class="card shadow-sm rounded-3">
+              <div class="card-body">
+                <span class="fw-semibold d-block mt-2">Mes Patients Hommes 🧑‍🦱:</span>
+                <h3 class="card-title">{{maleNumber}}</h3>
+              </div>
+            </div>
+          </div>
 
-              <span class="fw-semibold d-block mt-2">Total Femmes👩‍🦰:</span>
-              <h3 class="card-title">{{femaleNumber}}</h3>
+          <!-- Mes Patients Femmes Card -->
+          <div class="col-12">
+            <div class="card shadow-sm rounded-3">
+              <div class="card-body">
+                <span class="fw-semibold d-block mt-2">Mes Patients Femmes👩‍🦰:</span>
+                <h3 class="card-title">{{femaleNumber}}</h3>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </main>

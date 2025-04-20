@@ -6,7 +6,23 @@ button{
   margin-left: 30px;
   border: none;
 }
-body{
-    background-color: rgb(226, 236, 249);
-  ;
+body {
+  margin: 0;
+
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
+
+.row {
+  height: calc(100vh - 100px);
+
+}
+html, body {
+  margin: 0; /* Élimine les marges par défaut */
+  padding: 0; /* Élimine les paddings par défaut */
+  height: 100%; /* Assure que html et body prennent toute la hauteur disponible */
+  background-color: rgb(226, 236, 249); /* Applique la couleur de fond sur toute la page */
+
+}
+

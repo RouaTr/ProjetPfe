@@ -11,32 +11,77 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit{
-  upcomingAppointments: any[] = [];  // Rendez-vous à venir
-  listPatients: Patient[] = [];  // Liste des patients
+  role: string;
+  listPatients: Patient[] = [];
+  treatments: MedicalTreatment[] = [];
+
+  totalPatientsHospital: number = 0; // Total patients dans l'hôpital
+  totalMaleInHospital: number = 0;  // Total hommes dans l'hôpital
+  totalFemaleInHospital: number = 0;
   totalPatients: number = 0;
   maleNumber: number = 0;
   femaleNumber: number = 0;
-  appointment:MedicalTreatment[] = [];
+
+  patientsWithTreatment: number = 0;
+  patientsWithoutTreatment: number = 0;
+
+  upcomingAppointments: any[] = [];
 
   constructor(private service: CrudService) {
     Chart.register(...registerables);
     Chart.register(ChartDataLabels);
   }
 
-
-  loadPatientData(): void {
-    this.service.getPatients().subscribe(patients => {
-      this.listPatients = patients;
-      this.totalPatients = patients.length;
-      this.maleNumber = patients.filter(patient => patient.gender === 'Homme').length;
-      this.femaleNumber = patients.filter(patient => patient.gender === 'Femme').length;
-
-      this.loadUpcomingAppointments();
-      this.createPieChart();
-    });
-  }
   ngOnInit(): void {
-    this.loadPatientData(); // Appel unique ici
+    this.role = localStorage.getItem("role") as string;
+    const practitionerEmail = localStorage.getItem('practitionnerEmail');
+    console.log('Practitioner Email:', practitionerEmail);
+
+    if (practitionerEmail) {
+      this.service.getPatientsByPractitionner(practitionerEmail).subscribe(patients => {
+        this.listPatients = patients;
+        this.totalPatients = patients.length;
+
+        // Calculer le genre
+        this.maleNumber = patients.filter((patient: Patient) => patient.gender === 'Homme').length;
+        this.femaleNumber = patients.filter((patient: Patient) => patient.gender === 'Femme').length;
+
+
+
+        // Charger les traitements
+        this.service.getMedicalTreatment().subscribe(treatments => {
+          this.treatments = treatments;
+
+          this.listPatients.forEach(patient => {
+            const patientTreatments = treatments
+              .filter(t => t.patient?.id === patient.id)
+              .sort((a, b) =>
+                new Date(b.treatmentRegistrationDate).getTime() -
+                new Date(a.treatmentRegistrationDate).getTime()
+              );
+
+            patient.latestTreatment = patientTreatments[0] || null;
+          });
+
+          // Statistiques traitement
+          this.patientsWithTreatment = this.listPatients.filter(p => p.latestTreatment !== null).length;
+          this.patientsWithoutTreatment = this.totalPatients - this.patientsWithTreatment;
+
+          // Chargement des RDV
+          this.loadUpcomingAppointments();
+        });
+        this.service.getPatients().subscribe(allPatients => {
+          // Calculer les statistiques pour l'ensemble des patients dans l'hôpital
+          this.totalPatientsHospital = allPatients.length;
+          this.totalMaleInHospital = allPatients.filter((patient: Patient) => patient.gender === 'Homme').length;
+          this.totalFemaleInHospital = allPatients.filter((patient: Patient) => patient.gender === 'Femme').length;
+          this.createPieChart();
+          console.log(`Total patients à l'hôpital: ${this.totalPatientsHospital}`);
+          console.log(`Total hommes à l'hôpital: ${this.totalMaleInHospital}`);
+          console.log(`Total femmes à l'hôpital: ${this.totalFemaleInHospital}`);
+        });
+      });
+    }
   }
 
   createPieChart(): void {
@@ -48,7 +93,7 @@ export class HomeComponent implements OnInit{
           labels: ['Hommes', 'Femmes'],
           datasets: [{
 
-            data: [this.maleNumber, this.femaleNumber],
+            data: [this.totalMaleInHospital, this.totalFemaleInHospital],
             backgroundColor: ['#3498db', '#fd79a8'],
             borderWidth: 1,
           }]
@@ -89,44 +134,18 @@ export class HomeComponent implements OnInit{
   }
 
 
-
   loadUpcomingAppointments(): void {
-    this.service.getMedicalTreatment().subscribe(treatments => {
-      const allAppointments: { patientName: string; patientSurname: string; phone: string; nextIntakeDate: Date }[] = [];
-
-      this.listPatients.forEach(patient => {
-        // Récupérer le dernier traitement du patient
-        const latestTreatment = treatments
-          .filter(t => t.patient?.id === patient.id)  // Filtrer les traitements par patient
-          .sort((a, b) => new Date(b.next_intake_Date).getTime() - new Date(a.next_intake_Date).getTime())[0];  // Trier par date et prendre le plus récent
-
-        // Assurer qu'il y a bien un traitement pour ce patient
-        if (latestTreatment) {
-          patient.latestTreatment = latestTreatment;  // Ajouter le dernier traitement au patient
-        }
-      });
-
-      // Mettre à jour les rendez-vous à venir
-      this.upcomingAppointments = this.listPatients
-        .filter(patient => patient.latestTreatment)  // Ne garder que les patients ayant un dernier rendez-vous
-        .map(patient => ({
-          patientName: patient.lastName,
-          patientSurname: patient.firstName,
-          phone: patient.phoneNumber,
-          nextIntakeDate: patient.latestTreatment.next_intake_Date
-        }));
-
-      // Trier les rendez-vous par date
-      this.upcomingAppointments.sort((a, b) =>
+    this.upcomingAppointments = this.listPatients
+      .filter(patient => patient.latestTreatment && patient.latestTreatment.next_intake_Date)
+      .map(patient => ({
+        patientName: patient.lastName,
+        patientSurname: patient.firstName,
+        phone: patient.phoneNumber,
+        nextIntakeDate: patient.latestTreatment.next_intake_Date
+      }))
+      .sort((a, b) =>
         new Date(a.nextIntakeDate).getTime() - new Date(b.nextIntakeDate).getTime()
-      );
-
-      // Ne garder que les 2 plus proches
-      this.upcomingAppointments = this.upcomingAppointments.slice(0, 2);
-    });
+      )
+      .slice(0, 2);
   }
-
-
-
-
 }

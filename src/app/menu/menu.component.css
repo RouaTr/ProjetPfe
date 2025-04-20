@@ -27,3 +27,8 @@ h1{
   background-color: #cbdcf0;
   color: white;
 }
+:host {
+  position: relative;
+  z-index: 999;
+}
+

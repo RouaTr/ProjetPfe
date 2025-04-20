@@ -23,7 +23,6 @@ export class ListOfAllPatientsComponent {
   ngOnInit(): void {
     this.role = localStorage.getItem("role") as string;
 
-    // Récupérer tous les patients et tous les traitements en une seule fois
     this.service.getPatients().subscribe(patients => {
       this.listPatients = patients;
       console.log(this.listPatients);
@@ -40,19 +39,27 @@ export class ListOfAllPatientsComponent {
             );
             patient.latestTreatment = patientTreatments[0];
           } else {
-            patient.latestTreatment = null;
+            // Si aucun traitement, affecter une valeur nulle ou une valeur par défaut
+            patient.latestTreatment = { next_intake_Date: null }; // Pas de traitement
           }
         });
 
-        // 🔽 Après avoir assigné les traitements à tous les patients
+        // Après avoir assigné les traitements, on trie tous les patients
         this.filteredPatients = this.listPatients
-          .filter(p => p.latestTreatment?.next_intake_Date) // garder ceux qui ont une date
-          .sort((a, b) =>
-            new Date(a.latestTreatment!.next_intake_Date!).getTime() -
-            new Date(b.latestTreatment!.next_intake_Date!).getTime()
-          );
+          .sort((a, b) => {
+            // Utiliser une date par défaut pour les patients sans traitement
+            const dateA = a.latestTreatment?.next_intake_Date
+              ? new Date(a.latestTreatment.next_intake_Date).getTime()
+              : Infinity; // Les patients sans traitement seront affichés à la fin
 
-        // Ajouter la couleur selon la position
+            const dateB = b.latestTreatment?.next_intake_Date
+              ? new Date(b.latestTreatment.next_intake_Date).getTime()
+              : Infinity;
+
+            return dateA - dateB;
+          });
+
+        // Ajouter des couleurs selon la position
         this.filteredPatients.forEach((patient, index) => {
           if (index < 2) {
             (patient as any).nextIntakeColor = 'danger'; // 🔴
@@ -86,7 +93,7 @@ export class ListOfAllPatientsComponent {
 
   searchPatient(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
-    const searchValue = inputElement.value.trim().toLowerCase(); 
+    const searchValue = inputElement.value.trim().toLowerCase();
 
     if (searchValue) {
       // Convertir en minuscules et diviser les mots-clés

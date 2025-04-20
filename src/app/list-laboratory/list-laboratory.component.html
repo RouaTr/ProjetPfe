@@ -31,9 +31,36 @@
       </div>
       <main>
         <div class="mb-3 d-flex justify-content-between align-items-center">
-          <a  [routerLink]="['/laboratory', patient?.id]"class="btn btn-primary">
-            <i class="ri-user-add-line"></i> + résultats biologiques
-          </a>
+          <div class="a">
+            <a [routerLink]="['/laboratory', patient?.id]" class="btn btn-primary">
+              <i class="ri-user-add-line"></i> + résultats biologiques
+            </a>
+            <input type="file" accept="image/*,application/pdf" hidden #fileInput (change)="onFileSelected($event)" />
+
+            <a class="btn btn-primary scan-button" (click)="fileInput.click()">
+              <i class="bi bi-camera"></i> Scanner ou choisir un fichier
+            </a>
+
+
+            <!-- Affichage du fichier/image sélectionné -->
+
+            <div *ngIf="selectedImage">
+              <img [src]="selectedImage" alt="Image sélectionnée" style="max-width: 100%; height: auto;">
+            </div>
+
+            <!-- Bouton d'envoi pour IBM FileNet -->
+            <!-- Afficher le bouton d'envoi uniquement si un fichier est sélectionné -->
+            <button *ngIf="selectedFileName" (click)="sendToFileNet()">Envoyer à IBM FileNet</button>
+
+            <!-- Interface de confirmation de l'envoi -->
+            <div *ngIf="uploadStatus">
+              <p>{{ uploadStatus }}</p>
+            </div>
+            <div *ngIf="selectedFileName && !selectedImage">
+              <p>Fichier sélectionné : {{ selectedFileName }}</p>
+            </div>
+
+          </div>
           <!-- Barre de recherche -->
           <div class="input-group" style="max-width: 300px;">
             <input type="date" id="searchPatient" class="form-control" placeholder="Rechercher ..."

@@ -1,6 +1,6 @@
 header{
   background-color: rgb(185, 213, 249);
-  width:1287px;
+
 }
 .head-icon .d-flex {
   display: flex;
@@ -22,4 +22,9 @@ a .d-flex p {
   text-transform: capitalize; /* Mettre en majuscule la première lettre de chaque mot */
   text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
+:host {
+  position: relative;
+  z-index: 10;
+}
+
 

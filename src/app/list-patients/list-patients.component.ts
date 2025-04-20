@@ -48,21 +48,27 @@ export class ListPatientsComponent {
             }
           });
 
-          // 🔽 Après avoir assigné les traitements à tous les patients
-          this.filteredPatients = this.listPatients
-            .sort((a, b) =>
-              new Date(a.latestTreatment?.next_intake_Date || 0).getTime() -
-              new Date(b.latestTreatment?.next_intake_Date || 0).getTime()
-            );
+          //  Après avoir assigné les traitements à tous les patients
+          this.filteredPatients = this.listPatients.sort((a, b) => {
+            const dateA = a.latestTreatment?.next_intake_Date
+              ? new Date(a.latestTreatment.next_intake_Date).getTime()
+              : Infinity; // Pas de rendez-vous → à la fin
+            const dateB = b.latestTreatment?.next_intake_Date
+              ? new Date(b.latestTreatment.next_intake_Date).getTime()
+              : Infinity;
+
+            return dateA - dateB; // Date la plus proche en premier
+          });
+
 
           // Ajouter la couleur selon la position
           this.filteredPatients.forEach((patient, index) => {
             if (index < 2) {
-              (patient as any).nextIntakeColor = 'danger'; // 🔴
+              (patient as any).nextIntakeColor = 'danger';
             } else if (index < 4) {
-              (patient as any).nextIntakeColor = 'warning'; // 🟠
+              (patient as any).nextIntakeColor = 'warning';
             } else {
-              (patient as any).nextIntakeColor = 'info'; // 🟡
+              (patient as any).nextIntakeColor = 'info';
             }
           });
         });
