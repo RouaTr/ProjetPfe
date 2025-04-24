@@ -34,6 +34,7 @@ export class ListFunctionalSymptomsComponent implements OnInit {
         console.error("Erreur : patientId non récupéré");
       }
     });
+    this.groupByRecord();
   }
   filterByDate(): void {
     if (!this.searchDate) {
@@ -77,6 +78,7 @@ export class ListFunctionalSymptomsComponent implements OnInit {
           })
           .filter(symptom => Object.keys(symptom).length > 1);
         this.filteredFunctionalSymptoms = [...this.functionalsymptoms];
+        this.groupByRecord(); 
         console.log("Signes cliniques filtrés :", this.functionalsymptoms);
       },
       error: (err) => {
@@ -102,4 +104,12 @@ export class ListFunctionalSymptomsComponent implements OnInit {
   formatValue(value: boolean): string {
     return value ? 'Oui' : 'Non';
   }
+  groupedSymptoms: any[] = [];
+
+
+
+groupByRecord() {
+  this.groupedSymptoms = this.filteredFunctionalSymptoms.map(symptom => [symptom]);
+}
+
 }

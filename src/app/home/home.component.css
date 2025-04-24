@@ -37,11 +37,11 @@ app-header {
 }
 main{
   background-color: rgb(237, 247, 255);
-
+margin-top: -22px;
 
 }
 .img-fluid{
-  width: 220px;
+  width: 200px;
 }
 h3{
   margin-left: 90px;

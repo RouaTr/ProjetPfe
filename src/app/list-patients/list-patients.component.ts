@@ -10,7 +10,7 @@ import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
   styleUrls: ['./list-patients.component.css']
 })
 export class ListPatientsComponent {
-
+  uploadStatus: string | null = null;
   role: string;
   listPatients: Patient[] = [];
   filteredPatients: Patient[] = [];
@@ -90,6 +90,66 @@ export class ListPatientsComponent {
         console.error('Erreur lors de la génération du rapport :', error);
       }
     );
+  }
+  selectedImage: string | null = null;
+  selectedFileName: string | null = null;
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      this.selectedFileName = file.name;
+
+      console.log("Fichier sélectionné:", file);  // Afficher le fichier pour déboguer
+      console.log("Type de fichier:", file.type);
+
+      // Vérifie si c'est une image ou un PDF
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.selectedImage = reader.result as string;
+        };
+        reader.readAsDataURL(file);
+      } else if (file.type === 'application/pdf') {
+        this.selectedImage = null;  // Réinitialiser l'image si c'est un PDF
+        console.log("Fichier PDF sélectionné:", file);
+        // Afficher un aperçu ou message d'information ici, si nécessaire
+      } else {
+        this.selectedImage = null;  // Réinitialiser pour les autres types de fichiers
+        console.log('Fichier non valide:', file);
+      }
+    }
+  }
+
+  onAnalyzeTrends(patientId: number) {
+    this.router.navigate(['/analysetrends', patientId]);
+  }
+
+
+  // Envoi du fichier vers IBM FileNet
+  sendToFileNet(): void {
+    /* const file = this.selectedImage ? this.selectedImage : this.selectedFileName;
+
+    if (!file) {
+      console.error('Aucun fichier sélectionné');
+      return;
+    }
+
+    // Créer un objet FormData pour l'envoi du fichier
+    const formData = new FormData();
+    formData.append('file', file);  // 'file' est le nom du champ que tu enverras à IBM FileNet
+
+    // Envoi de la requête HTTP
+   this.crudService.sendToFileNet(formData).subscribe({
+      next: (response) => {
+        console.log('Fichier envoyé à IBM FileNet avec succès', response);
+        // Afficher une confirmation ou fermer l'interface d'envoi
+      },
+      error: (error) => {
+        console.error('Erreur lors de l\'envoi du fichier à IBM FileNet:', error);
+      }
+    });*/
   }
 
 

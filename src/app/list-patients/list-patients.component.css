@@ -1,28 +1,44 @@
-button{
+button {
   background-color: rgb(98, 153, 198);
 }
-.bt{
+
+.bt {
   background-color: rgb(255, 255, 255);
   margin-left: 30px;
   border: none;
 }
+
 body {
-  margin: 0;
+  background-color: rgb(226, 236, 249);
 
-  height: 100vh;
+  ;
+}
+.card {
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.card-body {
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+
+
+
+
+
+
+
+.scan-button {
+  color: white !important;
+}
+
+.a {
   display: flex;
-  flex-direction: column;
+  gap: 20px;
 }
-
-.row {
-  height: calc(100vh - 100px);
-
-}
-html, body {
-  margin: 0; /* Élimine les marges par défaut */
-  padding: 0; /* Élimine les paddings par défaut */
-  height: 100%; /* Assure que html et body prennent toute la hauteur disponible */
-  background-color: rgb(226, 236, 249); /* Applique la couleur de fond sur toute la page */
-
-}
-

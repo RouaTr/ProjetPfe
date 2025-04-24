@@ -34,6 +34,8 @@ import { LoginComponent } from './login/login.component';
 import { ManagePractitionnerAccessComponent } from './manage-practitionner-access/manage-practitionner-access.component';
 import { UpdatePractitionnerComponent } from './update-practitionner/update-practitionner.component';
 import { ListOfAllPatientsComponent } from './list-of-all-patients/list-of-all-patients.component';
+import { ManageTreatmentFormComponent } from './manage-treatment-form/manage-treatment-form.component';
+import { AnalyzeTrendsComponent } from './analyze-trends/analyze-trends.component';
 
 const routes: Routes = [
   {path:'home',component:HomeComponent,canActivate:[AuthGuard] ,data: { role: 'medecin' } },
@@ -45,6 +47,7 @@ const routes: Routes = [
 
   {path:'medicalfolder/:id',component:MedicalFolderComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
   {path:'updatePatient/:id',component:UpdatePatientComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
+  {path:'analysetrends/:id',component:AnalyzeTrendsComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
 
   {path:'laboratory',component:LaboratoryComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
 //observation
@@ -125,7 +128,7 @@ const routes: Routes = [
 { path: 'updatePractitionner/:id', component: UpdatePractitionnerComponent },
 { path: '', component: LoginComponent },
 { path: 'manageaccess', component: ManagePractitionnerAccessComponent, canActivate:[AuthGuard] ,data: { role: 'admin' }},
-
+{ path: 'managetreatmentForm', component: ManageTreatmentFormComponent, canActivate:[AuthGuard] ,data: { role: 'admin' }},
 
 
 

@@ -15,8 +15,7 @@
   <div class="app-content">
     <app-header></app-header>
     <div class="container-fluid">
-      <div class="container">
-        <h3> Dossier Médical:</h3>
+      <div class="container"> <h3> Dossier Médical du Patient : {{ patient.lastName }} {{ patient.firstName }}</h3>
 
         <div class="tabs">
           <a [routerLink]="['/medicalfolder', patient?.id]" class="tab">Patient</a>
@@ -38,7 +37,7 @@
             <input type="file" accept="image/*,application/pdf" hidden #fileInput (change)="onFileSelected($event)" />
 
             <a class="btn btn-primary scan-button" (click)="fileInput.click()">
-              <i class="bi bi-camera"></i> Scanner ou choisir un fichier
+              <i class="bi bi-camera"></i> Scanner un bilan
             </a>
 
 
@@ -50,7 +49,7 @@
 
             <!-- Bouton d'envoi pour IBM FileNet -->
             <!-- Afficher le bouton d'envoi uniquement si un fichier est sélectionné -->
-            <button *ngIf="selectedFileName" (click)="sendToFileNet()">Envoyer à IBM FileNet</button>
+            <button *ngIf="selectedFileName" (click)="sendToFileNet()">Enregistrer dans IBM FileNet</button>
 
             <!-- Interface de confirmation de l'envoi -->
             <div *ngIf="uploadStatus">
@@ -323,7 +322,7 @@
                   <p *ngIf="lab.tuberculinTest"><strong>Test à la tuberculine :</strong> {{ lab.tuberculinTest }}</p>
                   <p *ngIf="lab.quantiferonTest"><strong>Test Quantiféron :</strong>
                 </div>
-                <h5>Autres</h5>
+                <h5>immunovirologique</h5>
                 <div class="col-lg-6">
                   <p *ngIf="lab.viralLoad">
                     <strong>Charge virale :</strong> {{ lab.viralLoad}} copies/mL <br>

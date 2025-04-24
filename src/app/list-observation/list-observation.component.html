@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Liste des patients</title>
+  <title>Liste des observations</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
   <meta content="Themesbrand" name="author" />
@@ -17,6 +17,7 @@
       <app-header></app-header>
 
       <div class="container-fluid">
+        <h3> Dossier Médical du Patient : {{ patient.lastName }} {{ patient.firstName }}</h3>
         <div class="tabs">
           <a [routerLink]="['/medicalfolder', patient?.id]" class="tab">Patient</a>
           <a [routerLink]="['/medicalfolder/listmedicalhistory', patient?.id]" class="tab">Antécédents</a>

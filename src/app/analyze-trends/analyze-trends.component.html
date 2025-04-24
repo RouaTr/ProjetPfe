@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Multipurpose, super flexible, powerful, clean modern responsive bootstrap 5 admin template">
+  <title>Dossier Médical</title>
+</head>
+
+<body>
+
+  <div class="app-wrapper default">
+    <app-menu></app-menu>
+    <div class="app-content">
+      <app-header></app-header>
+      <div class="container-fluid">
+
+        <main>
+          <div class="chart-container">
+          <h3>charge virale </h3>
+          <canvas baseChart
+          [datasets]="viralLoadChartData"
+          [labels]="lineChartLabels"
+          [options]="lineChartOptions"
+          [plugins]="[ChartDataLabels]"
+          [legend]="lineChartLegend"
+          [type]="lineChartType">
+        </canvas>
+        <h3>CD4</h3>
+          <canvas baseChart
+          [datasets]="cd4ChartData"
+          [labels]="lineChartLabels"
+          [options]="lineChartOptions"
+          [plugins]="[ChartDataLabels]"
+          [legend]="lineChartLegend"
+          [type]="lineChartType">
+        </canvas>
+      </div>
+
+      <div class="treatment-legend">
+        <h4>Légende des traitements :</h4>
+        <ul>
+          <li *ngFor="let item of treatmentLegend">
+            <span [style.backgroundColor]="item.color" class="legend-color"></span> {{ item.name }}
+          </li>
+        </ul>
+      </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

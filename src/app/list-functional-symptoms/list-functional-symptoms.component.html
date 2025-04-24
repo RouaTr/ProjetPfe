@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Liste des patients</title>
+  <title>Liste des signes fonctionnels</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
   <meta content="Themesbrand" name="author" />
@@ -17,6 +17,7 @@
       <app-header></app-header>
 
       <div class="container-fluid">
+        <h3> Dossier Médical du Patient : {{ patient.lastName }} {{ patient.firstName }}</h3>
         <div class="tabs">
           <a [routerLink]="['/medicalfolder', patient?.id]" class="tab">Patient</a>
           <a [routerLink]="['/medicalfolder/listmedicalhistory', patient?.id]" class="tab">Antécédents</a>
@@ -42,13 +43,13 @@
 
         <div class="container-fluid">
           <div class="row">
-            <div *ngIf="filteredFunctionalSymptoms.length > 0; else loading">
+            <div *ngFor="let group of groupedSymptoms">
               <div class="card">
                 <div class="card-header">
-                  <h5 class="card-title mb-0">Liste des signes fonctionnels</h5>
+                  <h5 class="card-title mb-0">Symptômes du {{ group[0]?.functionalSymptomsDate | date:'dd/MM/yyyy' }}</h5>
                 </div>
                 <div class="card-body">
-                  <table id="scroll-horizontal" class="table nowrap align-middle" style="width:100%">
+                  <table id="scroll-horizontal" class="table-responsive" style="width:100%">
                     <thead>
                       <!-- Première ligne d'en-tête -->
                       <tr>
@@ -67,7 +68,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let symptom of filteredFunctionalSymptoms">
+                      <tr *ngFor="let symptom of group">
                         <td>{{ symptom.id }}</td>
                         <td>{{ formatValue(symptom.fever) }}</td>
                         <td>{{ formatValue(symptom.diarrhea) }}</td>
@@ -101,7 +102,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let symptom of filteredFunctionalSymptoms">
+                      <tr *ngFor="let symptom of group">
                         <td>{{ formatValue(symptom.pruritus) }}</td>
                         <td>{{ formatValue(symptom.anorexia) }}</td>
                         <td>{{ formatValue(symptom.insomnia) }}</td>

@@ -16,7 +16,7 @@
     <app-header></app-header>
     <div class="container-fluid">
       <div class="container">
-        <h3> Dossier Médical:</h3>
+        <h3> Dossier Médical du Patient : {{ patient.lastName }} {{ patient.firstName }}</h3>
 
         <div class="tabs">
           <a [routerLink]="['/medicalfolder', patient?.id]" class="tab">Patient</a>

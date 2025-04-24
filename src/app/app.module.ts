@@ -45,7 +45,10 @@ import { ManagePractitionnerAccessComponent } from './manage-practitionner-acces
 import { HeaderAdminComponent } from './header-admin/header-admin.component';
 import { MenuAdminComponent } from './menu-admin/menu-admin.component';
 import { ListOfAllPatientsComponent } from './list-of-all-patients/list-of-all-patients.component';
+import { ManageTreatmentFormComponent } from './manage-treatment-form/manage-treatment-form.component';
+import { AnalyzeTrendsComponent } from './analyze-trends/analyze-trends.component';
 
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -90,6 +93,8 @@ import { ListOfAllPatientsComponent } from './list-of-all-patients/list-of-all-p
     HeaderAdminComponent,
     MenuAdminComponent,
     ListOfAllPatientsComponent,
+    ManageTreatmentFormComponent,
+    AnalyzeTrendsComponent,
 
   ],
   imports: [
@@ -98,6 +103,9 @@ import { ListOfAllPatientsComponent } from './list-of-all-patients/list-of-all-p
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+   NgChartsModule,
+
+
   ],
   providers: [  { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     JwtHelperService,],

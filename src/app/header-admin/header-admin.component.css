@@ -24,5 +24,8 @@ a .d-flex p {
 .app-content {
   padding-top: 80px; /* ajuste selon la hauteur du header */
 }
-
+:host {
+  position: relative;
+  z-index: 10;
+}
 

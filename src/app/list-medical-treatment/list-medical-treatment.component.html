@@ -5,7 +5,7 @@
 <head>
 
   <meta charset="utf-8" />
-  <title>Liste des patients</title>
+  <title>Liste des traitements </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
   <meta content="Themesbrand" name="author" />
@@ -20,22 +20,25 @@
     <div class="app-content">
       <app-header></app-header>
 
-      <div class="container-fluid">
-
+      <div class="container-fluid" *ngIf="patient">
+        <h3>  Patient : {{ patient.lastName }} {{ patient.firstName }}</h3>
 
         <main>
+
           <div class="mb-3 d-flex justify-content-between align-items-center">
+
             <a [routerLink]="['/medicaltreatment', patient?.id]" class="btn btn-primary">
               <i class="ri-user-add-line"></i> + nouveau Traitement
             </a>
 
-            <!-- Barre de recherche avec icône -->
-            <div class="input-group" style="max-width: 300px;">
-              <input type="date" id="searchPatient" class="form-control" placeholder="Rechercher ..."
-                [(ngModel)]="searchDate" (input)="filterByDate()">
-              <span class="input-group-text"><i class="ri-search-line"></i></span>
-            </div>
           </div>
+          <!-- Barre de recherche avec icône -->
+          <div class="input-group" style="max-width: 300px;">
+            <input type="date" id="searchPatient" class="form-control" placeholder="Rechercher ..."
+              [(ngModel)]="searchDate" (input)="filterByDate()">
+            <span class="input-group-text"><i class="ri-search-line"></i></span>
+          </div>
+        <br>
 
 
 
@@ -52,7 +55,7 @@
                       <thead>
                         <tr>
 
-                          <th>ID</th>
+
                           <th>Nom du traitement</th>
                           <th>date du début du traitement</th>
                           <th>Durée de la prise</th>
@@ -67,7 +70,7 @@
                       </thead>
                       <tbody>
                         <tr *ngFor="let medicaltreatment of filteredMedicalTreatment">
-                          <td>{{ medicaltreatment?.treatmentId}}</td>
+
                           <td>{{ medicaltreatment?.treatmentName}}</td>
                           <td><span>{{medicaltreatment.treatmentStartDate| date: 'dd/MM/yyyy' }}</span></td>
                           <td><span class="badge bg-danger">{{ medicaltreatment?.treatment_intake_duration}}</span></td>
@@ -82,9 +85,12 @@
                                 <i class="ri-more-fill align-middle"></i>
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a [routerLink]="['/medicalfolder/listmedicaltreatment/updatemedicaltreatment', medicaltreatment.treatmentId]" class="dropdown-item">
-                                  <i class="ri-eye-fill align-bottom me-2 text-muted"></i> Modifier
+                                <li><a
+                                    [routerLink]="['/medicalfolder/listmedicaltreatment/updatemedicaltreatment', medicaltreatment.treatmentId]"
+                                    class="dropdown-item">
+                                    <i class="ri-eye-fill align-bottom me-2 text-muted"></i> Modifier
                                   </a></li>
+
                               </ul>
                             </div>
                           </td>

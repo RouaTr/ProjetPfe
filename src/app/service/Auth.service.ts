@@ -29,6 +29,7 @@ export class AuthGuard implements CanActivate {
         '/medicalfolder/:id',
         '/newpatient',
         '/updatePatient/:id',
+       '/analysetrends/:id',
         '/laboratory',
         '/observation',
         '/listobservation',
@@ -71,7 +72,7 @@ export class AuthGuard implements CanActivate {
         '/updatetreatmentbypharmacie/:treatmentId',
       ],
       admin: [
-        '/',
+        '/managetreatmentForm',
         '/manageaccess',
 
       ]

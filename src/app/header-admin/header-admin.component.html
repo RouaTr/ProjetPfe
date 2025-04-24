@@ -1,5 +1,5 @@
 <header
-class="bg-dark text-white p-3 fixed-top"  id="layout-navbar"
+class="header-main"
 >
   <div class="container-fluid">
     <div class="row w-100">
@@ -20,8 +20,8 @@ class="bg-dark text-white p-3 fixed-top"  id="layout-navbar"
               role="button"
             >
               <div class="d-flex align-items-center">
-                <img alt="avatar" class="b-r-50 h-35 w-35 bg-dark" src="assets/images/avtar/woman.jpg" />
-                <p class="f-s-12 mb-0 text-secondary ms-2">Bonjour Docteur {{ userDetails?.practitionnerFirstName }}</p>
+                <img alt="avatar" class="b-r-50 h-35 w-35 bg-dark" src="assets/images/avtar/admin.jpg" />
+                <p class="f-s-12 mb-0 text-secondary ms-2">Bonjour  {{ userDetails?.practitionnerFirstName }}</p>
               </div>
             </a>
 
@@ -36,7 +36,7 @@ class="bg-dark text-white p-3 fixed-top"  id="layout-navbar"
                   <li class="d-flex gap-3 mb-3">
                     <div class="d-flex-center">
                       <span class="h-45 w-45 d-flex-center b-r-10 position-relative">
-                        <img alt="" class="img-fluid b-r-10" src="assets/images/avtar/woman.jpg" />
+                        <img alt="" class="img-fluid b-r-10" src="assets/images/avtar/admin.jpg" />
                       </span>
                     </div>
                     <div class="text-center mt-2" *ngIf="userDetails">

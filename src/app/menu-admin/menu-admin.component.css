@@ -12,3 +12,7 @@ h1{
   padding: 10px;
 
 }
+:host {
+  position: relative;
+  z-index: 999;
+}

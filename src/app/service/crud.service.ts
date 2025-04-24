@@ -308,6 +308,10 @@ private getPractitionnerIdFromToken(): number {
   }
   return null;
 }
+getTrendsForPatient(patientId: number): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/laboratory/trends/patients/${patientId}`);
+}
+
 
 
 

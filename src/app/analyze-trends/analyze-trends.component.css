@@ -1,0 +1,28 @@
+.chart-container {
+  width:900px; /* ou 100%, 60%, etc. selon tes préférences */
+  margin: auto;
+}
+
+.treatment-legend ul {
+  list-style: none;
+  padding: 0;
+}
+
+.treatment-legend li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 20px;
+  height: 10px;
+  margin-right: 8px;
+  border: 1px solid #000;
+}
+
+body{
+  background-color: rgb(216, 226, 239);
+;
+}

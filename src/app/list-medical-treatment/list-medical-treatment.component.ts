@@ -11,10 +11,11 @@ import { CrudService } from '../service/crud.service';
 })
 export class ListMedicalTreatmentComponent {
 
- patient: Patient | null = null;
+
+  patient: Patient | null = null;
   medicaltreatment: MedicalTreatment[] = [];
   patientId!: number;
- searchDate: string = '';
+  searchDate: string = '';
   filteredMedicalTreatment: MedicalTreatment[] = [];
   constructor(
     private crudService: CrudService,
@@ -22,7 +23,7 @@ export class ListMedicalTreatmentComponent {
   ) {}
 
   ngOnInit(): void {
-    // 🔹 Écoute les changements d'ID du patient
+    //  Écoute les changements d'ID du patient
     this.route.paramMap.subscribe(params => {
       const id = params.get('patientId');
       if (id) {
@@ -101,5 +102,7 @@ export class ListMedicalTreatmentComponent {
 
      return filteredSymptom as MedicalTreatment;
    }
+
+
 }
 
