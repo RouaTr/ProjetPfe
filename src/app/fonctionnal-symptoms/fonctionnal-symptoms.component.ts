@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CrudService } from '../service/crud.service';
 
@@ -8,41 +8,32 @@ import { CrudService } from '../service/crud.service';
   templateUrl: './fonctionnal-symptoms.component.html',
   styleUrls: ['./fonctionnal-symptoms.component.css']
 })
-export class FonctionnalSymptomsComponent {
-
- messageCommande = "";
- FunctionalSymptomsForm: FormGroup;
-  patientId: number | null = null; // Initialisation correcte
-  patientName: string = '';  // Définition de la propriété patientName
+export class FonctionnalSymptomsComponent implements OnInit {
+  messageCommande = '';
+  FunctionalSymptomsForm: FormGroup;
+  patientId: number | null = null;
+  patientName: string = '';
   patientLastName: string = '';
-  constructor(private service: CrudService, private router: Router, private fb: FormBuilder,  private route: ActivatedRoute) {
-    let formControls = {
-      fever: new FormControl(''),
-      diarrhea: new FormControl(''),
-      cough: new FormControl(''),
-      abdominalPain: new FormControl(''),
-      dyspnea: new FormControl(''),
-      nausea: new FormControl(''),
-      asthenia: new FormControl(''),
-      arthralgia: new FormControl(''),
-      nightSweats: new FormControl(''),
-      headache: new FormControl(''),
-      dysphagia: new FormControl(''),
-      pruritus: new FormControl(''),
-      anorexia: new FormControl(''),
-      insomnia: new FormControl(''),
-      moodDisorders: new FormControl(''),
-      rhinorrhea: new FormControl(''),
-      paresthesia: new FormControl(''),
-      cramps: new FormControl(''),
-      visualDisturbances: new FormControl(''),
-      myalgia: new FormControl(''),
-      libidoDisorders: new FormControl(''),
-      otherSymptoms: new FormControl(''),
-      functionalSymptomsDate: new FormControl('', [Validators.required]),
+  symptomList: string[] = [
+    'fever', 'diarrhea', 'cough', 'abdominalPain', 'dyspnea', 'nausea',
+    'asthenia', 'arthralgia', 'nightSweats', 'headache', 'dysphagia',
+    'pruritus', 'anorexia', 'insomnia', 'moodDisorders', 'rhinorrhea',
+    'paresthesia', 'cramps', 'visualDisturbances', 'myalgia', 'libidoDisorders', 'otherSymptoms'
+  ];
+  selectedSymptoms: string[] = [];
 
-    };
-
+  constructor(
+    private service: CrudService,
+    private router: Router,
+    private fb: FormBuilder,
+    private route: ActivatedRoute
+  ) {
+    // Typage explicite de l'objet formControls
+    let formControls: { [key: string]: FormControl } = {};
+    this.symptomList.forEach(symptom => {
+      formControls[symptom] = new FormControl(false); // Définir chaque case à cocher comme 'false' initialement
+    });
+    formControls['functionalSymptomsDate'] = new FormControl(null);
     this.FunctionalSymptomsForm = this.fb.group(formControls);
   }
 
@@ -51,103 +42,105 @@ export class FonctionnalSymptomsComponent {
       const id = params.get('patientId');
       if (id) {
         this.patientId = +id;
-        console.log("🔹 ID du patient récupéré depuis l'URL :", this.patientId);
-
-        // Charger le patient
+        console.log('ID du patient récupéré depuis l\'URL :', this.patientId);
         this.service.findPatientById(this.patientId).subscribe(
           (patient) => {
             this.patientName = patient.firstName;
             this.patientLastName = patient.lastName;
           },
           (error) => {
-            console.error("Erreur lors de la récupération du patient :", error);
+            console.error('Erreur lors de la récupération du patient :', error);
           }
         );
-      } else {
-        console.error("⚠️ Aucun ID patient dans l'URL !");
       }
     });
-
   }
+  get functionalSymptomsDate() { return this.FunctionalSymptomsForm.get('functionalSymptomsDate'); }
 
-  // Getters pour accéder aux champs du formulaire
-  get fever() { return this.FunctionalSymptomsForm.get('fever'); }
-  get diarrhea() { return this.FunctionalSymptomsForm.get('diarrhea'); }
-  get cough() { return this.FunctionalSymptomsForm.get('cough'); }
-  get abdominalPain() { return this.FunctionalSymptomsForm.get('abdominalPain'); }
-  get dyspnea() { return this.FunctionalSymptomsForm.get('dyspnea'); }
-  get nausea() { return this.FunctionalSymptomsForm.get('nausea'); }
-  get asthenia() { return this.FunctionalSymptomsForm.get('asthenia'); }
-  get arthralgia() { return this.FunctionalSymptomsForm.get('arthralgia'); }
-  get nightSweats() { return this.FunctionalSymptomsForm.get('nightSweats'); }
-  get headache() { return this.FunctionalSymptomsForm.get('headache'); }
-  get dysphagia() { return this.FunctionalSymptomsForm.get('dysphagia'); }
-  get pruritus() { return this.FunctionalSymptomsForm.get('pruritus'); }
-  get anorexia() { return this.FunctionalSymptomsForm.get('anorexia'); }
-  get insomnia() { return this.FunctionalSymptomsForm.get('insomnia'); }
-  get moodDisorders() { return this.FunctionalSymptomsForm.get('moodDisorders'); }
-  get rhinorrhea() { return this.FunctionalSymptomsForm.get('rhinorrhea'); }
-  get paresthesia() { return this.FunctionalSymptomsForm.get('paresthesia'); }
-  get cramps() { return this.FunctionalSymptomsForm.get('cramps'); }
-  get visualDisturbances() { return this.FunctionalSymptomsForm.get('visualDisturbances'); }
-  get myalgia() { return this.FunctionalSymptomsForm.get('myalgia'); }
-  get libidoDisorders() { return this.FunctionalSymptomsForm.get('libidoDisorders'); }
-  get otherSymptoms() { return this.FunctionalSymptomsForm.get('otherSymptoms'); }
-  get functionalSymptomsDateControl(): FormControl {
-    return this.FunctionalSymptomsForm.get('functionalSymptomsDate') as FormControl;
-  }
-   isInvalidAndTouchedOrDirty(control: AbstractControl | null): boolean {
-      return (control as FormControl).invalid && ((control as FormControl).touched || (control as FormControl).dirty);
-
+  onCheckboxChange(symptom: string): void {
+    const control = this.FunctionalSymptomsForm.get(symptom); // Accède au contrôle de la case à cocher
+    if (control?.value) {
+      if (!this.selectedSymptoms.includes(symptom)) {
+        this.selectedSymptoms.push(symptom);
+      }
+    } else {
+      const index = this.selectedSymptoms.indexOf(symptom);
+      if (index !== -1) {
+        this.selectedSymptoms.splice(index, 1);
+      }
     }
-  logInvalidFields() {
-    console.log("🔴 Champs invalides dans le formulaire :");
-
-    Object.keys(this.FunctionalSymptomsForm.controls).forEach(key => {
-      const control = this.FunctionalSymptomsForm.get(key);
-      if (control?.invalid) {
-        console.log(`❌ Champ : ${key}`);
-        console.log("   ↳ Erreurs :", control.errors);
-      }
-    });
+    console.log(this.selectedSymptoms); // Affiche les symptômes sélectionnés
   }
-  addNewFunctionalSymptoms() {
-    this.FunctionalSymptomsForm.markAllAsTouched();
+  isInvalidAndTouchedOrDirty(controlName: string): boolean {
+    const control = this.FunctionalSymptomsForm.get(controlName);
+    return control?.invalid && (control?.touched || control?.dirty) ? true : false;
+  }
+
+
+
+  addNewFunctionalSymptoms(): void {
+    this.FunctionalSymptomsForm.markAllAsTouched(); // Marquer tous les contrôles comme touchés pour afficher les erreurs
     if (this.FunctionalSymptomsForm.invalid) {
-      console.log("🚨 Formulaire invalide !");
-      this.logInvalidFields(); // 🔍 Afficher les erreurs des champs invalides
+      console.log('Formulaire invalide !');
       return;
     }
+
+    // Vérification si un patient est sélectionné (pas de patientId)
     if (!this.patientId) {
-      console.error("Erreur : Aucun ID patient récupéré !");
+      console.error('Erreur : Aucun ID patient récupéré !');
       this.messageCommande = `<div class="alert alert-danger" role="alert">
-        Impossible d'ajouter les signes fonctionnels : aucun patient enregistré.
+        Impossible d\'ajouter les signes fonctionnels : aucun patient enregistré.
       </div>`;
       return;
     }
 
+    // Récupération des données du formulaire
     let data = this.FunctionalSymptomsForm.value;
+
+    // Ajouter le patientId aux données envoyées
     data = { ...data, patientId: this.patientId };
 
+    // Vérification si la date des symptômes est présente et bien formatée
+    if (!data.functionalSymptomsDate) {
+      console.error('La date des symptômes est manquante !');
+      this.messageCommande = `<div class="alert alert-danger" role="alert">
+        La date des symptômes est requise.
+      </div>`;
+      return;
+    }
+
+    // Si la date est présente, on la convertit en format Date (si nécessaire)
+    if (data.functionalSymptomsDate) {
+      data.functionalSymptomsDate = new Date(data.functionalSymptomsDate);
+    }
+
+    // Affichage des données envoyées pour debug
     console.log('Données envoyées:', data);
 
+    // Appel du service pour ajouter les symptômes fonctionnels
     this.service.addFunctionalSymptoms(this.patientId, data).subscribe(
       res => {
         console.log('Réponse du serveur:', res);
+
+        // Message de succès
         this.messageCommande = `<div class="alert alert-success" role="alert">
-          signes fonctionnels ajoutés avec succès !
+          Signes fonctionnels ajoutés avec succès !
         </div>`;
+
+        // Redirection après un délai
         setTimeout(() => {
           this.router.navigate([`medicalfolder/listfunctionalsymptoms/${this.patientId}`]);
         }, 2000);
       },
       err => {
         console.error('Erreur:', err);
+
+        // Message d'erreur en cas de problème serveur
         this.messageCommande = `<div class="alert alert-danger" role="alert">
           Problème de serveur ou données invalides !
         </div>`;
       }
     );
   }
-}
 
+}

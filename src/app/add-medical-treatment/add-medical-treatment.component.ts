@@ -3,6 +3,7 @@ import { CrudService } from '../service/crud.service';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { TreatmentOption } from '../Entity/treatmentOption.Entity';
 
 @Component({
   selector: 'app-add-medical-treatment',
@@ -15,6 +16,9 @@ export class AddMedicalTreatmentComponent {
   patientId: number | null = null; // Initialisation correcte
   patientName: string = '';  // Définition de la propriété patientName
   patientLastName: string = '';
+  options: string[] = [];
+
+  treatmentOptions: TreatmentOption[] = [];
   constructor(
     private service: CrudService,
     private router: Router,
@@ -36,6 +40,7 @@ export class AddMedicalTreatmentComponent {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
+      this.loadTreatmentOptions();
       const id = params.get('patientId');
       if (id) {
         this.patientId = +id;
@@ -55,6 +60,8 @@ export class AddMedicalTreatmentComponent {
         console.error("⚠️ Aucun ID patient dans l'URL !");
       }
     });
+
+
 
     this.MedicalTreatmentForm.get('treatmentStartDate')?.valueChanges.subscribe(() => {
       this.calculateNextAppointment();
@@ -82,9 +89,11 @@ export class AddMedicalTreatmentComponent {
       this.MedicalTreatmentForm.get('next_intake_Date')?.setValue(nextAppointment.toISOString().split('T')[0]);
     }
   }
-
+  get treatmentName() {
+    return this.MedicalTreatmentForm.get('treatmentName');
+  }
   // Getters pour accéder aux champs du formulaire
-  get treatmentName() { return this.MedicalTreatmentForm.get('treatmentName'); }
+
   get treatmentStartDate() { return this.MedicalTreatmentForm.get('treatmentStartDate'); }
   get treatment_intake_duration() { return this.MedicalTreatmentForm.get('treatment_intake_duration'); }
   get next_intake_Date() { return this.MedicalTreatmentForm.get('next_intake_Date'); }
@@ -96,6 +105,16 @@ export class AddMedicalTreatmentComponent {
     return (control as FormControl).invalid && ((control as FormControl).touched || (control as FormControl).dirty);
   }
 
+  loadTreatmentOptions(): void {
+    this.service.getAllTreatmentOptions().subscribe(
+      (options: TreatmentOption[]) => {
+        this.treatmentOptions = options;  // Assignez la réponse à la propriété treatmentOptions
+      },
+      error => {
+        console.error('Erreur lors du chargement des options de traitement', error);
+      }
+    );
+  }
   addNewMedicalTreatment() {
     this.MedicalTreatmentForm.markAllAsTouched();
     if (this.MedicalTreatmentForm.invalid) {

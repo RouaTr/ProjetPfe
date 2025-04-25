@@ -16,19 +16,18 @@
     <app-header></app-header>
     <div class="container-fluid">
       <div class="container">
-        <h3> Dossier Médicaldu Patient : {{ patient.lastName }} {{ patient.firstName }}</h3>
+        <h3> Dossier Médical du Patient : {{ patient.lastName }} {{ patient.firstName }}</h3>
 
         <div class="tabs">
           <a [routerLink]="['/medicalfolder', patient?.id]" class="tab">Patient</a>
           <a [routerLink]="['/medicalfolder/listmedicalhistory', patient?.id]" class="tab">Antécédents</a>
           <a [routerLink]="['/medicalfolder/listclinicalsymptoms', patient?.id]" class="tab">Signes Cliniques</a>
           <a [routerLink]="['/medicalfolder/listfunctionalsymptoms', patient?.id]" class="tab">Signes Fonctionnels</a>
-
           <a [routerLink]="['/medicalfolder/listlaboratory', patient?.id]" class="tab">Résultats Biologiques</a>
           <a [routerLink]="['/medicalfolder/listobservation', patient?.id]" class="tab">Observation</a>
-
         </div>
       </div>
+
       <main>
         <div class="mb-3 d-flex justify-content-between align-items-center">
           <a [routerLink]="['/clinicalsymptoms', patient?.id]" class="btn btn-primary">
@@ -41,33 +40,52 @@
             <span class="input-group-text"><i class="ri-search-line"></i></span>
           </div>
         </div>
+
         <div class="container mt-4">
-
           <div *ngIf="filteredClinicalSymptoms.length > 0; else loading">
-            <div class="card" *ngFor="let symptom of filteredClinicalSymptoms">
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped">
+                <thead >
+                  <tr>
+                    <th>Date</th>
+                    <th>Signes Généraux</th>
+                    <th>Dermatologique</th>
+                    <th>Neuro-Musculaire</th>
+                    <th>ENT</th>
+                    <th>Psychiatrique</th>
+                    <th>Cardiovasculaire</th>
+                    <th>Digestif</th>
+                    <th>Lipodystrophie</th>
+                    <th>Génito-Urinaire</th>
+                    <th>Ophtalmologique</th>
+                    <th>Pulmonaire</th>
+                    <th>Puberté</th>
 
-              <div class="card-body">
-                <h5>Signes Cliniques</h5><br>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let symptom of filteredClinicalSymptoms">
+                    <td>{{ symptom.clinicalSymptomsDate | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ symptom.generalSigns || '-' }}</td>
+                    <td>{{ symptom.dermatological || '-' }}</td>
+                    <td>{{ symptom.neuroMuscular || '-' }}</td>
+                    <td>{{ symptom.ent || '-' }}</td>
+                    <td>{{ symptom.psychiatric || '-' }}</td>
+                    <td>{{ symptom.cardiovascular || '-' }}</td>
+                    <td>{{ symptom.digestive || '-' }}</td>
+                    <td>{{ symptom.lipodystrophy || '-' }}</td>
+                    <td>{{ symptom.genitourinary || '-' }}</td>
+                    <td>{{ symptom.ophthalmological || '-' }}</td>
+                    <td>{{ symptom.pulmonary || '-' }}</td>
+                    <td>{{ symptom.puberty || '-' }}</td>
 
-                <p *ngIf="symptom.generalSigns"><strong>Signes Généraux :</strong> {{ symptom.generalSigns }}</p>
-                <p *ngIf="symptom.dermatological"><strong>Dermatologique :</strong> {{ symptom.dermatological }}</p>
-                <p *ngIf="symptom.neuroMuscular"><strong>Neuro-Musculaire :</strong> {{ symptom.neuroMuscular }}</p>
-                <p *ngIf="symptom.ent"><strong>ENT :</strong> {{ symptom.ent }}</p>
-                <p *ngIf="symptom.psychiatric"><strong>Psychiatrique :</strong> {{ symptom.psychiatric }}</p>
-                <p *ngIf="symptom.cardiovascular"><strong>Cardiovasculaire :</strong> {{ symptom.cardiovascular }}</p>
-                <p *ngIf="symptom.digestive"><strong>Digestif :</strong> {{ symptom.digestive }}</p>
-                <p *ngIf="symptom.lipodystrophy"><strong>Lipodystrophie :</strong> {{ symptom.lipodystrophy }}</p>
-                <p *ngIf="symptom.genitourinary"><strong>Génito-Urinaire :</strong> {{ symptom.genitourinary }}</p>
-                <p *ngIf="symptom.ophthalmological"><strong>Ophtalmologique :</strong> {{ symptom.ophthalmological }}
-                </p>
-                <p *ngIf="symptom.pulmonary"><strong>Pulmonaire :</strong> {{ symptom.pulmonary }}</p>
-                <p *ngIf="symptom.puberty"><strong>Puberté :</strong> {{ symptom.puberty }}</p>
-                <p *ngIf="symptom.clinicalSymptomsDate"><strong>Date :</strong> {{ symptom.clinicalSymptomsDate |
-                  date:'dd/MM/yyyy' }}</p>
-                <button class="btn btn-primary" (click)="updateClinicalSymptoms(symptom.id)"
-                  type="submit">Modifier</button>
-
-              </div>
+                    <td>
+                      <button class="btn btn-sm btn-primary" (click)="updateClinicalSymptoms(symptom.id)">Modifier</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
@@ -75,10 +93,6 @@
           <ng-template #loading>
             <p>pas de signes cliniques...</p>
           </ng-template>
-
-
-
-
         </div>
 
       </main>

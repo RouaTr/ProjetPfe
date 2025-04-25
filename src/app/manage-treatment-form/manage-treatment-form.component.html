@@ -1,157 +1,81 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!doctype html>
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <title>Liste des traitements</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="Multipurpose, super flexible, powerful, clean modern responsive bootstrap 5 admin template">
-  <title>Dossier Médical</title>
+  <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+  <meta content="Themesbrand" name="author" />
+
+  <!-- Lien vers Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+  <!-- Lien vers Bootstrap -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
+
   <div class="app-wrapper default">
     <app-menu-admin></app-menu-admin>
     <div class="app-content">
       <app-header-admin></app-header-admin>
       <br><br><br>
       <div class="container-fluid">
+
         <main>
-          <form  [formGroup]="MedicalTreatmentForm">
-            <div class="row m-1">
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h4 class="header-title"> ARV</h4>
-                  </div>
-
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-lg-6">
-
-
-                        <div class="mb-3">
-                          <label for="example-select" class="form-label">Nom du Traitement</label>
-                          <select class="form-select" id="example-select" formControlName="treatmentName"
-                            [class.is-invalid]="isInvalidAndTouchedOrDirty(treatmentName)">
-                            <option>selectionner</option>
-                            <option>Ténofovir (TDF)/ Lamivudine (3TC)/ Doltégravir (DTG) = TLD</option>
-                            <option>Tenofovir (TDF)/Lamivudine (3TC)/Efavirenz (EFV) = AVONZA</option>
-                            <option>Tenofovir (TDF) / Emtricitabine (FTC) / Efavirenz (EFV) = ATRIPLA</option>
-                            <option>Zidovudine (AZT)/Lamivudine (3TC) + Lopinavir/Ritonavir (Lop/r) = COMBIVIR+ ALUVIA
-                            </option>
-                            <option>Zidovudine (AZT)/Lamivudine (3TC) + Atazanavir/Ritonavir (ATV/r) = COMBIVIR+
-                              REYATAZ/RITONAVIR</option>
-                            <option>Abacavir (ABC)/Lamivudine (3TC) + Atazanavir/Ritonavir (ATV/r) = KIVEXA+
-                              REYATAZ/RITONAVIR</option>
-                            <option>Zidovudine (AZT)/Lamivudine (3TC) + Darunavir/ritonavir + Dolutégravir (DTG) =
-                              COMBIVIR + PREZISTA/RITONAVIR+ DTG</option>
-                            <option>Abacavir (ABC)/Lamivudine (3TC) + Darunavir/ritonavir = KIVEXA + PREZISTA/RITONAVIR
-                            </option>
-                            <option>Ténofvir (TDF)/Emtricitabine(FTC) + Atazanavir/Ritonavir (ATV/r) = TRUVADA +
-                              REYATAZ/RITONAVIR</option>
-                            <option>Atazanavir/Ritonavir (ATV/r) + Ténofovir (TDF)/ Lamivudine (3TC)/ Dolutégravir (DTG)
-                              = REYATAZ/RITONAVIR+ TLD</option>
-                            <option>Atazanavir/Ritonavir (ATV/r) + Dolutégravir (DTG) = REYATAZ/RITONAVIR+ DTG</option>
-                            <option>Atazanavir/Ritonavir (ATV/r) + Dolutegravir (DTG) + Abacavir (ABC) =
-                              REYATAZ/RITONAVIR+ DTG+ ZIAGEN</option>
-                            <option>Darunavir/ritonavir+ Tenofovir (TDF)/ Lamivudine (3TC)/ Dolutegravir (DTG) =
-                              PREZISTA/RITONAVIR+TLD</option>
-                            <option>Darunavir/ritonavir+ Tenofovir (TDF)/ Lamivudine (3TC)/ Dolutegravir (DTG) +
-                              Dolutegravir (DTG)= PREZISTA/RITONAVIR+TLD*</option>
-                            <option>Zidovudine (AZT)/Lamivudine (3TC) + Dolutegravir (DTG) = COMBIVIR + DTG</option>
-                            <option>Abacavir (ABC)/Lamivudine (3TC) + Dolutégravir (DTG) = KIVEXA + DTG</option>
-
-
-                          </select>
-                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(treatmentName)">
-                            champs requis
-                          </small>
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="treatmentStartDate" class="form-label">Date de début du Traitement</label>
-                          <input type="Date" id="treatmentStartDate" formControlName="treatmentStartDate"
-                            class="form-control" [class.is-invalid]="isInvalidAndTouchedOrDirty(treatmentStartDate)">
-                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(treatmentStartDate)">
-                            champs requis
-                          </small>
-
-                        </div>
-                        <div class="mb-3">
-                          <label for="treatmentRegistrationDate" class="form-label">Date d'enregistrement</label>
-                          <input type="Date" id="treatmentRegistrationDate" formControlName="treatmentRegistrationDate"
-                            class="form-control" [class.is-invalid]="isInvalidAndTouchedOrDirty(treatmentStartDate)">
-                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(treatmentStartDate)">
-                            champs requis
-                          </small>
-
-                        </div>
-                        <div class="mb-3">
-                          <label for="treatment_intake_duration" class="form-label">Durée de La prise </label>
-                          <input type="number" id="treatment_intake_duration"
-                            formControlName="treatment_intake_duration" class="form-control"
-                            [class.is-invalid]="isInvalidAndTouchedOrDirty(treatment_intake_duration)">
-                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(treatment_intake_duration)">
-                            champs requis
-                          </small>
-                        </div>
-
-                      </div>
-
-                      <div class="col-lg-6">
-
-                        <div class="mb-3">
-                          <label for="next_intake_Date" class="form-label">Rendez-Vous Prochain</label>
-                          <input type="Date" id="next_intake_Date" formControlName="next_intake_Date"
-                            class="form-control" [class.is-invalid]="isInvalidAndTouchedOrDirty(next_intake_Date)">
-                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(next_intake_Date)">
-                            champs requis
-                          </small>
-
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="duration_of_visual_loss" class="form-label">durée de perte de vue(en
-                            jours)</label>
-                          <input type="number" id="duration_of_visual_loss" formControlName="duration_of_visual_loss"
-                            class="form-control">
-
-                        </div>
-
-
-                        <div class="mb-3">
-                          <label for="example-select" class="form-label">statut de sortie</label>
-                          <select class="form-select" id="example-select" formControlName="status">
-                            <option>selectionner</option>
-                            <option>Décédé</option>
-                            <option>file active</option>
-                            <option>Transféré sortant/Référé</option>
-
-
-                          </select>
-
-                        </div>
-
-                      </div>
-                    </div>
-                    <div class="card-footer">
-                      <button type="submit">Enregistrer  </button>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div class="container mt-4">
+            <h2>Gestion des options de traitement</h2>
+            <!-- Formulaire d'ajout -->
+            <div class="mt-4">
+              <label for="newOptionName">Ajouter une nouvelle option de traitement :</label>
+              <form [formGroup]="addTreatmentForm" (ngSubmit)="addTreatmentOption()" class="d-flex align-items-center">
+                <input id="newOptionName" formControlName="treatmentName" class="form-control mb-2 mr-2"
+                  placeholder="Nom de l'option" />
+                <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Ajouter</button>
+              </form>
             </div>
-          </form>
-          <div class="card-footer">
+                 <!-- Formulaire de modification -->
+                 <div *ngIf="selectedOptionId !== null" class="mt-4">
+                  <label for="editOptionName">Modifier l'option de traitement :</label>
+                  <form [formGroup]="editTreatmentForm" (ngSubmit)="updateTreatmentOption()"
+                    class="d-flex align-items-center">
+                    <input id="editOptionName" formControlName="treatmentName" class="form-control mb-2 mr-2" />
+                    <button type="submit" class="btn btn-warning"><i class="fas fa-save"></i> Enregistrer</button>
+                  </form>
+                </div>
+
+            <!-- Tableau -->
+            <table class="table table-striped table-bordered mt-4">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Nom de l'option</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let option of options">
+                  <td>{{ option.id }}</td>
+                  <td>{{ option.treatmentName }}</td>
+                  <td class="d-flex">
+                    <button class="btn btn-danger mr-2" (click)="deleteTreatmentOption(option.id)">
+                      Supprimer
+                    </button>
+                    <button class="btn btn-primary" (click)="selectOption(option)">
+                      Modifier
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
 
 
           </div>
         </main>
-        <div *ngIf="messageCommande" class="alert alert-danger" style="color: rgb(21, 2, 2); font-weight: bold;">
-          {{ messageCommande }}
-        </div>
+
       </div>
     </div>
   </div>

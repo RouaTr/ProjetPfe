@@ -10,7 +10,7 @@ import { Laboratory } from '../Entity/Laboratory.Entity';
 import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
 import { Practitionner} from '../Entity/Practitionner.Entity';
 import { JwtHelperService } from '@auth0/angular-jwt';
-
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -263,12 +263,6 @@ getUserInfo() {
   return null;
 }
 
-
-
-
-
-
-
 isLoggedIn(){
 
   let token = localStorage.getItem("myToken");
@@ -311,10 +305,28 @@ private getPractitionnerIdFromToken(): number {
 getTrendsForPatient(patientId: number): Observable<any> {
   return this.http.get<any>(`${this.apiUrl}/laboratory/trends/patients/${patientId}`);
 }
+getAllTreatmentOptions(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/treatment-options`);  // Ajout de /treatment-options
+}
+
+// Ajouter une option de traitement
+
+addTreatmentOption(treatmentName: string): Observable<any> {
+  // Envoi de la chaîne directement, sans clé
+  return this.http.post<any>(`${this.apiUrl}/treatment-options`, treatmentName);
+}
+
+updateTreatmentOption(id: number, treatmentName: string): Observable<any> {
+  // Envoi de la chaîne directement, sans clé
+  return this.http.put<any>(`${this.apiUrl}/treatment-options/${id}`, treatmentName);
+}
 
 
 
-
+// Supprimer une option de traitement
+deleteTreatmentOption(id: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/treatment-options/${id}`);  // Ajout de /treatment-options
+}
 
 
 }

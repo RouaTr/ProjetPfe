@@ -41,110 +41,93 @@
           </div>
         </div>
 
-        <div class="container-fluid">
-          <div class="row">
-            <div *ngFor="let group of groupedSymptoms">
-              <div class="card">
-                <div class="card-header">
-                  <h5 class="card-title mb-0">Symptômes du {{ group[0]?.functionalSymptomsDate | date:'dd/MM/yyyy' }}</h5>
-                </div>
-                <div class="card-body">
-                  <table id="scroll-horizontal" class="table-responsive" style="width:100%">
-                    <thead>
-                      <!-- Première ligne d'en-tête -->
-                      <tr>
-                        <th>Id</th>
-                        <th>Fièvre</th>
-                        <th>Diarrhée</th>
-                        <th>Toux</th>
-                        <th>Douleurs abdom.</th>
-                        <th>Dyspnée</th>
-                        <th>Nausées</th>
-                        <th>Asthénie</th>
-                        <th>Sueurs nocturnes</th>
-                        <th>Céphalée</th>
-                        <th>Dysphagie</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let symptom of group">
-                        <td>{{ symptom.id }}</td>
-                        <td>{{ formatValue(symptom.fever) }}</td>
-                        <td>{{ formatValue(symptom.diarrhea) }}</td>
-                        <td>{{ formatValue(symptom.cough) }}</td>
-                        <td>{{ formatValue(symptom.abdominalPain) }}</td>
-                        <td>{{ formatValue(symptom.dyspnea) }}</td>
-                        <td>{{ formatValue(symptom.nausea) }}</td>
-                        <td>{{ formatValue(symptom.asthenia) }}</td>
-                        <td>{{ formatValue(symptom.nightSweats) }}</td>
-                        <td>{{ formatValue(symptom.headache) }}</td>
-                        <td>{{ formatValue(symptom.dysphagia) }}</td>
-                        <td>{{ symptom.functionalSymptomsDate | date:'dd/MM/yyyy' }}</td>
-                      </tr>
-                    </tbody>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Tous les Signes Fonctionnels</h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Fièvre</th>
+                      <th>Diarrhée</th>
+                      <th>Toux</th>
+                      <th>Douleurs abdom.</th>
+                      <th>Dyspnée</th>
+                      <th>Nausées</th>
+                      <th>Asthénie</th>
+                      <th>Sueurs nocturnes</th>
+                      <th>Céphalée</th>
+                      <th>Dysphagie</th>
+                      <th>Prurit</th>
+                      <th>Anorexie</th>
+                      <th>Insomnie</th>
+                      <th>Trouble humeur</th>
+                      <th>Rhinorhée</th>
+                      <th>Paresthésie</th>
+                      <th>Crampes</th>
+                      <th>Troubles visuels</th>
+                      <th>Myalgie</th>
+                      <th>Troubles Libido</th>
 
-                    <thead>
-                      <!-- Deuxième ligne d'en-tête -->
-                      <tr>
-                        <th>Prurit</th>
-                        <th>Anorexie</th>
-                        <th>Insomnie</th>
-                        <th>Trouble humeur</th>
-                        <th>Rhinorhée</th>
-                        <th>Paresthésie</th>
-                        <th>Crampes</th>
-                        <th>Troubles visuels</th>
-                        <th>Myalgie</th>
-                        <th>Troubles Libido</th>
-                        <th>Date</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let symptom of group">
-                        <td>{{ formatValue(symptom.pruritus) }}</td>
-                        <td>{{ formatValue(symptom.anorexia) }}</td>
-                        <td>{{ formatValue(symptom.insomnia) }}</td>
-                        <td>{{ formatValue(symptom.moodDisorders) }}</td>
-                        <td>{{ formatValue(symptom.rhinorrhea) }}</td>
-                        <td>{{ formatValue(symptom.paresthesia) }}</td>
-                        <td>{{ formatValue(symptom.cramps) }}</td>
-                        <td>{{ formatValue(symptom.visualDisturbances) }}</td>
-                        <td>{{ formatValue(symptom.myalgia) }}</td>
-                        <td>{{ formatValue(symptom.libidoDisorders) }}</td>
-                        <td>{{ symptom.functionalSymptomsDate | date:'dd/MM/yyyy' }}</td>
-                        <td>
-                          <div class="dropdown d-inline-block">
-                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              <i class="ri-more-fill align-middle"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                              <li>
-                                <a [routerLink]="['/medicalfolder/listfunctionalsymptoms/updatefunctionalsymptoms', symptom.id]"
-                                  class="dropdown-item">
-                                  <i class="ri-eye-fill align-bottom me-2 text-muted"></i> Modifier
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr *ngIf="filteredFunctionalSymptoms.length === 0">
-                        <td colspan="22" class="text-center">Aucun signe fonctionnel trouvé</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let symptom of filteredFunctionalSymptoms">
+                      <td>{{ symptom.functionalSymptomsDate | date:'dd/MM/yyyy' }}</td>
+                      <td>{{ formatValue(symptom.fever) }}</td>
+                      <td>{{ formatValue(symptom.diarrhea) }}</td>
+                      <td>{{ formatValue(symptom.cough) }}</td>
+                      <td>{{ formatValue(symptom.abdominalPain) }}</td>
+                      <td>{{ formatValue(symptom.dyspnea) }}</td>
+                      <td>{{ formatValue(symptom.nausea) }}</td>
+                      <td>{{ formatValue(symptom.asthenia) }}</td>
+                      <td>{{ formatValue(symptom.nightSweats) }}</td>
+                      <td>{{ formatValue(symptom.headache) }}</td>
+                      <td>{{ formatValue(symptom.dysphagia) }}</td>
+                      <td>{{ formatValue(symptom.pruritus) }}</td>
+                      <td>{{ formatValue(symptom.anorexia) }}</td>
+                      <td>{{ formatValue(symptom.insomnia) }}</td>
+                      <td>{{ formatValue(symptom.moodDisorders) }}</td>
+                      <td>{{ formatValue(symptom.rhinorrhea) }}</td>
+                      <td>{{ formatValue(symptom.paresthesia) }}</td>
+                      <td>{{ formatValue(symptom.cramps) }}</td>
+                      <td>{{ formatValue(symptom.visualDisturbances) }}</td>
+                      <td>{{ formatValue(symptom.myalgia) }}</td>
+                      <td>{{ formatValue(symptom.libidoDisorders) }}</td>
 
-
-                </div>
+                      <td>
+                        <div class="dropdown d-inline-block">
+                          <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="ri-more-fill align-middle"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                              <a [routerLink]="['/medicalfolder/listfunctionalsymptoms/updatefunctionalsymptoms', symptom.id]" class="dropdown-item">
+                                <i class="ri-edit-2-line align-bottom me-2 text-muted"></i> Modifier
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr *ngIf="filteredFunctionalSymptoms.length === 0">
+                      <td colspan="22" class="text-center">Aucun signe fonctionnel trouvé</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
-          <ng-template #loading>
-            <p>Pas de signes fonctionnels...</p>
-          </ng-template>
         </div>
+
+</div>
+
       </main>
     </div>
   </div>

@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from
 import { Router, ActivatedRoute } from '@angular/router';
 import { Patient } from '../Entity/Patient.Entity';
 import { CrudService } from '../service/crud.service';
+import { TreatmentOption } from '../Entity/treatmentOption.Entity';
 
 @Component({
   selector: 'app-update-medical-treatment',
@@ -11,7 +12,8 @@ import { CrudService } from '../service/crud.service';
   styleUrls: ['./update-medical-treatment.component.css']
 })
 export class UpdateMedicalTreatmentComponent {
-
+  options: string[] = [];
+  treatmentOptions: TreatmentOption[] = [];
 updateForm: FormGroup;
   id!: number;
   currentMedicalTreatment!: MedicalTreatment;
@@ -43,6 +45,7 @@ updateForm: FormGroup;
   get treatmentRegistrationDate() { return this.updateForm.get('treatmentRegistrationDate'); }
   get status() { return this.updateForm.get('status'); }
   ngOnInit(): void {
+    this.loadTreatmentOptions();
     const storedId = localStorage.getItem('selectedPatientId');
     if (storedId) {
       this.patientId = parseInt(storedId, 10);
@@ -101,6 +104,16 @@ updateForm: FormGroup;
     return (control as FormControl).invalid && ((control as FormControl).touched || (control as FormControl).dirty);
 
   }
+    loadTreatmentOptions(): void {
+      this.service.getAllTreatmentOptions().subscribe(
+        (options: TreatmentOption[]) => {
+          this.treatmentOptions = options;  // Assignez la réponse à la propriété treatmentOptions
+        },
+        error => {
+          console.error('Erreur lors du chargement des options de traitement', error);
+        }
+      );
+    }
 
   updateMedicalTreatment() {
     this.updateForm.markAllAsTouched();

@@ -20,6 +20,7 @@ export class AnalyzeTrendsComponent {
   treatmentLegend: { name: string, color: string }[] = [];
   public cd4Treatments: string[] = [];
   public viralLoadTreatments: string[] = [];
+  public viralLoadTreatmentTrends: TrendDTO[] = [];
 
   public cd4ChartData: ChartDataset<'line'>[] = [];
   public viralLoadChartData: ChartDataset<'line'>[] = [];
@@ -39,25 +40,6 @@ export class AnalyzeTrendsComponent {
         anchor: 'end',
         align: 'top'
       },
-      tooltip: {
-        callbacks: {
-          label: function(context: any) {
-            const index = context.dataIndex;
-            const datasetLabel = context.dataset.label || '';
-            const value = context.formattedValue;
-            const chart: any = context.chart;
-            let treatment = '';
-
-            if (datasetLabel === 'CD4') {
-              treatment = chart.config.options?.plugins?.custom?.cd4Treatments?.[index] ?? 'Non spécifié';
-            } else if (datasetLabel === 'Charge virale') {
-              treatment = chart.config.options?.plugins?.custom?.viralLoadTreatments?.[index] ?? 'Non spécifié';
-            }
-
-            return `${datasetLabel}: ${value} (Traitement: ${treatment})`;
-          }
-        }
-      }
 
     },
     scales: {
@@ -81,7 +63,6 @@ export class AnalyzeTrendsComponent {
     }
   };
 
-
   constructor(private crudService: CrudService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
@@ -91,6 +72,7 @@ export class AnalyzeTrendsComponent {
       this.loadPatientData(this.patientId);
     });
   }
+
 
   getTrendsForPatient(): void {
     this.loading = true;
@@ -113,6 +95,17 @@ export class AnalyzeTrendsComponent {
     });
   }
 
+  // Formatte une date en jj mm aaaa
+  formatDate(dateInput: string | Date): string {
+    const date = (typeof dateInput === 'string') ? new Date(dateInput) : dateInput;
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+  }
+
+
+
   prepareChartData(): void {
     if (!this.trends || this.trends.length === 0) return;
 
@@ -120,46 +113,57 @@ export class AnalyzeTrendsComponent {
       new Date(a.medicalTestDate).getTime() - new Date(b.medicalTestDate).getTime()
     );
 
-    const uniqueDates = Array.from(new Set(sortedTrends.map(t => new Date(t.medicalTestDate).toISOString().split('T')[0])));
+    const uniqueDates = Array.from(
+      new Set(sortedTrends.map(t => this.formatDate(t.medicalTestDate)))
+    );
 
     const treatmentColorsMap = new Map<string, string>();
     const availableColors = ['#FF0000', '#00FF00', '#0000FF', '#FF00FF', '#00FFFF', '#FFA500'];
     let colorIndex = 0;
 
-    sortedTrends.forEach(trend => {
-      const treatment = trend.treatmentName || 'Non spécifié';
-      if (!treatmentColorsMap.has(treatment)) {
-        treatmentColorsMap.set(treatment, availableColors[colorIndex % availableColors.length]);
-        colorIndex++;
-      }
-    });
-
     const cd4Data: (number | null)[] = [];
     this.cd4Treatments = [];
-
     const viralLoadData: (number | null)[] = [];
     this.viralLoadTreatments = [];
 
-    uniqueDates.forEach(date => {
-      const trendsForDate = sortedTrends.filter(t => new Date(t.medicalTestDate).toISOString().split('T')[0] === date);
+    uniqueDates.forEach(dateLabel => {
+      const trendsForDate = sortedTrends.filter(t => this.formatDate(t.medicalTestDate) === dateLabel);
 
       const cd4Trend = trendsForDate.find(t => t.cd4Count != null);
-      cd4Data.push(cd4Trend?.cd4Count ?? null);
-      this.cd4Treatments.push(cd4Trend?.treatmentName ?? 'Non spécifié');
+      if (cd4Trend) {
+        const treatment = this.getTreatmentIfWithinRange(cd4Trend);
+        cd4Data.push(cd4Trend.cd4Count);
+        this.cd4Treatments.push(treatment);
+        if (!treatmentColorsMap.has(treatment)) {
+          treatmentColorsMap.set(treatment, availableColors[colorIndex++ % availableColors.length]);
+        }
+      } else {
+        cd4Data.push(null);
+        this.cd4Treatments.push(' traitement non spécifié');
+      }
 
       const viralTrend = trendsForDate.find(t => t.viralLoad != null);
-      viralLoadData.push(viralTrend?.viralLoad ?? null);
-      this.viralLoadTreatments.push(viralTrend?.treatmentName ?? 'Non spécifié');
+      if (viralTrend) {
+        const treatment = this.getTreatmentIfWithinRange(viralTrend);
+        viralLoadData.push(viralTrend.viralLoad);
+        this.viralLoadTreatments.push(treatment);
+        if (!treatmentColorsMap.has(treatment)) {
+          treatmentColorsMap.set(treatment, availableColors[colorIndex++ % availableColors.length]);
+        }
+      } else {
+        viralLoadData.push(null);
+        this.viralLoadTreatments.push('Sans traitement');
+      }
     });
 
     this.lineChartLabels = uniqueDates;
-
     this.cd4ChartData = [{
       data: cd4Data,
       label: 'CD4',
-      tension: 0.4, // line smoothness
+      tension: 0.4,
       fill: false,
       pointRadius: 5,
+      spanGaps: true,
       pointBackgroundColor: this.getPointColor(this.cd4Treatments, treatmentColorsMap),
       segment: {
         borderColor: (ctx) => {
@@ -169,26 +173,46 @@ export class AnalyzeTrendsComponent {
         }
       },
     }];
-
     this.viralLoadChartData = [{
       data: viralLoadData,
       label: 'Charge virale',
       tension: 0.4,
       fill: false,
       pointRadius: 5,
+      spanGaps: true,
       pointBackgroundColor: this.getPointColor(this.viralLoadTreatments, treatmentColorsMap),
       segment: {
         borderColor: (ctx) => {
           const i = ctx.p0DataIndex;
-          const treatment = this.viralLoadTreatments[i] ?? 'Non spécifié';
-          return treatmentColorsMap.get(treatment) ?? '#000';
+          const treatment = this.viralLoadTreatments[i];
+          return treatmentColorsMap.get(treatment) || '#000';
         }
-      }
+      },
     }];
-
     this.treatmentLegend = Array.from(treatmentColorsMap.entries()).map(([name, color]) => ({ name, color }));
   }
 
+  getTreatmentIfWithinRange(trend: TrendDTO): string {
+    const treatmentStartDate = new Date(trend.treatmentStartDate);
+    const treatmentEndDate = trend.next_intake_Date ? new Date(trend.next_intake_Date) : null;
+    const testDate = new Date(trend.medicalTestDate);
+    if (testDate >= treatmentStartDate && (!treatmentEndDate || testDate <= treatmentEndDate)) {
+      return trend.treatmentName || 'Non spécifié';
+    }
+    return 'Sans traitement';
+  }
+
+  getTreatmentAt(dateStr: string): string {
+    const date = new Date(dateStr);
+    for (const t of this.viralLoadTreatmentTrends) {
+      const start = new Date(t.treatmentStartDate);
+      const end = new Date(t.next_intake_Date);
+      if (date >= start && date <= end) {
+        return t.treatmentName;
+      }
+    }
+    return 'Non spécifié';
+  }
 
   getPointColor(treatments: string[], colorsMap: Map<string, string>) {
     return (ctx: any) => {
@@ -197,5 +221,4 @@ export class AnalyzeTrendsComponent {
       return colorsMap.get(treatment) ?? '#000';
     };
   }
-
 }

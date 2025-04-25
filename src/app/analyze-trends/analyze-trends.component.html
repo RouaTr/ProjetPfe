@@ -19,8 +19,10 @@
       <div class="container-fluid">
 
         <main>
+          <h3> Patient : {{ patient.lastName }} {{ patient.firstName }}</h3>
+
           <div class="chart-container">
-          <h3>charge virale </h3>
+          <h4>charge virale </h4>
           <canvas baseChart
           [datasets]="viralLoadChartData"
           [labels]="lineChartLabels"
@@ -29,7 +31,15 @@
           [legend]="lineChartLegend"
           [type]="lineChartType">
         </canvas>
-        <h3>CD4</h3>
+        <div class="treatment-legend">
+          <h4>Légende des traitements :</h4>
+          <ul>
+            <li *ngFor="let item of treatmentLegend">
+              <span [style.backgroundColor]="item.color" class="legend-color"></span> {{ item.name }}
+            </li>
+          </ul>
+        </div>
+        <h4>CD4</h4>
           <canvas baseChart
           [datasets]="cd4ChartData"
           [labels]="lineChartLabels"

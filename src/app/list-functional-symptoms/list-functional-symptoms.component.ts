@@ -78,7 +78,7 @@ export class ListFunctionalSymptomsComponent implements OnInit {
           })
           .filter(symptom => Object.keys(symptom).length > 1);
         this.filteredFunctionalSymptoms = [...this.functionalsymptoms];
-        this.groupByRecord(); 
+        this.groupByRecord();
         console.log("Signes cliniques filtrés :", this.functionalsymptoms);
       },
       error: (err) => {
@@ -94,7 +94,7 @@ export class ListFunctionalSymptomsComponent implements OnInit {
 
       Object.keys(symptom).forEach((key) => {
         const value = (symptom as any)[key];
-        if (value !== true && value !== null && value !== undefined && key !== 'id' && key !== 'functionalSymptomsDate' && key !== 'patient') {
+        if (value !== null && value !== undefined && key !== 'id' && key !== 'functionalSymptomsDate' && key !== 'patient') {
           filteredSymptom[key] = value;
         }
       });

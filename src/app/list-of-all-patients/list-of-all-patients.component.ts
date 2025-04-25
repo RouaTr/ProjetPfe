@@ -128,6 +128,9 @@ export class ListOfAllPatientsComponent {
       this.filteredPatients = this.listPatients;
     }
   }
+  onAnalyzeTrends(patientId: number) {
+    this.router.navigate(['/analysetrends', patientId]);
+  }
 
 }
 
