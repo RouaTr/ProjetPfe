@@ -16,6 +16,7 @@ export class ListLaboratoryComponent {
   patientId!: number;
   laboratory: Laboratory[] = [];
   searchDate: string = '';
+  
     filteredLaboratory: Laboratory[] = [];
   usualRanges: { [key: string]: { min: number; max: number } } = {
     wbc: { min: 4, max: 10 },

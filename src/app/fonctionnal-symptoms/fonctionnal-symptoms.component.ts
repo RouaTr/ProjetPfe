@@ -21,6 +21,30 @@ export class FonctionnalSymptomsComponent implements OnInit {
     'paresthesia', 'cramps', 'visualDisturbances', 'myalgia', 'libidoDisorders', 'otherSymptoms'
   ];
   selectedSymptoms: string[] = [];
+  symptomLabels: { [key: string]: string } = {
+    fever: 'Fièvre',
+    diarrhea: 'Diarrhée',
+    cough: 'Toux',
+    abdominalPain: 'Douleur abdominale',
+    dyspnea: 'Dyspnée',
+    nausea: 'Nausée',
+    asthenia: 'Asthénie',
+    arthralgia: 'Arthralgie',
+    nightSweats: 'Sueurs nocturnes',
+    headache: 'Céphalée',
+    dysphagia: 'Dysphagie',
+    pruritus: 'Prurit',
+    anorexia: 'Anorexie',
+    insomnia: 'Insomnie',
+    moodDisorders: 'Troubles de l’humeur',
+    rhinorrhea: 'Rhinorrhée',
+    paresthesia: 'Paresthésie',
+    cramps: 'Crampes',
+    visualDisturbances: 'Troubles visuels',
+    myalgia: 'Myalgie',
+    libidoDisorders: 'Troubles de la libido',
+    otherSymptoms: 'Autres symptômes'
+  };
 
   constructor(
     private service: CrudService,

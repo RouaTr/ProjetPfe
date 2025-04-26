@@ -20,37 +20,50 @@ export class UpdateFunctionalSymptomsComponent {
   public message!: string;
   patientId?: number; // Doit être bien défini dans la classe
   patient: Patient | null = null;
+  symptomList: string[] = [
+    'fever', 'diarrhea', 'cough', 'abdominalPain', 'dyspnea', 'nausea',
+    'asthenia', 'arthralgia', 'nightSweats', 'headache', 'dysphagia',
+    'pruritus', 'anorexia', 'insomnia', 'moodDisorders', 'rhinorrhea',
+    'paresthesia', 'cramps', 'visualDisturbances', 'myalgia', 'libidoDisorders', 'otherSymptoms'
+  ];
+  selectedSymptoms: string[] = [];
+  symptomLabels: { [key: string]: string } = {
+    fever: 'Fièvre',
+    diarrhea: 'Diarrhée',
+    cough: 'Toux',
+    abdominalPain: 'Douleur abdominale',
+    dyspnea: 'Dyspnée',
+    nausea: 'Nausée',
+    asthenia: 'Asthénie',
+    arthralgia: 'Arthralgie',
+    nightSweats: 'Sueurs nocturnes',
+    headache: 'Céphalée',
+    dysphagia: 'Dysphagie',
+    pruritus: 'Prurit',
+    anorexia: 'Anorexie',
+    insomnia: 'Insomnie',
+    moodDisorders: 'Troubles de l’humeur',
+    rhinorrhea: 'Rhinorrhée',
+    paresthesia: 'Paresthésie',
+    cramps: 'Crampes',
+    visualDisturbances: 'Troubles visuels',
+    myalgia: 'Myalgie',
+    libidoDisorders: 'Troubles de la libido',
+    otherSymptoms: 'Autres symptômes'
+  };
+
   constructor(
     private fb: FormBuilder,
     private service: CrudService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.updateForm = this.fb.group({
-      fever: new FormControl(''),
-      diarrhea: new FormControl(''),
-      cough: new FormControl(''),
-      abdominalPain: new FormControl(''),
-      dyspnea: new FormControl(''),
-      nausea: new FormControl(''),
-      asthenia: new FormControl(''),
-      arthralgia: new FormControl(''),
-      nightSweats: new FormControl(''),
-      headache: new FormControl(''),
-      dysphagia: new FormControl(''),
-      pruritus: new FormControl(''),
-      anorexia: new FormControl(''),
-      insomnia: new FormControl(''),
-      moodDisorders: new FormControl(''),
-      rhinorrhea: new FormControl(''),
-      paresthesia: new FormControl(''),
-      cramps: new FormControl(''),
-      visualDisturbances: new FormControl(''),
-      myalgia: new FormControl(''),
-      libidoDisorders: new FormControl(''),
-      otherSymptoms: new FormControl(''),
-      functionalSymptomsDate: new FormControl('', [Validators.required]),
+    let formControls: { [key: string]: FormControl } = {};
+    this.symptomList.forEach(symptom => {
+      formControls[symptom] = new FormControl(false); // Définir chaque case à cocher comme 'false' initialement
     });
+    formControls['functionalSymptomsDate'] = new FormControl(null);
+    this.updateForm = this.fb.group(formControls);
   }
 
 
@@ -98,11 +111,24 @@ export class UpdateFunctionalSymptomsComponent {
     });
   }
   get functionalSymptomsDate() { return this.updateForm.get('functionalSymptomsDate'); }
-
-  isInvalidAndTouchedOrDirty(control: AbstractControl | null): boolean {
-      return (control as FormControl).invalid && ((control as FormControl).touched || (control as FormControl).dirty);
-
+  onCheckboxChange(symptom: string): void {
+    const control = this.updateForm.get(symptom); // Accède au contrôle de la case à cocher
+    if (control?.value) {
+      if (!this.selectedSymptoms.includes(symptom)) {
+        this.selectedSymptoms.push(symptom);
+      }
+    } else {
+      const index = this.selectedSymptoms.indexOf(symptom);
+      if (index !== -1) {
+        this.selectedSymptoms.splice(index, 1);
+      }
     }
+    console.log(this.selectedSymptoms); // Affiche les symptômes sélectionnés
+  }
+  isInvalidAndTouchedOrDirty(controlName: string): boolean {
+    const control = this.updateForm.get(controlName);
+    return control?.invalid && (control?.touched || control?.dirty) ? true : false;
+  }
   logInvalidFields() {
     console.log("🔴 Champs invalides dans le formulaire :");
 
