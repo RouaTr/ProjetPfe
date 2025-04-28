@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="Multipurpose, super flexible, powerful, clean modern responsive bootstrap 5 admin template">
-  <title>Dossier Médical</title>
-</head>
-
-<body class="app-wrapper default">
+<div class="app-wrapper default">
   <app-menu></app-menu>
   <div class="app-content">
     <app-header></app-header>
@@ -30,42 +18,44 @@
         </div>
       </div>
       <main>
-        <div class="mb-3 d-flex justify-content-between align-items-center">
-          <div class="a">
-            <a [routerLink]="['/laboratory', patient?.id]" class="btn btn-primary">
-              <i class="ri-user-add-line"></i> + résultats biologiques
-            </a>
-            <input type="file" accept="image/*,application/pdf" hidden #fileInput (change)="onFileSelected($event)" />
+        <div class="container mt-4">
+          <div class="bt">
+            <div class="a">
+              <a [routerLink]="['/laboratory', patient?.id]" class="btn btn-primary">
+                <i class="ri-user-add-line"></i> + résultats biologiques
+              </a>
+              <input type="file" accept="image/*,application/pdf" hidden #fileInput (change)="onFileSelected($event)" />
 
-            <a class="btn btn-primary scan-button" (click)="fileInput.click()">
-              <i class="bi bi-camera"></i> Scanner un bilan
-            </a>
+              <a class="btn btn-primary scan-button" (click)="fileInput.click()">
+                <i class="bi bi-camera"></i> Scanner un bilan
+              </a>
 
 
-            <!-- Affichage du fichier/image sélectionné -->
+              <!-- Affichage du fichier/image sélectionné -->
 
-            <div *ngIf="selectedImage">
-              <img [src]="selectedImage" alt="Image sélectionnée" style="max-width: 100%; height: auto;">
+              <div *ngIf="selectedImage">
+                <img [src]="selectedImage" alt="Image sélectionnée" style="max-width: 100%; height: auto;">
+              </div>
+
+              <!-- Bouton d'envoi pour IBM FileNet -->
+              <!-- Afficher le bouton d'envoi uniquement si un fichier est sélectionné -->
+              <button *ngIf="selectedFileName" (click)="sendToFileNet()">Enregistrer dans IBM FileNet</button>
+
+              <!-- Interface de confirmation de l'envoi -->
+              <div *ngIf="uploadStatus">
+                <p>{{ uploadStatus }}</p>
+              </div>
+              <div *ngIf="selectedFileName && !selectedImage">
+                <p>Fichier sélectionné : {{ selectedFileName }}</p>
+              </div>
+
             </div>
-
-            <!-- Bouton d'envoi pour IBM FileNet -->
-            <!-- Afficher le bouton d'envoi uniquement si un fichier est sélectionné -->
-            <button *ngIf="selectedFileName" (click)="sendToFileNet()">Enregistrer dans IBM FileNet</button>
-
-            <!-- Interface de confirmation de l'envoi -->
-            <div *ngIf="uploadStatus">
-              <p>{{ uploadStatus }}</p>
+            <!-- Barre de recherche -->
+            <div class="input-group" style="max-width: 300px;">
+              <input type="date" id="searchPatient" class="form-control" placeholder="Rechercher ..."
+                [(ngModel)]="searchDate" (input)="filterByDate()">
+              <span class="input-group-text"><i class="ri-search-line"></i></span>
             </div>
-            <div *ngIf="selectedFileName && !selectedImage">
-              <p>Fichier sélectionné : {{ selectedFileName }}</p>
-            </div>
-
-          </div>
-          <!-- Barre de recherche -->
-          <div class="input-group" style="max-width: 300px;">
-            <input type="date" id="searchPatient" class="form-control" placeholder="Rechercher ..."
-              [(ngModel)]="searchDate" (input)="filterByDate()">
-            <span class="input-group-text"><i class="ri-search-line"></i></span>
           </div>
         </div>
         <div class="container mt-4">
@@ -574,6 +564,3 @@
       </main>
     </div>
   </div>
-</body>
-
-</html>

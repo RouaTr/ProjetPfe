@@ -47,8 +47,10 @@ import { MenuAdminComponent } from './menu-admin/menu-admin.component';
 import { ListOfAllPatientsComponent } from './list-of-all-patients/list-of-all-patients.component';
 import { ManageTreatmentFormComponent } from './manage-treatment-form/manage-treatment-form.component';
 import { AnalyzeTrendsComponent } from './analyze-trends/analyze-trends.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgChartsModule } from 'ng2-charts';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -104,7 +106,8 @@ import { NgChartsModule } from 'ng2-charts';
     ReactiveFormsModule,
     HttpClientModule,
    NgChartsModule,
-
+   MatTabsModule,
+   BrowserAnimationsModule,
 
   ],
   providers: [  { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },

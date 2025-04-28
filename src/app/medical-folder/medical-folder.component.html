@@ -1,17 +1,7 @@
-<!DOCTYPE html>
-<html lang="fr">
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="Multipurpose, super flexible, powerful, clean modern responsive bootstrap 5 admin template">
-  <title>Dossier Médical</title>
-</head>
-
-<body class="app-wrapper default">
+<div class="app-wrapper default">
   <app-menu></app-menu>
+
   <div class="app-content">
     <app-header></app-header>
     <div class="container-fluid">
@@ -82,6 +72,7 @@
                 <p><strong>Type de virus :</strong> {{ patient.viralType }}</p>
                 <p><strong>Date de contamination :</strong> {{ patient.contaminationDate }}</p>
                 <p><strong>Stade CDC :</strong> {{ patient.cdcStage }}</p>
+
                 <button class="btn btn-primary" (click)="updatePatient()" type="submit">Modifier</button>
 
               </div>
@@ -100,6 +91,6 @@
       </main>
     </div>
   </div>
-</body>
+</div>
 
-</html>
+

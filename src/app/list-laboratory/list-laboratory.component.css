@@ -43,8 +43,22 @@ h5{
 .scan-button {
   color: white !important;
 }
-body{
+.app-wrapper{
   background-color: rgb(226, 236, 249);
-;
+
 }
 
+
+.d-flex{
+  margin-top: 1000px;
+}
+
+.bt {
+  display: flex;           /* Utiliser flexbox pour aligner les éléments sur une ligne */
+  align-items: center;     /* Aligner verticalement les éléments au centre */
+  gap: 10px;               /* Ajouter un espacement de 10px entre les éléments */
+}
+
+.input-group {
+  margin-left: 10px;       /* Un petit espacement à gauche de la barre de recherche */
+}

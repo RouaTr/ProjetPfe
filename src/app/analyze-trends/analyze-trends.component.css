@@ -1,32 +1,66 @@
-.chart-container {
-  width:900px; /* ou 100%, 60%, etc. selon tes préférences */
-  margin: auto;
-}
 
-.treatment-legend ul {
-  list-style: none;
-  padding: 0;
-}
 
-.treatment-legend li {
-  display: flex;
-  align-items: center;
-  margin-bottom: 4px;
-}
-
-.legend-color {
-  display: inline-block;
-  width: 20px;
-  height: 10px;
-  margin-right: 8px;
-  border: 1px solid #000;
-}
-
-body{
+html,body{
   background-color: rgb(216, 226, 239);
+  height: 1100px;
 ;
 }
 h3 {
   text-align: center;
+}
+.patient-summary {
+  background: #f0f4f8;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.alert {
+  background-color: #ffcccc;
+  color: #b30000;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.tabs {
+  margin: 20px 100px;
+  width: 950px;
+
+}
+
+.chart-container {
+  position: relative;
+  height: 60vh;
+}
+
+.filters {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.legend {
+  margin-top: 20px;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  width: 950px;
+  margin: 20px 120px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.color-box {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 10px;
+  border-radius: 3px;
 }
 

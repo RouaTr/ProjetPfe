@@ -19,45 +19,47 @@
       <div class="container-fluid">
 
         <main>
-          <h3> Patient : {{ patient.lastName }} {{ patient.firstName }}</h3>
+          <div class="patient-summary">
+            <h2>Patient : {{patient?.firstName}} {{patient?.lastName}} | Dossier : {{patient?.medicalRecordNumber}}</h2>
 
-          <div class="chart-container">
-          <h4>charge virale </h4>
-          <canvas baseChart
-          [datasets]="viralLoadChartData"
-          [labels]="lineChartLabels"
-          [options]="lineChartOptions"
-          [plugins]="[ChartDataLabels]"
-          [legend]="lineChartLegend"
-          [type]="lineChartType">
-        </canvas>
-        <div class="treatment-legend">
-          <h4>Légende des traitements :</h4>
-          <ul>
-            <li *ngFor="let item of treatmentLegend">
-              <span [style.backgroundColor]="item.color" class="legend-color"></span> {{ item.name }}
-            </li>
-          </ul>
-        </div>
-        <h4>CD4</h4>
-          <canvas baseChart
-          [datasets]="cd4ChartData"
-          [labels]="lineChartLabels"
-          [options]="lineChartOptions"
-          [plugins]="[ChartDataLabels]"
-          [legend]="lineChartLegend"
-          [type]="lineChartType">
-        </canvas>
-      </div>
+            <p>Dernier CD4 : {{latestCd4 ?? 'Non disponible'}} | Dernière charge virale : {{latestViralLoad ?? 'Non disponible'}}</p>
 
-      <div class="treatment-legend">
-        <h4>Légende des traitements :</h4>
-        <ul>
-          <li *ngFor="let item of treatmentLegend">
-            <span [style.backgroundColor]="item.color" class="legend-color"></span> {{ item.name }}
-          </li>
-        </ul>
-      </div>
+            <div *ngIf="alert" class="alert">
+              ⚠️ Alerte charge virale (> 50 copies/mL) détectée le {{alertDate}}
+            </div>
+          </div>
+
+          <mat-tab-group class="tabs">
+            <mat-tab label="Évolution CD4">
+              <div class="chart-container">
+                <canvas baseChart
+                  [data]="{ labels: lineChartLabels, datasets: cd4ChartData }"
+                  [options]="lineChartOptions"
+                  [type]="lineChartType"
+                  [plugins]="[ChartDataLabels]">
+                </canvas>
+              </div>
+            </mat-tab>
+            <mat-tab label="Évolution Charge Virale">
+              <div class="chart-container">
+                <canvas baseChart
+                  [data]="{ labels: lineChartLabels, datasets: viralLoadChartData }"
+                  [options]="lineChartOptions"
+                  [type]="lineChartType"
+                  [plugins]="[ChartDataLabels]">
+                </canvas>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+
+
+          <div class="legend">
+            <h3>Légende traitements :</h3>
+            <div class="legend-item" *ngFor="let item of treatmentLegend">
+              <span class="color-box" [style.background]="item.color"></span> {{ item.name }}
+            </div>
+          </div>
+
 
         </main>
       </div>
