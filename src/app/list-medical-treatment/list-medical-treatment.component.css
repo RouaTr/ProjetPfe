@@ -37,5 +37,8 @@ body{
   color: blue;
   border-radius: 5px;
 }
+.app-wrapper{
+  background-color: rgb(226, 236, 249);
 
+}
 

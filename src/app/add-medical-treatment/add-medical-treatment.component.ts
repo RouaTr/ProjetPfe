@@ -13,8 +13,8 @@ import { TreatmentOption } from '../Entity/treatmentOption.Entity';
 export class AddMedicalTreatmentComponent {
   messageCommande = "";
   MedicalTreatmentForm: FormGroup;
-  patientId: number | null = null; // Initialisation correcte
-  patientName: string = '';  // Définition de la propriété patientName
+  patientId: number | null = null;
+  patientName: string = '';
   patientLastName: string = '';
   options: string[] = [];
 
@@ -72,8 +72,6 @@ export class AddMedicalTreatmentComponent {
     });
   }
 
-  // Fonction pour générer l'ordonnance avec les informations du patient
-
 
 
   calculateNextAppointment() {
@@ -108,7 +106,7 @@ export class AddMedicalTreatmentComponent {
   loadTreatmentOptions(): void {
     this.service.getAllTreatmentOptions().subscribe(
       (options: TreatmentOption[]) => {
-        this.treatmentOptions = options;  // Assignez la réponse à la propriété treatmentOptions
+        this.treatmentOptions = options;
       },
       error => {
         console.error('Erreur lors du chargement des options de traitement', error);

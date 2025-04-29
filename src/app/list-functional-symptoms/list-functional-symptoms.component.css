@@ -33,7 +33,7 @@ button{
   color: blue;
   border-radius: 5px;
 }
-body{
+.app-wrapper{
   background-color: rgb(226, 236, 249);
 ;
 }

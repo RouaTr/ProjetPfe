@@ -69,8 +69,8 @@ textarea {
 button{
   margin-top: 20px;
 }
-body{
+.app-wrapper{
   background-color: rgb(226, 236, 249);
-;
+
 }
 

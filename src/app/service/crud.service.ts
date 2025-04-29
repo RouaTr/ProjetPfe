@@ -327,6 +327,14 @@ updateTreatmentOption(id: number, treatmentName: string): Observable<any> {
 deleteTreatmentOption(id: number): Observable<any> {
   return this.http.delete(`${this.apiUrl}/treatment-options/${id}`);  // Ajout de /treatment-options
 }
+//filenet
+uploadFileToFileNet(file: File, title: string) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('title', title);
+
+  return this.http.post(`${this.apiUrl}/filenet/upload`, formData, { responseType: 'text' });
+}
 
 
 }

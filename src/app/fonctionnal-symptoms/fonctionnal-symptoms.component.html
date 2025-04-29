@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dossier Médical - Symptômes Fonctionnels</title>
-</head>
-
-<body>
   <div class="app-wrapper default">
     <app-menu></app-menu>
     <div class="app-content">
@@ -41,7 +31,7 @@
 
               <div class="date-and-button">
                 <div class="Date">
-                  <label for="functionalSymptomsDate">Date des symptômes cliniques</label>
+                  <label for="functionalSymptomsDate">Date des symptômes fonctionnels</label>
                   <input type="date" formControlName="functionalSymptomsDate" class="custom-date"
                     [class.is-invalid]="isInvalidAndTouchedOrDirty('functionalSymptomsDate')" required>
                 </div>
@@ -58,6 +48,4 @@
       </div>
     </div>
   </div>
-</body>
 
-</html>

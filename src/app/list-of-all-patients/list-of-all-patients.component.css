@@ -8,10 +8,9 @@ button {
   border: none;
 }
 
-body {
+.app-wrapper{
   background-color: rgb(226, 236, 249);
 
-  ;
 }
 .card {
   height: auto !important;
