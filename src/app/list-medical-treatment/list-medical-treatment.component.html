@@ -11,13 +11,15 @@
 
         <main>
 
-          <div class="mb-3 d-flex justify-content-between align-items-center">
-
-            <a [routerLink]="['/medicaltreatment', patient?.id]" class="btn btn-primary">
+          <div class="mb-3 d-flex justify-content-start align-items-center">
+            <a [routerLink]="['/medicaltreatment', patient?.id]" class="btn btn-primary me-2">
               <i class="ri-user-add-line"></i> + nouveau Traitement
             </a>
-
+            <a [routerLink]="['/medicalfolder', patient?.id]" class="btn btn-primary">
+              <i></i> dossier medical
+            </a>
           </div>
+
           <!-- Barre de recherche avec icône -->
           <div class="input-group" style="max-width: 300px;">
             <input type="date" id="searchPatient" class="form-control" placeholder="Rechercher ..."

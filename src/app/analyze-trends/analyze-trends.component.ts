@@ -121,35 +121,60 @@ export class AnalyzeTrendsComponent {
     this.cd4Treatments = [];
     this.viralLoadTreatments = [];
 
+    let previousCd4Treatment = 'Non spécifié';
+    let previousViralTreatment = 'Non spécifié';
+
     uniqueDates.forEach(dateLabel => {
       const trendsForDate = sortedTrends.filter(t => this.formatDate(t.medicalTestDate) === dateLabel);
 
-      const cd4Trend = trendsForDate.find(t => t.cd4Count != null);
-      if (cd4Trend) {
-        const treatment = this.getTreatmentIfWithinRange(cd4Trend);
-        cd4Data.push(cd4Trend.cd4Count);
-        this.cd4Treatments.push(treatment);
-
-        if (!treatmentColorsMap.has(treatment)) {
-          treatmentColorsMap.set(treatment, availableColors[colorIndex++ % availableColors.length]);
-        }
+      // --- CD4 ---
+      const cd4Trends = trendsForDate.filter(t => t.cd4Count != null);
+      if (cd4Trends.length > 0) {
+        const averageCd4 = cd4Trends.reduce((sum, t) => sum + (t.cd4Count || 0), 0) / cd4Trends.length;
+        cd4Data.push(averageCd4);
       } else {
         cd4Data.push(null);
-        this.cd4Treatments.push('Non spécifié');
       }
 
-      const viralTrend = trendsForDate.find(t => t.viralLoad != null);
-      if (viralTrend) {
-        const treatment = this.getTreatmentIfWithinRange(viralTrend);
-        viralLoadData.push(viralTrend.viralLoad);
-        this.viralLoadTreatments.push(treatment);
-
-        if (!treatmentColorsMap.has(treatment)) {
-          treatmentColorsMap.set(treatment, availableColors[colorIndex++ % availableColors.length]);
+      const treatmentsSet = new Set<string>();
+      cd4Trends.forEach(t => {
+        const treatment = this.getTreatmentIfWithinRange(t);
+        if (treatment && treatment !== 'Non spécifié') {
+          treatmentsSet.add(treatment);
         }
+      });
+
+      const combinedTreatment = Array.from(treatmentsSet).join(', ') || previousCd4Treatment;
+      previousCd4Treatment = combinedTreatment;
+      this.cd4Treatments.push(combinedTreatment);
+
+      if (!treatmentColorsMap.has(combinedTreatment)) {
+        treatmentColorsMap.set(combinedTreatment, availableColors[colorIndex++ % availableColors.length]);
+      }
+
+      // --- Viral Load ---
+      const viralTrends = trendsForDate.filter(t => t.viralLoad != null);
+      if (viralTrends.length > 0) {
+        const averageViral = viralTrends.reduce((sum, t) => sum + (t.viralLoad || 0), 0) / viralTrends.length;
+        viralLoadData.push(averageViral);
       } else {
         viralLoadData.push(null);
-        this.viralLoadTreatments.push('Non spécifié');
+      }
+
+      const viralTreatmentsSet = new Set<string>();
+      viralTrends.forEach(t => {
+        const treatment = this.getTreatmentIfWithinRange(t);
+        if (treatment && treatment !== 'Non spécifié') {
+          viralTreatmentsSet.add(treatment);
+        }
+      });
+
+      const combinedViralTreatment = Array.from(viralTreatmentsSet).join(', ') || previousViralTreatment;
+      previousViralTreatment = combinedViralTreatment;
+      this.viralLoadTreatments.push(combinedViralTreatment);
+
+      if (!treatmentColorsMap.has(combinedViralTreatment)) {
+        treatmentColorsMap.set(combinedViralTreatment, availableColors[colorIndex++ % availableColors.length]);
       }
     });
 
@@ -201,7 +226,7 @@ export class AnalyzeTrendsComponent {
     const testDate = new Date(trend.medicalTestDate);
 
     if (testDate >= treatmentStartDate && (!treatmentEndDate || testDate <= treatmentEndDate)) {
-      return trend.treatmentName || ' Traitement Non spécifié';
+      return trend.treatmentName?.trim() || 'Non spécifié';
     }
     return 'Non spécifié';
   }
@@ -209,7 +234,7 @@ export class AnalyzeTrendsComponent {
   getPointColor(treatments: string[], colorsMap: Map<string, string>) {
     return (ctx: any) => {
       const i = ctx.dataIndex;
-      const treatment = treatments[i] ?? ' Traitement Non spécifié';
+      const treatment = treatments[i] ?? 'Non spécifié';
       return colorsMap.get(treatment) ?? '#000';
     };
   }
@@ -224,7 +249,4 @@ export class AnalyzeTrendsComponent {
       this.alertDate = this.formatDate(recentAlertTrend.medicalTestDate);
     }
   }
-
-
-
 }

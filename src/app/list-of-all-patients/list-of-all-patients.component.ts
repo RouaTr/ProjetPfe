@@ -58,6 +58,23 @@ export class ListOfAllPatientsComponent {
 
             return dateA - dateB;
           });
+          this.filteredPatients = this.listPatients.sort((a, b) => {
+            const isADeceased = a.latestTreatment?.status?.toLowerCase() === 'décédé';
+            const isBDeceased = b.latestTreatment?.status?.toLowerCase() === 'décédé';
+
+
+            if (isADeceased && !isBDeceased) return 1;
+            if (!isADeceased && isBDeceased) return -1;
+
+            const dateA = a.latestTreatment?.next_intake_Date
+              ? new Date(a.latestTreatment.next_intake_Date).getTime()
+              : Infinity;
+            const dateB = b.latestTreatment?.next_intake_Date
+              ? new Date(b.latestTreatment.next_intake_Date).getTime()
+              : Infinity;
+
+            return dateA - dateB;
+          });
 
         // Ajouter des couleurs selon la position
         this.filteredPatients.forEach((patient, index) => {

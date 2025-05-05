@@ -28,40 +28,69 @@ export class ListPatientsComponent {
     console.log('User Details:', userDetails);
 
     if (practitionnerEmail) {
-      // Pass the practitionerEmail to the service method
       this.service.getPatientsByPractitionner(practitionnerEmail).subscribe(patients => {
         this.listPatients = patients;
 
         this.service.getMedicalTreatment().subscribe(treatments => {
+          this.treatments = treatments;
+
+          const today = new Date();
+
           this.listPatients.forEach(patient => {
-            // Filtrer les traitements pour ce patient
             const patientTreatments = treatments.filter(t => t.patient?.id === patient.id);
 
             if (patientTreatments.length > 0) {
-              // Trier les traitements par date
               patientTreatments.sort((a, b) =>
                 new Date(b.treatmentRegistrationDate).getTime() - new Date(a.treatmentRegistrationDate).getTime()
               );
               patient.latestTreatment = patientTreatments[0];
+
+              // Calcul de duration_of_visual_loss (à INSÉRER ici dans latestTreatment)
+              const nextIntakeDate = patient.latestTreatment?.next_intake_Date
+                ? new Date(patient.latestTreatment.next_intake_Date)
+                : null;
+
+              if (nextIntakeDate) {
+                const today = new Date();
+                const isToday = nextIntakeDate.toDateString() === today.toDateString();
+                const isMissed = today > nextIntakeDate;
+
+                if (isToday) {
+                  (patient.latestTreatment as any).duration_of_visual_loss = 0;
+                } else if (isMissed) {
+                  const diffTime = Math.abs(today.getTime() - nextIntakeDate.getTime());
+                  (patient.latestTreatment as any).duration_of_visual_loss = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                } else {
+                  (patient.latestTreatment as any).duration_of_visual_loss = 0;
+                }
+              } else {
+                (patient.latestTreatment as any).duration_of_visual_loss = 0;
+              }
             } else {
               patient.latestTreatment = null;
             }
           });
 
-          //  Après avoir assigné les traitements à tous les patients
+          // Tri final : patients non décédés en haut, triés par date
           this.filteredPatients = this.listPatients.sort((a, b) => {
+            const isADeceased = a.latestTreatment?.status?.toLowerCase() === 'décédé';
+            const isBDeceased = b.latestTreatment?.status?.toLowerCase() === 'décédé';
+
+
+            if (isADeceased && !isBDeceased) return 1;
+            if (!isADeceased && isBDeceased) return -1;
+
             const dateA = a.latestTreatment?.next_intake_Date
               ? new Date(a.latestTreatment.next_intake_Date).getTime()
-              : Infinity; // Pas de rendez-vous → à la fin
+              : Infinity;
             const dateB = b.latestTreatment?.next_intake_Date
               ? new Date(b.latestTreatment.next_intake_Date).getTime()
               : Infinity;
 
-            return dateA - dateB; // Date la plus proche en premier
+            return dateA - dateB;
           });
 
-
-          // Ajouter la couleur selon la position
+          // Ajouter les couleurs
           this.filteredPatients.forEach((patient, index) => {
             if (index < 2) {
               (patient as any).nextIntakeColor = 'danger';
@@ -81,9 +110,7 @@ export class ListPatientsComponent {
   onGenerateOrdonnance(patientId: number): void {
     this.service.generateOrdonnance(patientId).subscribe(
       (pdfBlob: Blob) => {
-        // Créez une URL à partir du blob PDF
         const fileURL = URL.createObjectURL(pdfBlob);
-        // Ouvrir le PDF dans une nouvelle fenêtre ou onglet
         window.open(fileURL);
       },
       (error) => {
@@ -91,8 +118,10 @@ export class ListPatientsComponent {
       }
     );
   }
+
   selectedImage: string | null = null;
   selectedFileName: string | null = null;
+  selectedFile: File | null = null;
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
@@ -114,10 +143,6 @@ export class ListPatientsComponent {
     this.router.navigate(['/analysetrends', patientId]);
   }
 
-
-
-  selectedFile: File | null = null;
-
   sendToFileNet() {
     if (this.selectedFile) {
       const title = this.selectedFileName || 'Document';
@@ -130,41 +155,32 @@ export class ListPatientsComponent {
     }
   }
 
-
   searchPatient(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
-    const searchValue = inputElement.value.trim().toLowerCase(); // Valeur de la recherche en minuscule
+    const searchValue = inputElement.value.trim().toLowerCase();
 
     if (searchValue) {
-      // Convertir en minuscules et diviser les mots-clés
-      const searchTerms = searchValue.toLowerCase().split(' ');
+      const searchTerms = searchValue.split(' ');
 
-      // Filtrer la liste des patients
       this.filteredPatients = this.listPatients.filter(patient => {
-        // Récupérer les champs en minuscules
         const firstName = patient.firstName.toLowerCase();
         const lastName = patient.lastName.toLowerCase();
         const folderCode = patient.medicalRecordNumber.toLowerCase();
 
-        // Créer deux versions du nom complet
         const fullName = `${firstName} ${lastName}`;
         const reversedName = `${lastName} ${firstName}`;
 
-        // Vérifie si tous les termes sont dans le nom complet ou le nom inversé
         const matchesName = searchTerms.every(term =>
           fullName.includes(term) || reversedName.includes(term)
         );
 
-        // Vérifie si tous les termes sont dans le numéro de dossier
         const matchesFolder = searchTerms.every(term =>
           folderCode.includes(term)
         );
 
-        // Retourner true si l'une des deux correspondances est vraie
         return matchesName || matchesFolder;
       });
     } else {
-      // Si la barre de recherche est vide, afficher tous les patients
       this.filteredPatients = this.listPatients;
     }
   }
