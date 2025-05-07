@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, throwError, tap, switchMap, map } from 'rxjs';
 import { Patient } from '../Entity/Patient.Entity';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observation } from '../Entity/Observation.Entity';
@@ -11,6 +11,16 @@ import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
 import { Practitionner} from '../Entity/Practitionner.Entity';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject } from 'rxjs';
+import { TreatmentPredictionDTO } from '../Entity/TreatmentPredictionDTO';
+
+interface FileNetResponse {
+  id?: number;
+  fileNetId?: string;
+  title?: string;
+  documentType?: string;
+  message?: string;
+  error?: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -220,8 +230,37 @@ getPractitionner(): Observable<Practitionner[]> {
   return this.http.get<Practitionner[]>(`${this.apiUrl}/practitionner`);
 }
 
-updatePractitionner(id: number, practitionner: Practitionner): Observable<Practitionner> {
-  return this.http.put<Practitionner>(`${this.apiUrl}/practitionner/${id}`,practitionner);
+updatePractitionner(id: number, practitionner: Practitionner) {
+  console.log('=== DÉBUT MISE À JOUR PRATICIEN ===');
+  console.log('ID du praticien à mettre à jour:', id);
+  console.log('Données reçues:', {
+    ...practitionner,
+    password: '***'
+  });
+  
+  // Supprimer le champ password avant l'envoi
+  const updatedPractitionner = { ...practitionner };
+  delete updatedPractitionner.password;
+  
+  console.log('Données envoyées au serveur (sans mot de passe):', updatedPractitionner);
+  console.log('URL de la requête:', `${this.apiUrl}/practitionner/${id}`);
+  
+  return this.http.put<any>(`${this.apiUrl}/practitionner/${id}`, updatedPractitionner).pipe(
+    tap(response => {
+      console.log('=== RÉPONSE DU SERVEUR ===');
+      console.log('Statut: Succès');
+      console.log('Données reçues:', response);
+      console.log('=== FIN MISE À JOUR PRATICIEN ===');
+    }),
+    catchError(error => {
+      console.error('=== ERREUR LORS DE LA MISE À JOUR ===');
+      console.error('Statut:', error.status);
+      console.error('Message:', error.error?.message || error.message);
+      console.error('Détails complets:', error);
+      console.error('=== FIN ERREUR ===');
+      throw error;
+    })
+  );
 }
 
 findPractitionnerById(id: number): Observable<Practitionner> {
@@ -230,8 +269,54 @@ findPractitionnerById(id: number): Observable<Practitionner> {
 doesPractitionnerExists(practitionnerLastName: string, practitionnerFirstName: string) {
   return this.http.get<boolean>(`${this.apiUrl}/practitionner/exists?practitionnerLastName=${practitionnerLastName}&practitionnerFirstName=${practitionnerFirstName}`);
 }
-loginPractitionner(practitionner:Practitionner){
-  return this.http.post<any>(this.loginUserUrl, practitionner);
+loginPractitionner(practitionner: Practitionner) {
+  console.log('Tentative de connexion pour:', practitionner.practitionnerEmail);
+  
+  // Créer un nouvel objet avec les données de connexion
+  const loginData = {
+    practitionnerEmail: practitionner.practitionnerEmail,
+    password: practitionner.password
+  };
+
+  console.log('Données envoyées:', {
+    email: loginData.practitionnerEmail,
+    password: '******'
+  });
+
+  return this.http.post<any>(this.loginUserUrl, loginData).pipe(
+    tap(response => {
+      console.log('Réponse de connexion réussie:', {
+        token: response.token ? 'Présent' : 'Absent',
+        role: response.practitionnerRole,
+        message: response.message
+      });
+      
+      if (response.token) {
+        localStorage.setItem("myToken", response.token);
+        localStorage.setItem("practitionnerRole", response.practitionnerRole);
+        console.log('Token et rôle sauvegardés dans localStorage');
+      } else {
+        console.warn('Pas de token reçu dans la réponse');
+      }
+    }),
+    catchError(error => {
+      console.error('Erreur de connexion détaillée:', {
+        status: error.status,
+        message: error.error?.message || error.message,
+        error: error
+      });
+
+      if (error.status === 403) {
+        throw new Error('Compte en attente d\'activation par l\'administrateur');
+      } else if (error.status === 404) {
+        throw new Error('Email ou mot de passe incorrect');
+      } else if (error.status === 0) {
+        throw new Error('Impossible de se connecter au serveur. Veuillez vérifier votre connexion internet.');
+      } else {
+        throw new Error(error.error?.message || 'Une erreur est survenue lors de la connexion');
+      }
+    })
+  );
 }
 getPendingPractitionners() {
   return this.http.get<any[]>(`http://localhost:8081/api/practitionner?status=pending`);
@@ -275,66 +360,120 @@ isLoggedIn(){
 }
 requestPasswordReset(email: string): Observable<any> {
   return this.http.post<any>(
-    `http://localhost:8081/api/practitionner/forgot-password`,
+    `${this.apiUrl}/practitionner/forgot-password`,
     { email }
   );
 }
 
 resetPassword(token: string, newPassword: string): Observable<any> {
-  const url = `http://localhost:8081/api/practitionner/reset-password?token=${encodeURIComponent(token)}&newPassword=${encodeURIComponent(newPassword)}`;
-
+  const url = `${this.apiUrl}/practitionner/reset-password?token=${encodeURIComponent(token)}&newPassword=${encodeURIComponent(newPassword)}`;
   return this.http.post<any>(url, {}, { headers: { 'Content-Type': 'application/json' } });
 }
 
-
 validatePractitionner(id: number, newRole: string) {
-  const url = `http://localhost:8081/api/practitionner/${id}/validate`;
+  const url = `${this.apiUrl}/practitionner/${id}/validate`;
   const params = { newRole };
   return this.http.put(url, null, { params, responseType: 'text' });
 }
-
 
 private getPractitionnerIdFromToken(): number {
   const token = localStorage.getItem('myToken');
   if (token) {
     const decodedToken = this.jwtHelper.decodeToken(token);
-    return decodedToken.id; // Assurez-vous que l'ID du praticien est stocké dans le token
+    return decodedToken.id;
   }
   return null;
 }
+
 getTrendsForPatient(patientId: number): Observable<any> {
   return this.http.get<any>(`${this.apiUrl}/laboratory/trends/patients/${patientId}`);
 }
+
 getAllTreatmentOptions(): Observable<any[]> {
-  return this.http.get<any[]>(`${this.apiUrl}/treatment-options`);  // Ajout de /treatment-options
+  return this.http.get<any[]>(`${this.apiUrl}/treatment-options`);
 }
 
-// Ajouter une option de traitement
-
 addTreatmentOption(treatmentName: string): Observable<any> {
-  // Envoi de la chaîne directement, sans clé
   return this.http.post<any>(`${this.apiUrl}/treatment-options`, treatmentName);
 }
 
 updateTreatmentOption(id: number, treatmentName: string): Observable<any> {
-  // Envoi de la chaîne directement, sans clé
   return this.http.put<any>(`${this.apiUrl}/treatment-options/${id}`, treatmentName);
 }
 
-
-
-// Supprimer une option de traitement
 deleteTreatmentOption(id: number): Observable<any> {
-  return this.http.delete(`${this.apiUrl}/treatment-options/${id}`);  // Ajout de /treatment-options
+  return this.http.delete(`${this.apiUrl}/treatment-options/${id}`);
 }
-//filenet
+
 uploadFileToFileNet(file: File, title: string) {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('title', title);
-
   return this.http.post(`${this.apiUrl}/filenet/upload`, formData, { responseType: 'text' });
 }
 
+predictFromLatestDataById(patientId: number) {
+  return this.http.get<TreatmentPredictionDTO>(`${this.apiUrl}/ai/prediction/by-id/${patientId}`);
+}
 
+uploadDocument(file: File, title: string, documentType: string, patientId: number): Observable<any> {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('title', title);
+  formData.append('documentType', documentType);
+  formData.append('patientId', patientId.toString());
+
+  console.log('Envoi du document:', {
+    title,
+    documentType,
+    patientId,
+    fileName: file.name,
+    fileSize: file.size,
+    fileType: file.type
+  });
+
+  return this.http.post(`${this.apiUrl}/filenet/upload`, formData, {
+    responseType: 'text'
+  }).pipe(
+    map(response => {
+      console.log('Réponse du serveur:', response);
+      // Extraire l'ID du message
+      const match = response.match(/ID: \{([^}]+)\}/);
+      if (match) {
+        return {
+          success: true,
+          message: response,
+          documentId: match[1]
+        };
+      }
+      throw new Error('Format de réponse invalide');
+    }),
+    catchError(error => {
+      console.error('Erreur détaillée:', error);
+      let errorMessage = 'Erreur lors de l\'envoi du document';
+      
+      if (error.error instanceof ErrorEvent) {
+        errorMessage = `Erreur client: ${error.error.message}`;
+      } else if (error.status === 200) {
+        if (typeof error.error === 'string') {
+          errorMessage = error.error;
+        } else if (error.error && typeof error.error === 'object') {
+          errorMessage = JSON.stringify(error.error);
+        }
+      } else {
+        errorMessage = `Erreur serveur (${error.status}): ${error.message}`;
+      }
+      
+      return throwError(() => new Error(errorMessage));
+    })
+  );
+}
+
+getDocumentsByPatientId(patientId: number) {
+  return this.http.get(`${this.apiUrl}/filenet/patient/${patientId}`);
+}
+
+getDocumentsByPatientIdAndType(patientId: number, documentType: string) {
+  return this.http.get(`${this.apiUrl}/filenet/patient/${patientId}/type/${documentType}`);
+}
 }

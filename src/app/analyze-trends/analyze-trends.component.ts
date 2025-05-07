@@ -6,6 +6,7 @@ import { ChartDataset, ChartOptions } from 'chart.js';
 import { HttpErrorResponse } from '@angular/common/http';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ActivatedRoute } from '@angular/router';
+import { TreatmentPredictionDTO } from '../Entity/TreatmentPredictionDTO';
 
 @Component({
   selector: 'app-analyze-trends',
@@ -69,6 +70,7 @@ export class AnalyzeTrendsComponent {
       this.patientId = +params.get('id')!;
       this.getTrendsForPatient();
       this.loadPatientData(this.patientId);
+      this.predictTreatmentForPatient();
     });
   }
 
@@ -136,13 +138,34 @@ export class AnalyzeTrendsComponent {
         cd4Data.push(null);
       }
 
+      // --- Viral Load ---
+      const viralTrends = trendsForDate.filter(t => t.viralLoad != null);
+      if (viralTrends.length > 0) {
+        // Prendre la dernière valeur de charge virale pour cette date
+        const latestViralTrend = viralTrends[viralTrends.length - 1];
+        viralLoadData.push(latestViralTrend.viralLoad);
+        
+        // Mettre à jour la dernière charge virale globale
+        if (dateLabel === uniqueDates[uniqueDates.length - 1]) {
+          this.latestViralLoad = latestViralTrend.viralLoad;
+          console.log('Dernière charge virale mise à jour:', this.latestViralLoad);
+        }
+      } else {
+        viralLoadData.push(null);
+      }
+
       const treatmentsSet = new Set<string>();
       cd4Trends.forEach(t => {
-        const treatment = this.getTreatmentIfWithinRange(t);
-        if (treatment && treatment !== 'Non spécifié') {
-          treatmentsSet.add(treatment);
+        const treatmentFromFunction = this.getTreatmentIfWithinRange(t);
+        console.log('Date:', this.formatDate(t.medicalTestDate));
+        console.log('Treatment from function:', this.getTreatmentIfWithinRange(t));
+        console.log('Treatment from function:', treatmentFromFunction);
+
+        if (treatmentFromFunction && treatmentFromFunction !== 'Non spécifié') {
+          treatmentsSet.add(treatmentFromFunction);
         }
       });
+
 
       const combinedTreatment = Array.from(treatmentsSet).join(', ') || previousCd4Treatment;
       previousCd4Treatment = combinedTreatment;
@@ -150,15 +173,6 @@ export class AnalyzeTrendsComponent {
 
       if (!treatmentColorsMap.has(combinedTreatment)) {
         treatmentColorsMap.set(combinedTreatment, availableColors[colorIndex++ % availableColors.length]);
-      }
-
-      // --- Viral Load ---
-      const viralTrends = trendsForDate.filter(t => t.viralLoad != null);
-      if (viralTrends.length > 0) {
-        const averageViral = viralTrends.reduce((sum, t) => sum + (t.viralLoad || 0), 0) / viralTrends.length;
-        viralLoadData.push(averageViral);
-      } else {
-        viralLoadData.push(null);
       }
 
       const viralTreatmentsSet = new Set<string>();
@@ -217,7 +231,7 @@ export class AnalyzeTrendsComponent {
     this.treatmentLegend = Array.from(treatmentColorsMap.entries()).map(([name, color]) => ({ name, color }));
 
     this.latestCd4 = cd4Data.filter(x => x != null).slice(-1)[0] ?? undefined;
-    this.latestViralLoad = viralLoadData.filter(x => x != null).slice(-1)[0] ?? undefined;
+    console.log('Dernière charge virale finale:', this.latestViralLoad);
   }
 
   getTreatmentIfWithinRange(trend: TrendDTO): string {
@@ -229,7 +243,9 @@ export class AnalyzeTrendsComponent {
       return trend.treatmentName?.trim() || 'Non spécifié';
     }
     return 'Non spécifié';
+
   }
+
 
   getPointColor(treatments: string[], colorsMap: Map<string, string>) {
     return (ctx: any) => {
@@ -240,13 +256,63 @@ export class AnalyzeTrendsComponent {
   }
 
   checkAlerts() {
-    const recentAlertTrend = this.trends
-      .filter(t => t.viralLoad && t.viralLoad > 50)
-      .sort((a, b) => new Date(b.medicalTestDate).getTime() - new Date(a.medicalTestDate).getTime())[0];
-
-    if (recentAlertTrend) {
+    console.log('=== DÉBUT CHECK ALERTS ===');
+    console.log('Dernière charge virale:', this.latestViralLoad);
+    
+    if (this.latestViralLoad && this.latestViralLoad > 50) {
       this.alert = true;
-      this.alertDate = this.formatDate(recentAlertTrend.medicalTestDate);
+      // Trouver la date correspondante à la dernière charge virale
+      const latestTrend = this.trends
+        .filter(t => t.viralLoad === this.latestViralLoad)
+        .sort((a, b) => new Date(b.medicalTestDate).getTime() - new Date(a.medicalTestDate).getTime())[0];
+      
+      if (latestTrend) {
+        this.alertDate = this.formatDate(latestTrend.medicalTestDate);
+        console.log('ALERTE ACTIVÉE - Charge virale détectable:', this.latestViralLoad, 'le', this.alertDate);
+      }
+    } else {
+      this.alert = false;
+      console.log('Pas d\'alerte - Charge virale indétectable ou non disponible');
     }
+    
+    console.log('=== FIN CHECK ALERTS ===');
   }
+  viralLoad: number = 0;
+  cd4Count: number = 0;
+  treatmentName: string = '';
+
+  predictionResult: TreatmentPredictionDTO | null = null;
+  errorMessage: string | null = null;
+  result?: TreatmentPredictionDTO;
+
+
+
+
+
+ // Méthode pour appeler la prédiction de traitement
+ predictTreatmentForPatient(): void {
+  this.loading = true;
+  this.result = undefined;
+  this.errorMessage = '';
+
+  this.crudService.predictFromLatestDataById(this.patientId).subscribe({
+    next: (data) => {
+      this.result = data;
+      this.loading = false;
+      // Si le traitement est efficace, afficher un message
+      if (this.result?.effective) {
+        this.errorMessage = 'Vous n\'avez pas besoin de modifier ce traitement';
+      } else {
+        this.errorMessage = `Traitement suggéré : ${this.result?.suggestedTreatment}`;
+      }
+    },
+    error: (err) => {
+      this.errorMessage = 'Erreur lors de la prédiction.';
+      this.loading = false;
+      console.error(err);
+    }
+  });
+}
+
+
 }

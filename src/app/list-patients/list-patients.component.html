@@ -18,36 +18,47 @@
                 <i class="bi bi-camera"></i> Scanner une Ordonnance
               </a>
 
-
               <!-- Affichage du fichier/image sélectionné -->
-
               <div *ngIf="selectedImage">
                 <img [src]="selectedImage" alt="Image sélectionnée" style="max-width: 100%; height: auto;">
               </div>
 
-              <!-- Bouton d'envoi pour IBM FileNet -->
-              <!-- Afficher le bouton d'envoi uniquement si un fichier est sélectionné -->
-              <button *ngIf="selectedFileName" (click)="sendToFileNet()">Enregistrer dans IBM FileNet</button>
+              <!-- Sélection du patient pour FileNet -->
+              <div *ngIf="selectedFileName" class="mt-3">
+                <div class="form-group">
+                  <label for="patientSelect">Sélectionner un patient</label>
+                  <select class="form-control" 
+                          id="patientSelect" 
+                          [(ngModel)]="selectedPatientId"
+                          (change)="onPatientSelected($event)">
+                    <option value="">Choisir un patient</option>
+                    <option *ngFor="let patient of listPatients" [value]="patient.id">
+                      {{patient.lastName}} {{patient.firstName}} - {{patient.medicalRecordNumber}}
+                    </option>
+                  </select>
+                </div>
+
+                <!-- Bouton d'envoi pour IBM FileNet -->
+                <button *ngIf="selectedFileName && selectedPatientId" class="btn btn-success mt-3" (click)="sendToFileNet()">
+                  Enregistrer dans IBM FileNet
+                </button>
+              </div>
 
               <!-- Interface de confirmation de l'envoi -->
-              <div *ngIf="uploadStatus">
-                <p>{{ uploadStatus }}</p>
+              <div *ngIf="uploadStatus" class="alert" [ngClass]="{'alert-success': uploadStatus.includes('succès'), 'alert-danger': uploadStatus.includes('Erreur')}">
+                {{ uploadStatus }}
               </div>
+
               <div *ngIf="selectedFileName && !selectedImage">
                 <p>Fichier sélectionné : {{ selectedFileName }}</p>
               </div>
             </div>
-            <!-- Barre de recherche avec icône -->
+            <!-- Barre de recherche principale pour la liste des patients -->
             <div class="input-group" style="max-width: 300px;">
               <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher un patient..."
                 (input)="searchPatient($event)">
-
-
-
-
               <span class="input-group-text"><i class="ri-search-line"></i></span>
             </div>
-
           </div>
 
           <div class="container-fluid">

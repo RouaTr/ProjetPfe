@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="Multipurpose, super flexible, powerful, clean modern responsive bootstrap 5 admin template">
-  <title>Dossier Médical</title>
-</head>
-
-<body>
 
   <div class="app-wrapper default">
     <app-menu></app-menu>
@@ -24,9 +12,22 @@
 
             <p>Dernier CD4 : {{latestCd4 ?? 'Non disponible'}} | Dernière charge virale : {{latestViralLoad ?? 'Non disponible'}}</p>
 
-            <div *ngIf="alert" class="alert">
-              ⚠️ Alerte charge virale (> 50 copies/mL) détectée le {{alertDate}}
+            <div *ngIf="alert" class="alert alert-danger">
+              ⚠️ Alerte : Charge virale détectable ({{latestViralLoad}} copies/mL) le {{alertDate}}
             </div>
+
+          <div *ngIf="loading">
+            <p>Chargement des données...</p>
+          </div>
+
+          <div *ngIf="!loading && result">
+            <p><strong>Nom du traitement Actuel:</strong> {{ result.treatmentName }}</p>
+            <p><strong>Efficacité:</strong> {{ result.effective ? 'Oui' : 'Non' }}</p>
+          </div>
+
+          <div *ngIf="errorMessage" class="error">
+            <p>{{ errorMessage }}</p>
+          </div>
           </div>
 
           <mat-tab-group class="tabs">
@@ -61,11 +62,13 @@
           </div>
 
 
+
+
+
+
         </main>
       </div>
     </div>
   </div>
 
-</body>
 
-</html>

@@ -46,7 +46,6 @@
                           <th>Durée de la prise</th>
                           <th>date prochaine prise</th>
                           <th>Numéro de Téléphone</th>
-                          <th> perte de vue(jours)</th>
                           <th>Statut</th>
                           <th>Medecin Traitant</th>
                           <th>Action</th>
@@ -73,7 +72,6 @@
                             </span>
                           </td>
                           <td>{{patient.phoneNumber}}</td>
-                          <td><span class="badge bg-info-subtle text-info">{{ patient.latestTreatment?.duration_of_visual_loss }}j</span></td>
                           <td><span >{{ patient.latestTreatment?.status }}</span></td>
                           <td>{{ patient.practitionner?.practitionnerFirstName}} {{ patient.practitionner?.practitionnerLastName }}</td>
 

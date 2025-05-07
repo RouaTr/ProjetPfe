@@ -3,6 +3,8 @@ import { CrudService } from '../service/crud.service';
 import { Patient } from '../Entity/Patient.Entity';
 import { Router } from '@angular/router';
 import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list-patients',
@@ -14,7 +16,12 @@ export class ListPatientsComponent {
   role: string;
   listPatients: Patient[] = [];
   filteredPatients: Patient[] = [];
+  mainListFilteredPatients: Patient[] = [];
   treatments: MedicalTreatment[] = [];
+  selectedFile: File | null = null;
+  selectedFileName: string | null = null;
+  selectedPatientId: number | null = null;
+  searchTerm: string = '';
 
   constructor(private service: CrudService, private router: Router) { }
 
@@ -30,6 +37,7 @@ export class ListPatientsComponent {
     if (practitionnerEmail) {
       this.service.getPatientsByPractitionner(practitionnerEmail).subscribe(patients => {
         this.listPatients = patients;
+        this.mainListFilteredPatients = patients;
 
         this.service.getMedicalTreatment().subscribe(treatments => {
           this.treatments = treatments;
@@ -120,68 +128,98 @@ export class ListPatientsComponent {
   }
 
   selectedImage: string | null = null;
-  selectedFileName: string | null = null;
-  selectedFile: File | null = null;
 
   onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-      this.selectedFileName = file.name;
+    this.selectedFile = event.target.files[0];
+    this.selectedFileName = this.selectedFile ? this.selectedFile.name : null;
 
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = () => this.selectedImage = reader.result as string;
-        reader.readAsDataURL(file);
-      } else {
+    if (this.selectedFile) {
+      const reader = new FileReader();
+      reader.onload = () => this.selectedImage = reader.result as string;
+      reader.readAsDataURL(this.selectedFile);
+    } else {
+      this.selectedImage = null;
+    }
+  }
+
+  onPatientSelected(event: any) {
+    const patientId = event.target.value;
+    if (patientId) {
+      this.selectedPatientId = Number(patientId);
+    } else {
+      this.selectedPatientId = null;
+    }
+  }
+
+  sendToFileNet() {
+    if (!this.selectedFile || !this.selectedPatientId) {
+      this.uploadStatus = 'Veuillez sélectionner un fichier et un patient';
+      return;
+    }
+
+    console.log('Début de l\'upload vers FileNet');
+    console.log('Fichier sélectionné:', this.selectedFile);
+    console.log('Patient ID sélectionné:', this.selectedPatientId);
+
+    this.uploadStatus = 'Envoi du document en cours...';
+
+    this.service.uploadDocument(
+      this.selectedFile,
+      this.selectedFile.name,
+      'DOCUMENT',
+      this.selectedPatientId
+    ).subscribe({
+      next: (response) => {
+        console.log('Réponse du serveur:', response);
+        if (response.success) {
+          this.uploadStatus = `Document enregistré avec succès (ID: ${response.documentId})`;
+          this.selectedFile = null;
+          this.selectedPatientId = null;
+          this.selectedImage = null;
+        } else {
+          this.uploadStatus = response.message || 'Erreur lors de l\'upload';
+        }
+      },
+      error: (error) => {
+        console.error('Erreur lors de l\'upload:', error);
+        this.uploadStatus = error.message || 'Erreur lors de l\'envoi du document';
+        this.selectedFile = null;
+        this.selectedPatientId = null;
         this.selectedImage = null;
       }
-    }
+    });
   }
 
   onAnalyzeTrends(patientId: number) {
     this.router.navigate(['/analysetrends', patientId]);
   }
 
-  sendToFileNet() {
-    if (this.selectedFile) {
-      const title = this.selectedFileName || 'Document';
-
-      this.service.uploadFileToFileNet(this.selectedFile, title)
-        .subscribe({
-          next: response => alert('Succès : ' + response),
-          error: error => alert('Erreur : ' + error.error)
-        });
+  searchPatient(event: any) {
+    const term = event.target.value.toLowerCase();
+    if (!term) {
+      this.filteredPatients = this.listPatients;
+      return;
     }
+
+    this.filteredPatients = this.listPatients.filter(patient => 
+      `${patient.lastName} ${patient.firstName}`.toLowerCase().includes(term) ||
+      `${patient.firstName} ${patient.lastName}`.toLowerCase().includes(term) ||
+      patient.medicalRecordNumber.toLowerCase().includes(term)
+    );
   }
 
-  searchPatient(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    const searchValue = inputElement.value.trim().toLowerCase();
-
-    if (searchValue) {
-      const searchTerms = searchValue.split(' ');
-
-      this.filteredPatients = this.listPatients.filter(patient => {
-        const firstName = patient.firstName.toLowerCase();
-        const lastName = patient.lastName.toLowerCase();
-        const folderCode = patient.medicalRecordNumber.toLowerCase();
-
-        const fullName = `${firstName} ${lastName}`;
-        const reversedName = `${lastName} ${firstName}`;
-
-        const matchesName = searchTerms.every(term =>
-          fullName.includes(term) || reversedName.includes(term)
-        );
-
-        const matchesFolder = searchTerms.every(term =>
-          folderCode.includes(term)
-        );
-
-        return matchesName || matchesFolder;
-      });
-    } else {
-      this.filteredPatients = this.listPatients;
+  searchMainList(event: any) {
+    const term = event.target.value.toLowerCase();
+    if (!term) {
+      this.mainListFilteredPatients = this.listPatients;
+      return;
     }
+
+    this.mainListFilteredPatients = this.listPatients.filter(patient => 
+      `${patient.lastName} ${patient.firstName}`.toLowerCase().includes(term) ||
+      `${patient.firstName} ${patient.lastName}`.toLowerCase().includes(term) ||
+      patient.medicalRecordNumber.toLowerCase().includes(term)
+    );
   }
 }
+

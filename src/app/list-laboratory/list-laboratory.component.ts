@@ -4,6 +4,9 @@ import { Laboratory } from '../Entity/Laboratory.Entity';
 import { Patient } from '../Entity/Patient.Entity';
 import { CrudService } from '../service/crud.service';
 import { HttpClient } from '@angular/common/http';
+import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list-laboratory',
@@ -16,8 +19,7 @@ export class ListLaboratoryComponent {
   patientId!: number;
   laboratory: Laboratory[] = [];
   searchDate: string = '';
-
-    filteredLaboratory: Laboratory[] = [];
+  filteredLaboratory: Laboratory[] = [];
   usualRanges: { [key: string]: { min: number; max: number } } = {
     wbc: { min: 4, max: 10 },
     rbc: { min: 3.5, max: 5.8 },
@@ -49,9 +51,20 @@ export class ListLaboratoryComponent {
     cd4Count:{ min: 200 , max: Infinity},
     viralLoad:{ min:0, max: 50},
   };
+  role: string;
+  listPatients: Patient[] = [];
+  filteredPatients: Patient[] = [];
+  treatments: MedicalTreatment[] = [];
+  selectedFile: File | null = null;
+  selectedFileName: string | null = null;
+  selectedPatientId: number | null = null;
+  searchTerm: string = '';
+
   constructor(
     private crudService: CrudService,
-    private route: ActivatedRoute,private router: Router,private http: HttpClient
+    private route: ActivatedRoute,
+    private router: Router,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -80,6 +93,7 @@ export class ListLaboratoryComponent {
       }
     });
   }
+
   filterByDate(): void {
     if (!this.searchDate) {
       this.filteredLaboratory = [...this.laboratory]; // Afficher tout si la recherche est vide
@@ -97,41 +111,43 @@ export class ListLaboratoryComponent {
   }
 
   getLaboratory(): void {
-     this.crudService.getLaboratoryByPatientId(this.patientId).subscribe({
-        next: (data) => {
-          this.laboratory = data
-            .filter(symptom => symptom.patient?.id === this.patientId)
-            .map(symptom => {
-              // Vérifier et convertir clinicalSymptomsDate en objet Date
-              if (symptom.medicaltestDate) {
-                symptom.medicaltestDate = new Date(symptom.medicaltestDate);
-              }
-              return this.filterSymptoms(symptom);
-            })
-            .filter(symptom => Object.keys(symptom).length > 1);
-          this.filteredLaboratory = [...this.laboratory];
-          console.log("Signes cliniques filtrés :", this.laboratory);
-        },
-        error: (err) => {
-          console.warn("Erreur lors de la récupération des signes cliniques :", err);
-        }
-      });
-    }
-    private filterSymptoms(symptom: Laboratory): Laboratory {
-        const filteredSymptom: { [key: string]: any } = {
-          id: symptom.id,
-          medicaltestDate: symptom.medicaltestDate
-        };
-
-        Object.keys(symptom).forEach((key) => {
-          const value = (symptom as any)[key];
-          if (value !== true && value !== null && value !== undefined && key !== 'id' && key !== 'medicaltestDate' && key !== 'patient') {
-            filteredSymptom[key] = value;
-          }
-        });
-
-        return filteredSymptom as Laboratory;
+    this.crudService.getLaboratoryByPatientId(this.patientId).subscribe({
+      next: (data) => {
+        this.laboratory = data
+          .filter(symptom => symptom.patient?.id === this.patientId)
+          .map(symptom => {
+            // Vérifier et convertir clinicalSymptomsDate en objet Date
+            if (symptom.medicaltestDate) {
+              symptom.medicaltestDate = new Date(symptom.medicaltestDate);
+            }
+            return this.filterSymptoms(symptom);
+          })
+          .filter(symptom => Object.keys(symptom).length > 1);
+        this.filteredLaboratory = [...this.laboratory];
+        console.log("Signes cliniques filtrés :", this.laboratory);
+      },
+      error: (err) => {
+        console.warn("Erreur lors de la récupération des signes cliniques :", err);
       }
+    });
+  }
+
+  private filterSymptoms(symptom: Laboratory): Laboratory {
+    const filteredSymptom: { [key: string]: any } = {
+      id: symptom.id,
+      medicaltestDate: symptom.medicaltestDate
+    };
+
+    Object.keys(symptom).forEach((key) => {
+      const value = (symptom as any)[key];
+      if (value !== true && value !== null && value !== undefined && key !== 'id' && key !== 'medicaltestDate' && key !== 'patient') {
+        filteredSymptom[key] = value;
+      }
+    });
+
+    return filteredSymptom as Laboratory;
+  }
+
   isOutOfRange(key: string, value: number): boolean {
     if (this.usualRanges[key]) {
       return value < this.usualRanges[key].min || value > this.usualRanges[key].max;
@@ -142,44 +158,56 @@ export class ListLaboratoryComponent {
   updateLaboratory(laboratory: number) {
     this.router.navigate(['/medicalfolder/listlaboratory/updatelaboratory', laboratory]);
   }
-  selectedImage: string | null = null;
-selectedFileName: string | null = null;
-
-
 
   onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-      this.selectedFileName = file.name;
+    this.selectedFile = event.target.files[0];
+    this.selectedFileName = this.selectedFile ? this.selectedFile.name : null;
+  }
 
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = () => this.selectedImage = reader.result as string;
-        reader.readAsDataURL(file);
-      } else {
-        this.selectedImage = null;
-      }
+  onPatientSelected(event: any) {
+    const patientId = event.target.value;
+    if (patientId) {
+      this.selectedPatientId = Number(patientId);
+    } else {
+      this.selectedPatientId = null;
     }
   }
 
+  searchPatient() {
+    if (!this.searchTerm) {
+      this.filteredPatients = [];
+      return;
+    }
 
-
-selectedFile: File | null = null;
-
-sendToFileNet() {
-  if (this.selectedFile) {
-    const title = this.selectedFileName || 'Document';
-
-    this.crudService.uploadFileToFileNet(this.selectedFile, title)
-      .subscribe({
-        next: response => alert('Succès : ' + response),
-        error: error => alert('Erreur : ' + error.error)
-      });
+    const term = this.searchTerm.toLowerCase();
+    this.filteredPatients = this.listPatients.filter(patient => 
+      `${patient.lastName} ${patient.firstName}`.toLowerCase().includes(term) ||
+      `${patient.firstName} ${patient.lastName}`.toLowerCase().includes(term) ||
+      patient.medicalRecordNumber.toLowerCase().includes(term)
+    );
   }
-}
 
+  sendToFileNet() {
+    if (this.selectedFile && this.selectedPatientId) {
+      const title = this.selectedFileName || 'Document';
+      const documentType = 'RESULTAT_BIOLOGIQUE'; // Type pour les résultats biologiques
 
-
+      this.crudService.uploadDocument(this.selectedFile, title, documentType, this.selectedPatientId)
+        .subscribe({
+          next: (response: any) => {
+            this.uploadStatus = 'Document enregistré avec succès';
+            // Réinitialiser les champs
+            this.selectedFile = null;
+            this.selectedFileName = null;
+            this.selectedPatientId = null;
+          },
+          error: (error) => {
+            this.uploadStatus = 'Erreur lors de l\'enregistrement du document: ' + error.message;
+          }
+        });
+    } else {
+      this.uploadStatus = 'Veuillez sélectionner un fichier et un patient';
+    }
+  }
 }
 

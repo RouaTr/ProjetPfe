@@ -12,6 +12,7 @@ import { CrudService } from '../service/crud.service';
 export class LoginComponent {
   messageCommande = "";
   loginForm: FormGroup;
+  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -35,53 +36,41 @@ export class LoginComponent {
 
   login() {
     console.log('Login function called');
-    let data = this.loginForm.value;
-    console.log('Login form data:', data);  // Vérifie si les données sont récupérées correctement
+    console.log('Login form data:', this.loginForm.value);
 
-    let practitionner = new Practitionner(null, null, null, null, data.practitionnerEmail, data.password, null);
-
-    if (!data.practitionnerEmail || !data.password) {
-      console.log('Fields are missing');
-      this.messageCommande = `<div class="alert alert-warning" role="alert">Veuillez remplir tous les champs.</div>`;
-    } else {
-      console.log('Sending login request to service...');
-      this.service.loginPractitionner(practitionner).subscribe(
-        res => {
-          console.log('Response from backend:', res);  // Vérifie la réponse du backend
-          if (res.token) {
-            let token = res.token;
-            localStorage.setItem("myToken", token);
-            console.log('Token saved in localStorage:', token);
-
-            localStorage.setItem("practitionnerRole", res.practitionnerRole);
-            console.log('Role saved in localStorage:', res.practitionnerRole);
-
-            // Redirige vers la page appropriée en fonction du rôle
-            if (res.practitionnerRole === 'admin') {
-              console.log('Redirecting to admin...');
-              this.router.navigate(['manageaccess']);
-            } else if (res.practitionnerRole === 'medecin') {
-              console.log('Redirecting to medecin...');
-              this.router.navigate(['home']);
-            } else if (res.practitionnerRole === 'pharmacien') {
-              console.log('Redirecting to pharmacien...');
-              this.router.navigate(['/listofmedicalprescriptions']);
-            } else {
-              console.log('Unrecognized role, redirecting to login...');
-              this.router.navigate(['']);  // Redirige si le rôle n'est pas reconnu
-            }
-
-
-          } else {
-            console.log('No token received');
-            this.messageCommande = `<div class="alert alert-warning" role="alert">Invalid credentials or missing token!</div>`;
-          }
-        },
-        err => {
-          console.log('Error response from backend:', err);  // Vérifie l'erreur renvoyée par le backend
-          this.messageCommande = `<div class="alert alert-warning" role="alert"> Service en panne! </div>`;
-        }
-      );
+    if (!this.loginForm.get('practitionnerEmail')?.value || !this.loginForm.get('password')?.value) {
+      this.errorMessage = 'Veuillez remplir tous les champs';
+      return;
     }
+
+    console.log('Sending login request to service...');
+    this.service.loginPractitionner(this.loginForm.value).subscribe({
+      next: (response) => {
+        console.log('Login successful, response:', response);
+        const role = response.practitionnerRole;
+
+        if (role === 'admin') {
+          this.router.navigate(['/manageaccess']);
+        } else if (role === 'medecin') {
+          this.router.navigate(['/home']);
+        } else if (role === 'pharmacien') {
+          this.router.navigate(['/listofmedicalprescriptions']);
+        } else {
+          this.errorMessage = 'Rôle non reconnu';
+        }
+      },
+      error: (error) => {
+        console.error('Error response from backend:', error);
+        this.errorMessage = error.message || 'Une erreur est survenue lors de la connexion';
+
+        // Réinitialiser le formulaire en cas d'erreur
+        this.loginForm.reset();
+
+        // Afficher le message d'erreur pendant 5 secondes
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
   }
 }

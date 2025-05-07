@@ -1,0 +1,15 @@
+<dependencies>
+    <!-- Autres dépendances existantes -->
+
+    <!-- Flyway pour les migrations de base de données -->
+    <dependency>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-core</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-mysql</artifactId>
+    </dependency>
+
+    <!-- ... autres dépendances existantes ... -->
+</dependencies> 

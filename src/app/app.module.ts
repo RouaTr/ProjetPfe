@@ -48,7 +48,6 @@ import { ListOfAllPatientsComponent } from './list-of-all-patients/list-of-all-p
 import { ManageTreatmentFormComponent } from './manage-treatment-form/manage-treatment-form.component';
 import { AnalyzeTrendsComponent } from './analyze-trends/analyze-trends.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { NgChartsModule } from 'ng2-charts';
 import { MatTabsModule } from '@angular/material/tabs';
 
@@ -97,7 +96,6 @@ import { MatTabsModule } from '@angular/material/tabs';
     ListOfAllPatientsComponent,
     ManageTreatmentFormComponent,
     AnalyzeTrendsComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -105,13 +103,14 @@ import { MatTabsModule } from '@angular/material/tabs';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-   NgChartsModule,
-   MatTabsModule,
-   BrowserAnimationsModule,
-
+    NgChartsModule,
+    MatTabsModule,
+    BrowserAnimationsModule,
   ],
-  providers: [  { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-    JwtHelperService,],
+  providers: [
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

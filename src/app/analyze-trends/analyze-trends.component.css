@@ -1,8 +1,8 @@
 
 
-html,body{
+.app-wrapper{
   background-color: rgb(216, 226, 239);
-  height: 1100px;
+ 
 ;
 }
 h3 {
