@@ -5,7 +5,12 @@
     <div class="app-content">
       <app-header></app-header>
       <div class="container-fluid">
-
+        <div class="mb-3 d-flex justify-content-start align-items-center">
+       
+          <a [routerLink]="['/medicalfolder', patient?.id]" class="btn btn-primary">
+            <i></i> dossier medical
+          </a>
+        </div>
         <main>
           <div class="patient-summary">
             <h2>Patient : {{patient?.firstName}} {{patient?.lastName}} | Dossier : {{patient?.medicalRecordNumber}}</h2>

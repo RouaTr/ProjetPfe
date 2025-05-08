@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CrudService } from '../service/crud.service';
 import { MedicalDocument } from '../Entity/MedicalDocument.Entity';
+import { Patient } from '../Entity/Patient.Entity';
 
 @Component({
   selector: 'app-display-filenet-documents',
@@ -13,6 +14,8 @@ export class DisplayFilenetDocumentsComponent implements OnInit {
   bilans: MedicalDocument[] = [];
   ordonnances: MedicalDocument[] = [];
   public saveDate?: Date;
+    patient!: Patient;
+
   constructor(
     private route: ActivatedRoute,
     private service: CrudService
