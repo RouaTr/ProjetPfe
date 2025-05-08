@@ -10,8 +10,8 @@ import { Laboratory } from '../Entity/Laboratory.Entity';
 import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
 import { Practitionner} from '../Entity/Practitionner.Entity';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { BehaviorSubject } from 'rxjs';
 import { TreatmentPredictionDTO } from '../Entity/TreatmentPredictionDTO';
+import { MedicalDocument } from '../Entity/MedicalDocument.Entity';
 
 interface FileNetResponse {
   id?: number;
@@ -20,6 +20,22 @@ interface FileNetResponse {
   documentType?: string;
   message?: string;
   error?: string;
+}
+
+export interface Document {
+  id: number;
+  title: string;
+  documentType: string;
+  fileNetId: string;
+  uploadDate: Date;
+  fileName: string;
+  fileType: string;
+}
+
+interface FileNetUploadResponse {
+  success: boolean;
+  message: string;
+  documentId: string;
 }
 
 @Injectable({
@@ -237,14 +253,14 @@ updatePractitionner(id: number, practitionner: Practitionner) {
     ...practitionner,
     password: '***'
   });
-  
+
   // Supprimer le champ password avant l'envoi
   const updatedPractitionner = { ...practitionner };
   delete updatedPractitionner.password;
-  
+
   console.log('Données envoyées au serveur (sans mot de passe):', updatedPractitionner);
   console.log('URL de la requête:', `${this.apiUrl}/practitionner/${id}`);
-  
+
   return this.http.put<any>(`${this.apiUrl}/practitionner/${id}`, updatedPractitionner).pipe(
     tap(response => {
       console.log('=== RÉPONSE DU SERVEUR ===');
@@ -271,7 +287,7 @@ doesPractitionnerExists(practitionnerLastName: string, practitionnerFirstName: s
 }
 loginPractitionner(practitionner: Practitionner) {
   console.log('Tentative de connexion pour:', practitionner.practitionnerEmail);
-  
+
   // Créer un nouvel objet avec les données de connexion
   const loginData = {
     practitionnerEmail: practitionner.practitionnerEmail,
@@ -290,7 +306,7 @@ loginPractitionner(practitionner: Practitionner) {
         role: response.practitionnerRole,
         message: response.message
       });
-      
+
       if (response.token) {
         localStorage.setItem("myToken", response.token);
         localStorage.setItem("practitionnerRole", response.practitionnerRole);
@@ -405,75 +421,39 @@ deleteTreatmentOption(id: number): Observable<any> {
   return this.http.delete(`${this.apiUrl}/treatment-options/${id}`);
 }
 
-uploadFileToFileNet(file: File, title: string) {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('title', title);
-  return this.http.post(`${this.apiUrl}/filenet/upload`, formData, { responseType: 'text' });
-}
+
 
 predictFromLatestDataById(patientId: number) {
   return this.http.get<TreatmentPredictionDTO>(`${this.apiUrl}/ai/prediction/by-id/${patientId}`);
 }
 
-uploadDocument(file: File, title: string, documentType: string, patientId: number): Observable<any> {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('title', title);
-  formData.append('documentType', documentType);
-  formData.append('patientId', patientId.toString());
 
-  console.log('Envoi du document:', {
-    title,
-    documentType,
-    patientId,
-    fileName: file.name,
-    fileSize: file.size,
-    fileType: file.type
-  });
-
-  return this.http.post(`${this.apiUrl}/filenet/upload`, formData, {
-    responseType: 'text'
-  }).pipe(
-    map(response => {
-      console.log('Réponse du serveur:', response);
-      // Extraire l'ID du message
-      const match = response.match(/ID: \{([^}]+)\}/);
-      if (match) {
-        return {
-          success: true,
-          message: response,
-          documentId: match[1]
-        };
-      }
-      throw new Error('Format de réponse invalide');
-    }),
-    catchError(error => {
-      console.error('Erreur détaillée:', error);
-      let errorMessage = 'Erreur lors de l\'envoi du document';
-      
-      if (error.error instanceof ErrorEvent) {
-        errorMessage = `Erreur client: ${error.error.message}`;
-      } else if (error.status === 200) {
-        if (typeof error.error === 'string') {
-          errorMessage = error.error;
-        } else if (error.error && typeof error.error === 'object') {
-          errorMessage = JSON.stringify(error.error);
-        }
-      } else {
-        errorMessage = `Erreur serveur (${error.status}): ${error.message}`;
-      }
-      
-      return throwError(() => new Error(errorMessage));
-    })
-  );
-}
-
-getDocumentsByPatientId(patientId: number) {
-  return this.http.get(`${this.apiUrl}/filenet/patient/${patientId}`);
-}
 
 getDocumentsByPatientIdAndType(patientId: number, documentType: string) {
   return this.http.get(`${this.apiUrl}/filenet/patient/${patientId}/type/${documentType}`);
+}
+uploadFile(file: File, title: string, patientId: number, type: string, saveDate: any): Observable<any> {
+  const formData = new FormData();
+  formData.append('file', file, file.name);
+  formData.append('title', title);
+  formData.append('patientId', patientId.toString());
+  formData.append('type', type);
+
+  const dateObj = new Date(saveDate);
+  const formattedDate = dateObj.toISOString().split('T')[0]; 
+  formData.append('saveDate', formattedDate);
+  const headers = new HttpHeaders();
+  const url = `${this.apiUrl}/filenet/upload`;
+
+  return this.http.post(url, formData, { headers, responseType: 'text' });
+}
+
+
+downloadDocument(fileNetId: string): void {
+  const url = `${this.apiUrl}/filenet/download/${fileNetId}`;
+  window.open(url, '_blank');
+}
+getDocumentsByPatientId(patientId: number): Observable<MedicalDocument[]> {
+  return this.http.get<MedicalDocument[]>(`${this.apiUrl}/filenet/documents/patient/${patientId}`);
 }
 }

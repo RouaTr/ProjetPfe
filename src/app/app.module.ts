@@ -50,6 +50,7 @@ import { AnalyzeTrendsComponent } from './analyze-trends/analyze-trends.componen
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgChartsModule } from 'ng2-charts';
 import { MatTabsModule } from '@angular/material/tabs';
+import { DisplayFilenetDocumentsComponent } from './display-filenet-documents/display-filenet-documents.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     ListOfAllPatientsComponent,
     ManageTreatmentFormComponent,
     AnalyzeTrendsComponent,
+    DisplayFilenetDocumentsComponent,
+
   ],
   imports: [
     BrowserModule,

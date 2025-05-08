@@ -20,77 +20,86 @@
         </div>
       </div>
       <main>
-        <div class="container mt-4">
-          <div class="bt">
-            <div class="a">
-              <a [routerLink]="['/laboratory', patient?.id]" class="btn btn-primary">
-                <i class="ri-user-add-line"></i> + résultats biologiques
-              </a>
-              <div class="mb-3 d-flex justify-content-between align-items-center">
-                <div class="a">
-                  <input type="file" accept="image/*,application/pdf" hidden #fileInput (change)="onFileSelected($event)" />
+        <div class="container">
+          <div class="upload-container">
+            <div class="file-upload">
+              <h4 class="title">Envoi d’un document vers IBM FileNet</h4>
 
-                  <a class="btn btn-primary scan-button" (click)="fileInput.click()">
-                    <i class="bi bi-camera"></i> Scanner un Résultat Biologique
-                  </a>
+              <input type="file" accept="image/*,application/pdf" hidden #fileInput (change)="onFileSelected($event)" />
+              <div class="btn-container">
+                <a class="btn" (click)="fileInput.click()">
+                  <i class="bi bi-camera"></i> Scanner un Bilan
+                </a>
+              </div>
 
-                  <!-- Affichage du fichier/image sélectionné -->
-                  <div *ngIf="selectedFileName" class="mt-3">
-                    <p>Fichier sélectionné : {{ selectedFileName }}</p>
+              <div *ngIf="selectedImage" class="image-preview">
+                <img [src]="selectedImage" alt="fichier sélectionné" class="img-preview">
+              </div>
 
-                    <!-- Sélection du patient -->
-                    <div class="form-group">
-                      <label for="patientSearch">Rechercher un patient</label>
-                      <input type="text" 
-                             class="form-control" 
-                             id="patientSearch" 
-                             [(ngModel)]="searchTerm" 
-                             (input)="searchPatient()"
-                             placeholder="Rechercher par nom, prénom ou numéro de dossier">
-                    </div>
-
-                    <div class="form-group" *ngIf="filteredPatients.length > 0">
-                      <label for="patientSelect">Sélectionner un patient</label>
-                      <select class="form-control" 
-                              id="patientSelect" 
-                              [(ngModel)]="selectedPatientId"
-                              (change)="onPatientSelected($event)">
-                        <option value="">Choisir un patient</option>
-                        <option *ngFor="let patient of filteredPatients" [value]="patient.id">
-                          {{patient.lastName}} {{patient.firstName}} - {{patient.medicalRecordNumber}}
-                        </option>
-                      </select>
-                    </div>
-
-                    <div *ngIf="filteredPatients.length === 0 && searchTerm" class="alert alert-info">
-                      Aucun patient trouvé
-                    </div>
-
-                    <!-- Bouton d'envoi pour IBM FileNet -->
-                    <button *ngIf="selectedPatientId" class="btn btn-success mt-3" (click)="sendToFileNet()">
-                      Enregistrer dans IBM FileNet
-                    </button>
-                  </div>
-
-                  <!-- Interface de confirmation de l'envoi -->
-                  <div *ngIf="uploadStatus" class="alert" [ngClass]="{'alert-success': uploadStatus.includes('succès'), 'alert-danger': uploadStatus.includes('Erreur')}">
-                    {{ uploadStatus }}
-                  </div>
+              <div *ngIf="selectedFileName" class="form-section">
+                <!-- Sélection du patient -->
+                <div class="form-group">
+                  <label for="patientSelect">Sélectionner un patient</label>
+                  <select class="form-control" id="patientSelect" [(ngModel)]="selectedPatientId"
+                    (change)="onPatientSelected($event)">
+                    <option value="">Choisir un patient</option>
+                    <option *ngFor="let patient of listPatients" [value]="patient.id">
+                      {{ patient.lastName }} {{ patient.firstName }} - {{ patient.medicalRecordNumber }}
+                    </option>
+                  </select>
                 </div>
 
-                <!-- Barre de recherche avec icône -->
-                <div class="input-group" style="max-width: 300px;">
-                  <input type="text" id="searchPatient" class="form-control" placeholder="Rechercher un patient..."
-                    (input)="searchPatient()">
-                  <span class="input-group-text"><i class="ri-search-line"></i></span>
+                <!-- Sélection du type de fichier -->
+                <div class="form-group">
+                  <label for="fileType">Type de fichier</label>
+                  <select class="form-control" id="fileType" [(ngModel)]="fileType">
+                    <option value="Bilan">Bilan</option>
+                    <option value="Ordonnance">Ordonnance</option>
+                  </select>
+                </div>
+                <!-- Sélection de la date -->
+                <div class="form-group mb-3">
+                  <label for="saveDate">Date d’enregistrement</label>
+                  <input type="date" class="form-control" id="saveDate" [(ngModel)]="saveDate" name="saveDate" />
+                </div>
+                <!-- Bouton d'envoi -->
+                <div class="submit-btn">
+                  <button *ngIf="selectedFileName && selectedPatientId" class="btn-submit" (click)="sendToFileNet()">
+                    Enregistrer dans IBM FileNet
+                  </button>
                 </div>
               </div>
+
+              <!-- Statut de l’envoi -->
+              <div *ngIf="uploadStatus" class="status-message"
+                [ngClass]="{ 'success': uploadStatus.includes('succès'), 'error': uploadStatus.includes('Erreur') }">
+                {{ uploadStatus }}
+              </div>
+
+              <!-- Fichier sans aperçu -->
+              <div *ngIf="selectedFileName && !selectedImage" class="file-name">
+                <p><strong>Fichier sélectionné :</strong> {{ selectedFileName }}</p>
+              </div>
             </div>
+
+            <div class="action-bar">
+              <a [routerLink]="['/laboratory', patient?.id]" class="btn-laboratory">
+                <i class="ri-user-add-line"></i> + Résultats Biologiques
+              </a>
+
+              <div class="search-bar">
+                <input type="date" id="searchPatient" class="search-input" placeholder="Rechercher ..."
+                  [(ngModel)]="searchDate" (input)="filterByDate()" />
+                <span class="search-icon"><i class="ri-search-line"></i></span>
+              </div>
+            </div>
+
+
           </div>
         </div>
-        <div class="container mt-4">
 
-          <div *ngIf="filteredLaboratory.length > 0; else loading">
+        <div class="container mt-4">
+          <div *ngIf="filteredLaboratory && filteredLaboratory.length > 0; else loading">
             <div class="card" *ngFor="let lab of filteredLaboratory">
               <div class="card-body">
                 <div class="row">

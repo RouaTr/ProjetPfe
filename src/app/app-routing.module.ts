@@ -36,6 +36,7 @@ import { UpdatePractitionnerComponent } from './update-practitionner/update-prac
 import { ListOfAllPatientsComponent } from './list-of-all-patients/list-of-all-patients.component';
 import { ManageTreatmentFormComponent } from './manage-treatment-form/manage-treatment-form.component';
 import { AnalyzeTrendsComponent } from './analyze-trends/analyze-trends.component';
+import { DisplayFilenetDocumentsComponent } from './display-filenet-documents/display-filenet-documents.component';
 
 const routes: Routes = [
   {path:'home',component:HomeComponent,canActivate:[AuthGuard] ,data: { role: 'medecin' } },
@@ -129,6 +130,10 @@ const routes: Routes = [
 { path: '', component: LoginComponent },
 { path: 'manageaccess', component: ManagePractitionnerAccessComponent, canActivate:[AuthGuard] ,data: { role: 'admin' }},
 { path: 'managetreatmentForm', component: ManageTreatmentFormComponent, canActivate:[AuthGuard] ,data: { role: 'admin' }},
+//document
+{ path: 'listdocument/:patientId', component: DisplayFilenetDocumentsComponent ,canActivate:[AuthGuard],data: { role: 'medecin' }},
+
+
 
 
 

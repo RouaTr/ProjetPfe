@@ -6,7 +6,6 @@ import { CrudService } from '../service/crud.service';
 import { HttpClient } from '@angular/common/http';
 import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list-laboratory',
@@ -15,10 +14,23 @@ import { map } from 'rxjs/operators';
 })
 export class ListLaboratoryComponent {
   uploadStatus: string | null = null;
+  selectedImage: string | null = null;
   patient: Patient | null = null;
   patientId!: number;
   laboratory: Laboratory[] = [];
   searchDate: string = '';
+  selectedPatientId: number | null = null;
+  public saveDate?: Date;
+  role: string;
+  listPatients: Patient[] = [];
+  filteredPatients: Patient[] = [];
+  mainListFilteredPatients: Patient[] = [];
+  treatments: MedicalTreatment[] = [];
+  selectedFile: File | null = null;
+
+  selectedFileName: string | null = null;
+  searchTerm: string = '';
+  fileType: string = 'DOCUMENT';
   filteredLaboratory: Laboratory[] = [];
   usualRanges: { [key: string]: { min: number; max: number } } = {
     wbc: { min: 4, max: 10 },
@@ -51,14 +63,6 @@ export class ListLaboratoryComponent {
     cd4Count:{ min: 200 , max: Infinity},
     viralLoad:{ min:0, max: 50},
   };
-  role: string;
-  listPatients: Patient[] = [];
-  filteredPatients: Patient[] = [];
-  treatments: MedicalTreatment[] = [];
-  selectedFile: File | null = null;
-  selectedFileName: string | null = null;
-  selectedPatientId: number | null = null;
-  searchTerm: string = '';
 
   constructor(
     private crudService: CrudService,
@@ -68,7 +72,6 @@ export class ListLaboratoryComponent {
   ) {}
 
   ngOnInit(): void {
-    // 🔹 Écoute les changements d'ID du patient
     this.route.paramMap.subscribe(params => {
       const id = params.get('patientId');
       if (id) {
@@ -80,6 +83,20 @@ export class ListLaboratoryComponent {
         console.error("Erreur : patientId non récupéré");
       }
     });
+    const practitionerEmail = localStorage.getItem('practitionnerEmail');
+    if (practitionerEmail) {
+      this.crudService.getPatientsByPractitionner(practitionerEmail).subscribe(
+        patients => {
+          this.listPatients = patients;
+          console.log("Patients chargés :", this.listPatients);
+        },
+        error => {
+          console.error("Erreur lors du chargement des patients :", error);
+        }
+      );
+    } else {
+      console.error("Aucun email de praticien trouvé dans le localStorage.");
+    }
   }
 
   loadPatientData(): void {
@@ -113,21 +130,22 @@ export class ListLaboratoryComponent {
   getLaboratory(): void {
     this.crudService.getLaboratoryByPatientId(this.patientId).subscribe({
       next: (data) => {
-        this.laboratory = data
-          .filter(symptom => symptom.patient?.id === this.patientId)
-          .map(symptom => {
-            // Vérifier et convertir clinicalSymptomsDate en objet Date
+        console.log("Données brutes reçues du serveur:", data);
+        if (Array.isArray(data)) {
+          this.laboratory = data.map(symptom => {
             if (symptom.medicaltestDate) {
               symptom.medicaltestDate = new Date(symptom.medicaltestDate);
             }
-            return this.filterSymptoms(symptom);
-          })
-          .filter(symptom => Object.keys(symptom).length > 1);
-        this.filteredLaboratory = [...this.laboratory];
-        console.log("Signes cliniques filtrés :", this.laboratory);
+            return symptom;
+          });
+          this.filteredLaboratory = [...this.laboratory];
+          console.log("Données de laboratoire après traitement:", this.laboratory);
+        } else {
+          console.error("Les données reçues ne sont pas un tableau:", data);
+        }
       },
       error: (err) => {
-        console.warn("Erreur lors de la récupération des signes cliniques :", err);
+        console.error("Erreur lors de la récupération des résultats de laboratoire:", err);
       }
     });
   }
@@ -159,9 +177,20 @@ export class ListLaboratoryComponent {
     this.router.navigate(['/medicalfolder/listlaboratory/updatelaboratory', laboratory]);
   }
 
+
+
+
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
     this.selectedFileName = this.selectedFile ? this.selectedFile.name : null;
+
+    if (this.selectedFile) {
+      const reader = new FileReader();
+      reader.onload = () => this.selectedImage = reader.result as string;
+      reader.readAsDataURL(this.selectedFile);
+    } else {
+      this.selectedImage = null;
+    }
   }
 
   onPatientSelected(event: any) {
@@ -172,42 +201,46 @@ export class ListLaboratoryComponent {
       this.selectedPatientId = null;
     }
   }
-
-  searchPatient() {
-    if (!this.searchTerm) {
-      this.filteredPatients = [];
+  sendToFileNet() {
+    if (!this.selectedFile || !this.selectedPatientId) {
+      this.uploadStatus = 'Veuillez sélectionner un fichier et un patient';
       return;
     }
 
-    const term = this.searchTerm.toLowerCase();
-    this.filteredPatients = this.listPatients.filter(patient => 
-      `${patient.lastName} ${patient.firstName}`.toLowerCase().includes(term) ||
-      `${patient.firstName} ${patient.lastName}`.toLowerCase().includes(term) ||
-      patient.medicalRecordNumber.toLowerCase().includes(term)
-    );
+    console.log('Début de l\'upload vers FileNet');
+    console.log('Fichier sélectionné:', this.selectedFile);
+    console.log('Patient ID sélectionné:', this.selectedPatientId);
+    console.log('Type de fichier sélectionné:', this.fileType);
+
+    this.uploadStatus = 'Envoi du document en cours...';
+
+    this.crudService.uploadFile(
+      this.selectedFile,
+      this.selectedFile.name,
+      this.selectedPatientId,
+      this.fileType,
+      this.saveDate// Passe le type sélectionné ici
+    ).subscribe({
+      next: (response) => {
+        console.log('Réponse du serveur:', response);  // Affiche la réponse complète du serveur
+        if (response && response.includes("uploaded and saved")) {  // Vérifie la présence du message d'upload
+          this.uploadStatus = 'Document enregistré avec succès';
+        } else {
+          this.uploadStatus = response || 'Erreur lors de l\'upload';
+        }
+        this.selectedFile = null;
+        this.selectedPatientId = null;
+        this.selectedImage = null;
+      },
+      error: (error) => {
+        console.error('Erreur lors de l\'upload:', error);
+        this.uploadStatus = error.message || 'Erreur lors de l\'envoi du document';
+        this.selectedFile = null;
+        this.selectedPatientId = null;
+        this.selectedImage = null;
+      }
+    });
   }
 
-  sendToFileNet() {
-    if (this.selectedFile && this.selectedPatientId) {
-      const title = this.selectedFileName || 'Document';
-      const documentType = 'RESULTAT_BIOLOGIQUE'; // Type pour les résultats biologiques
-
-      this.crudService.uploadDocument(this.selectedFile, title, documentType, this.selectedPatientId)
-        .subscribe({
-          next: (response: any) => {
-            this.uploadStatus = 'Document enregistré avec succès';
-            // Réinitialiser les champs
-            this.selectedFile = null;
-            this.selectedFileName = null;
-            this.selectedPatientId = null;
-          },
-          error: (error) => {
-            this.uploadStatus = 'Erreur lors de l\'enregistrement du document: ' + error.message;
-          }
-        });
-    } else {
-      this.uploadStatus = 'Veuillez sélectionner un fichier et un patient';
-    }
-  }
 }
 

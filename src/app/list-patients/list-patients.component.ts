@@ -1,10 +1,10 @@
+
 import { Component } from '@angular/core';
 import { CrudService } from '../service/crud.service';
 import { Patient } from '../Entity/Patient.Entity';
 import { Router } from '@angular/router';
 import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list-patients',
@@ -13,7 +13,9 @@ import { map } from 'rxjs/operators';
 })
 export class ListPatientsComponent {
   uploadStatus: string | null = null;
+  selectedImage: string | null = null;
   role: string;
+  saveDate: Date;
   listPatients: Patient[] = [];
   filteredPatients: Patient[] = [];
   mainListFilteredPatients: Patient[] = [];
@@ -22,7 +24,7 @@ export class ListPatientsComponent {
   selectedFileName: string | null = null;
   selectedPatientId: number | null = null;
   searchTerm: string = '';
-
+  fileType: string = 'DOCUMENT';
   constructor(private service: CrudService, private router: Router) { }
 
   ngOnInit(): void {
@@ -127,7 +129,7 @@ export class ListPatientsComponent {
     );
   }
 
-  selectedImage: string | null = null;
+
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
@@ -150,35 +152,37 @@ export class ListPatientsComponent {
       this.selectedPatientId = null;
     }
   }
-
   sendToFileNet() {
-    if (!this.selectedFile || !this.selectedPatientId) {
-      this.uploadStatus = 'Veuillez sélectionner un fichier et un patient';
+    if (!this.selectedFile || !this.selectedPatientId || !this.saveDate) {
+      this.uploadStatus = 'Veuillez sélectionner un fichier, un patient et une date d\'enregistrement.';
       return;
     }
 
     console.log('Début de l\'upload vers FileNet');
     console.log('Fichier sélectionné:', this.selectedFile);
     console.log('Patient ID sélectionné:', this.selectedPatientId);
+    console.log('Type de fichier sélectionné:', this.fileType);
+    console.log('Date d\'enregistrement:', this.saveDate);
 
     this.uploadStatus = 'Envoi du document en cours...';
 
-    this.service.uploadDocument(
+    this.service.uploadFile(
       this.selectedFile,
       this.selectedFile.name,
-      'DOCUMENT',
-      this.selectedPatientId
+      this.selectedPatientId,
+      this.fileType,  // Passe le type sélectionné ici
+      this.saveDate   // Ajoute la saveDate ici
     ).subscribe({
       next: (response) => {
-        console.log('Réponse du serveur:', response);
-        if (response.success) {
-          this.uploadStatus = `Document enregistré avec succès (ID: ${response.documentId})`;
-          this.selectedFile = null;
-          this.selectedPatientId = null;
-          this.selectedImage = null;
+        console.log('Réponse du serveur:', response);  // Affiche la réponse complète du serveur
+        if (response && response.includes("uploaded and saved")) {
+          this.uploadStatus = 'Document enregistré avec succès';
         } else {
-          this.uploadStatus = response.message || 'Erreur lors de l\'upload';
+          this.uploadStatus = response || 'Erreur lors de l\'upload';
         }
+        this.selectedFile = null;
+        this.selectedPatientId = null;
+        this.selectedImage = null;
       },
       error: (error) => {
         console.error('Erreur lors de l\'upload:', error);
@@ -189,6 +193,8 @@ export class ListPatientsComponent {
       }
     });
   }
+
+
 
   onAnalyzeTrends(patientId: number) {
     this.router.navigate(['/analysetrends', patientId]);
@@ -201,7 +207,7 @@ export class ListPatientsComponent {
       return;
     }
 
-    this.filteredPatients = this.listPatients.filter(patient => 
+    this.filteredPatients = this.listPatients.filter(patient =>
       `${patient.lastName} ${patient.firstName}`.toLowerCase().includes(term) ||
       `${patient.firstName} ${patient.lastName}`.toLowerCase().includes(term) ||
       patient.medicalRecordNumber.toLowerCase().includes(term)
@@ -215,11 +221,10 @@ export class ListPatientsComponent {
       return;
     }
 
-    this.mainListFilteredPatients = this.listPatients.filter(patient => 
+    this.mainListFilteredPatients = this.listPatients.filter(patient =>
       `${patient.lastName} ${patient.firstName}`.toLowerCase().includes(term) ||
       `${patient.firstName} ${patient.lastName}`.toLowerCase().includes(term) ||
       patient.medicalRecordNumber.toLowerCase().includes(term)
     );
   }
 }
-

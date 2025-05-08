@@ -28,6 +28,7 @@ export class AuthGuard implements CanActivate {
         '/home',
         '/medicalfolder/:id',
         '/newpatient',
+       '/listdocument/:patientId',
         '/updatePatient/:id',
        '/analysetrends/:id',
         '/laboratory',
@@ -82,9 +83,17 @@ export class AuthGuard implements CanActivate {
 
     // Fonction pour gérer les routes dynamiques avec paramètres
     function matchRoute(routePattern: string, url: string): boolean {
+      // Supprimer les éventuels query params ou fragments
+      const cleanUrl = url.split('?')[0].split('#')[0].replace(/\/$/, '');
+
       const regex = new RegExp('^' + routePattern.replace(/:[^/]+/g, '[^/]+') + '$');
-      return regex.test(url);
+      const result = regex.test(cleanUrl);
+
+      console.log(`⛳️ Test de "${routePattern}" avec URL "${cleanUrl}" ➤ Résultat :`, result);
+
+      return result;
     }
+
 
     // Vérifie si l’URL demandée correspond à l’une des routes autorisées
     const isAuthorized = authorizedRoutes.some(route => matchRoute(route, url));

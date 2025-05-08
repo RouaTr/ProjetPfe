@@ -1,0 +1,31 @@
+
+
+
+<div class="app-wrapper default">
+  <app-menu></app-menu>
+  <div class="app-content">
+    <app-header></app-header>
+    <div class="container-fluid">
+<h2>Récupérer les enregisrements</h2>
+<div *ngIf="bilans.length > 0">
+  <h4>📄 Bilans</h4>
+  <ul>
+    <li *ngFor="let doc of bilans">
+      {{ doc.type }} - {{ doc.saveDate }}
+      <button (click)="downloadDocument(doc.fileNetId)">Télécharger</button>
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="ordonnances.length > 0">
+  <h4>📄 Ordonnances</h4>
+  <ul>
+    <li *ngFor="let doc of ordonnances">
+      {{ doc.type }} - {{ doc.saveDate}}
+      <button (click)="downloadDocument(doc.fileNetId)">Télécharger</button>
+    </li>
+  </ul>
+</div>
+</div>
+</div>
+</div>
