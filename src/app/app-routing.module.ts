@@ -42,7 +42,7 @@ const routes: Routes = [
   {path:'home',component:HomeComponent,canActivate:[AuthGuard] ,data: { role: 'medecin' } },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
-
+//patient
   {path:'newpatient',component:AddPatientComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
   {path:'listpatient',component:ListPatientsComponent,canActivate:[AuthGuard],data: { role: 'medecin' }},
 

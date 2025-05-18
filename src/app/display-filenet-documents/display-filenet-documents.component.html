@@ -11,12 +11,12 @@
   <div class="app-content">
     <app-header></app-header>
     <div class="container-fluid">
-<h2>Récupérer les enregisrements</h2>
+<h2>Récupérer les enregisrements du patient</h2>
 <div *ngIf="bilans.length > 0">
   <h4>📄 Bilans</h4>
   <ul>
     <li *ngFor="let doc of bilans">
-      {{ doc.type }} - {{ doc.saveDate }}
+      {{ doc.type }} -{{ doc.patientName}}- {{ doc.saveDate }}
       <button (click)="downloadDocument(doc.fileNetId)">Télécharger</button>
     </li>
   </ul>
@@ -26,7 +26,7 @@
   <h4>📄 Ordonnances</h4>
   <ul>
     <li *ngFor="let doc of ordonnances">
-      {{ doc.type }} - {{ doc.saveDate}}
+      {{ doc.type }} - {{ doc.patientName}}-{{ doc.saveDate}}
       <button (click)="downloadDocument(doc.fileNetId)">Télécharger</button>
     </li>
   </ul>

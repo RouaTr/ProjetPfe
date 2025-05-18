@@ -44,7 +44,7 @@ export class ListOfMedicalPrescriptionsComponent {
 
         // 🔽 Après avoir assigné les traitements à tous les patients
         this.filteredPatients = this.listPatients
-          .filter(p => p.latestTreatment?.next_intake_Date) // garder ceux qui ont une date
+          .filter(p => p.latestTreatment?.status?.toLowerCase() !== 'décédé' && p.latestTreatment?.next_intake_Date)
           .sort((a, b) =>
             new Date(a.latestTreatment!.next_intake_Date!).getTime() -
             new Date(b.latestTreatment!.next_intake_Date!).getTime()

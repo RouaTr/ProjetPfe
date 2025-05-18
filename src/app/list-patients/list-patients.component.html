@@ -173,6 +173,10 @@
                       </tbody>
                     </table>
                   </div>
+                  <div *ngIf="messageCommande" class="alert alert-danger"
+                    style="color: rgb(18, 11, 11); font-weight: bold;">
+                    {{ messageCommande }}
+                  </div>
                 </div>
               </div>
             </div>

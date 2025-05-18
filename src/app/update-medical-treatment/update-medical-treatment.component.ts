@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Patient } from '../Entity/Patient.Entity';
 import { CrudService } from '../service/crud.service';
 import { TreatmentOption } from '../Entity/treatmentOption.Entity';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-update-medical-treatment',
@@ -14,17 +15,19 @@ import { TreatmentOption } from '../Entity/treatmentOption.Entity';
 export class UpdateMedicalTreatmentComponent {
   options: string[] = [];
   treatmentOptions: TreatmentOption[] = [];
-updateForm: FormGroup;
+  updateForm: FormGroup;
+  messageCommande = "";
   id!: number;
   currentMedicalTreatment!: MedicalTreatment;
   public message!: string;
-  patientId?: number; // Doit être bien défini dans la classe
+  patientId?: number;
   patient: Patient | null = null;
   constructor(
     private fb: FormBuilder,
     private service: CrudService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdRef: ChangeDetectorRef
   ) {
     this.updateForm = this.fb.group({
    treatmentName: new FormControl('', [Validators.required]),
@@ -119,6 +122,10 @@ updateForm: FormGroup;
     this.updateForm.markAllAsTouched();
     if (this.updateForm.invalid) {
       console.log("🚨 Formulaire invalide !");
+
+        this.messageCommande = `
+          informations incompletes !
+       `;
       this.logInvalidFields();
       return;
     }
@@ -128,7 +135,7 @@ updateForm: FormGroup;
       return;
     }
 
-    this.patientId = this.currentMedicalTreatment.patient.id; // ✅ Récupération correcte de l'ID du patient
+    this.patientId = this.currentMedicalTreatment.patient.id;
 
     let data = this.updateForm.value;
     let medicaltreatment = new MedicalTreatment();
@@ -136,13 +143,18 @@ updateForm: FormGroup;
     medicaltreatment.treatmentId= this.id;
     medicaltreatment.patient = this.currentMedicalTreatment.patient;
 
-    console.log("🔄 Données envoyées pour mise à jour :", medicaltreatment);
+    console.log(" Données envoyées pour mise à jour :", medicaltreatment);
 
     this.service.updateMedicalTreatment(this.id, this.patientId, medicaltreatment).subscribe({
       next: (res) => {
         console.log("✅ traitement mis à jour avec succès :", res);
+         this.messageCommande = `
+          Traitement enregistré !
+       `;
+        this.cdRef.detectChanges();
+        setTimeout(() => {
         this.router.navigate(['/listmedicaltreatment', this.patientId]);
-      },
+     }, 1000);        },
       error: (err) => {
         console.error("⚠️ Erreur lors de la mise à jour :", err);
       }

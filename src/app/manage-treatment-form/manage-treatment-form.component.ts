@@ -44,21 +44,35 @@ export class ManageTreatmentFormComponent {
     );
   }
 
-  addTreatmentOption(): void {
-    const newOptionName = this.addTreatmentForm.get('treatmentName')?.value;
-    if (newOptionName) {
-      this.treatmentOptionService.addTreatmentOption(newOptionName).subscribe(
-        (response) => {
-          console.log('Option de traitement ajoutée:', response);
-          this.loadTreatmentOptions();
-          this.addTreatmentForm.reset();
-        },
-        error => {
-          console.error('Erreur lors de l\'ajout de l\'option de traitement', error);
-        }
-      );
-    }
+addTreatmentOption(): void {
+  const newOptionName = this.addTreatmentForm.get('treatmentName')?.value?.trim();
+
+  if (!newOptionName) {
+    alert('Veuillez entrer un nom de traitement.');
+    return;
   }
+
+  const exists = this.options.some(option =>
+    option.treatmentName?.toLowerCase() === newOptionName.toLowerCase()
+  );
+
+  if (exists) {
+    alert('Ce nom existe déjà.');
+    return;
+  }
+
+  this.treatmentOptionService.addTreatmentOption(newOptionName).subscribe(
+    (response) => {
+      console.log('Option de traitement ajoutée:', response);
+      this.loadTreatmentOptions();
+      this.addTreatmentForm.reset();
+    },
+    error => {
+      console.error('Erreur lors de l\'ajout de l\'option de traitement', error);
+    }
+  );
+}
+
 
   updateTreatmentOption(): void {
     const updatedOptionName = this.editTreatmentForm.get('treatmentName')?.value;
@@ -77,7 +91,9 @@ export class ManageTreatmentFormComponent {
     }
   }
 
-  deleteTreatmentOption(id: number): void {
+deleteTreatmentOption(id: number): void {
+  const confirmDelete = window.confirm('Voulez-vous vraiment supprimer ce nom ?');
+  if (confirmDelete) {
     this.treatmentOptionService.deleteTreatmentOption(id).subscribe(
       () => {
         console.log('Option supprimée avec succès');
@@ -88,6 +104,7 @@ export class ManageTreatmentFormComponent {
       }
     );
   }
+}
 
   selectOption(option: any): void {
     this.selectedOptionId = option.id;

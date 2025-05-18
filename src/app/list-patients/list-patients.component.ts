@@ -24,7 +24,9 @@ export class ListPatientsComponent {
   selectedFileName: string | null = null;
   selectedPatientId: number | null = null;
   searchTerm: string = '';
+  messageCommande = '';
   fileType: string = 'DOCUMENT';
+
   constructor(private service: CrudService, private router: Router) { }
 
   ngOnInit(): void {
@@ -201,18 +203,27 @@ export class ListPatientsComponent {
   }
 
   searchPatient(event: any) {
-    const term = event.target.value.toLowerCase();
-    if (!term) {
-      this.filteredPatients = this.listPatients;
-      return;
-    }
+  const term = event.target.value.toLowerCase();
 
-    this.filteredPatients = this.listPatients.filter(patient =>
-      `${patient.lastName} ${patient.firstName}`.toLowerCase().includes(term) ||
-      `${patient.firstName} ${patient.lastName}`.toLowerCase().includes(term) ||
-      patient.medicalRecordNumber.toLowerCase().includes(term)
-    );
+  if (!term) {
+    this.filteredPatients = this.listPatients;
+    this.messageCommande = ''; // Réinitialiser le message
+    return;
   }
+
+  this.filteredPatients = this.listPatients.filter(patient =>
+    `${patient.lastName} ${patient.firstName}`.toLowerCase().includes(term) ||
+    `${patient.firstName} ${patient.lastName}`.toLowerCase().includes(term) ||
+    patient.medicalRecordNumber.toLowerCase().includes(term)
+  );
+
+  if (this.filteredPatients.length === 0) {
+    this.messageCommande = "Patient n'existe pas ";
+  } else {
+    this.messageCommande = ''; // Réinitialiser s'il y a des résultats
+  }
+}
+
 
   searchMainList(event: any) {
     const term = event.target.value.toLowerCase();

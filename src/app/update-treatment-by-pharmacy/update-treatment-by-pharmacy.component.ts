@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MedicalTreatment } from '../Entity/MedicalTreatment.Entity';
@@ -16,13 +16,15 @@ updateForm: FormGroup;
   id!: number;
   currentMedicalTreatment!: MedicalTreatment;
   public message!: string;
+  messageCommande='';
   patientId?: number; // Doit être bien défini dans la classe
   patient: Patient | null = null;
   constructor(
     private fb: FormBuilder,
     private service: CrudService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdRef: ChangeDetectorRef
   ) {
     this.updateForm = this.fb.group({
       treatmentName: new FormControl({ value: '', disabled: true }),
@@ -100,6 +102,9 @@ updateForm: FormGroup;
     this.updateForm.markAllAsTouched();
     if (this.updateForm.invalid) {
       console.log("🚨 Formulaire invalide !");
+       this.messageCommande = `
+          informations incompletes !
+       `;
       this.logInvalidFields();
       return;
     }
@@ -123,8 +128,13 @@ updateForm: FormGroup;
     this.service.updateMedicalTreatment(this.id, this.patientId, medicaltreatment).subscribe({
       next: (res) => {
         console.log("✅ traitement mis à jour avec succès :", res);
+                 this.messageCommande = `
+          Traitement enregistré !
+       `;
+        this.cdRef.detectChanges();
+        setTimeout(() => {
         this.router.navigate(['/listofmedicalprescriptions']);
-      },
+       }, 1000);        },
       error: (err) => {
         console.error("⚠️ Erreur lors de la mise à jour :", err);
       }

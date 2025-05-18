@@ -54,7 +54,7 @@ export class AddPatientComponent {
       hlaB5701Typing: new FormControl(''),
       screeningCircumstance: new FormControl(''),
       viralType: new FormControl(''),
-      age_at_HIV_diagnosis: new FormControl('', [Validators.required]),
+      age_at_HIV_diagnosis: new FormControl(''),
       contaminationDate: new FormControl(''),
       cdcStage: new FormControl('')
     }
@@ -98,6 +98,7 @@ export class AddPatientComponent {
     this.PatientForm.markAllAsTouched();
     if (this.PatientForm.invalid) {
       console.log("🚨 Formulaire invalide !");
+      this.messageCommande = " Veuillez remplir tous les champs !";
       this.logInvalidFields();
       return;
     }

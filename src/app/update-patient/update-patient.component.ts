@@ -15,7 +15,7 @@ export class UpdatePatientComponent implements OnInit {
   currentPatient = new Patient();
   userFile: any;
   public message!: string;
-
+  messageCommande='';
   constructor(
     private fb: FormBuilder,
     private service: CrudService,
@@ -150,6 +150,7 @@ export class UpdatePatientComponent implements OnInit {
       if (control?.invalid) {
         console.log(`❌ Champ : ${key}`);
         console.log("   ↳ Erreurs :", control.errors);
+        this.messageCommande = " Veuillez remplir tous les champs";
       }
     });
   }
@@ -182,8 +183,11 @@ export class UpdatePatientComponent implements OnInit {
       this.service.updatePatient(this.id, updatedPatient, practitionnerEmail).subscribe(
         (res) => {
           console.log("✅ Patient mis à jour avec succès", res);
+         this.messageCommande = " Patient modifié avec succès";
+
+         setTimeout(() => {
           this.router.navigate(['/medicalfolder', this.id]);
-        },
+          }, 1000);        },
         (err) => {
           console.log("❌ Erreur lors de la mise à jour du patient", err);
         }

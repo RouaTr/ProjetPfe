@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { TreatmentOption } from '../Entity/treatmentOption.Entity';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-add-medical-treatment',
@@ -23,7 +24,7 @@ export class AddMedicalTreatmentComponent {
     private service: CrudService,
     private router: Router,
     private fb: FormBuilder,
-    private http: HttpClient,  private route: ActivatedRoute
+    private http: HttpClient,  private route: ActivatedRoute,private cdRef: ChangeDetectorRef
   ) {
     let formControls = {
       treatmentName: new FormControl('', [Validators.required]),
@@ -117,14 +118,17 @@ export class AddMedicalTreatmentComponent {
     this.MedicalTreatmentForm.markAllAsTouched();
     if (this.MedicalTreatmentForm.invalid) {
       console.log("🚨 Formulaire invalide !");
+        this.messageCommande = `
+          informations incompletes !
+       `;
       this.logInvalidFields();
       return;
     }
     if (!this.patientId) {
       console.error("Erreur : Aucun ID patient récupéré !");
-      this.messageCommande = `<div class="alert alert-danger" role="alert">
+      this.messageCommande = `
         Impossible d'ajouter le traitement : aucun patient enregistré.
-      </div>`;
+      `;
       return;
     }
 
@@ -136,16 +140,18 @@ export class AddMedicalTreatmentComponent {
     this.service.addMedicalTreatment(this.patientId, data).subscribe(
       res => {
         console.log('Réponse du serveur:', res);
-        this.messageCommande = `<div class="alert alert-success" role="alert">
+        this.messageCommande = `
           Traitement ajouté avec succès !
-        </div>`;
+       `;
+       this.cdRef.detectChanges();
+        setTimeout(() => {
         this.router.navigate([`/listmedicaltreatment/${this.patientId}`]);
-      },
+      }, 1000);        },
       err => {
         console.error('Erreur:', err);
-        this.messageCommande = `<div class="alert alert-danger" role="alert">
+        this.messageCommande = `
           Problème de serveur ou données invalides !
-        </div>`;
+       `;
       }
     );
   }

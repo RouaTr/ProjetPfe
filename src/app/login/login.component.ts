@@ -10,7 +10,6 @@ import { CrudService } from '../service/crud.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  messageCommande = "";
   loginForm: FormGroup;
   errorMessage = '';
 

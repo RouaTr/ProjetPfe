@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
     content="Multipurpose, super flexible, powerful, clean modern responsive bootstrap 5 admin template">
-  <title>Dossier Médical</title>
 </head>
 
 <body>
@@ -122,6 +121,9 @@
           </form>
 
         </main>
+         <div *ngIf="messageCommande" class="alert alert-danger" style="color: rgb(21, 2, 2); font-weight: bold;">
+          {{ messageCommande }}
+        </div>
       </div>
     </div>
   </div>
