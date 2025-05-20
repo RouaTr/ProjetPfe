@@ -11,7 +11,7 @@ import { CrudService } from '../service/crud.service';
 })
 export class ListOfMedicalPrescriptionsComponent {
   patientId?: number;
- role: string;
+  role: string;
   listPatients: Patient[] = [];
   filteredPatients: Patient[] = [];
   treatments: MedicalTreatment[] = [];
@@ -20,9 +20,9 @@ export class ListOfMedicalPrescriptionsComponent {
   constructor(private service: CrudService, private router: Router) { }
 
   ngOnInit(): void {
-    this.role = localStorage.getItem("role") as string;
+    this.role = localStorage.getItem("'practitionnerRole'") as string;
 
-    // Récupérer tous les patients et tous les traitements en une seule fois
+    // Récupérer tous les patients et tous les traitements
     this.service.getPatients().subscribe(patients => {
       this.listPatients = patients;
 
@@ -42,7 +42,7 @@ export class ListOfMedicalPrescriptionsComponent {
           }
         });
 
-        // 🔽 Après avoir assigné les traitements à tous les patients
+        //  Après avoir assigné les traitements à tous les patients
         this.filteredPatients = this.listPatients
           .filter(p => p.latestTreatment?.status?.toLowerCase() !== 'décédé' && p.latestTreatment?.next_intake_Date)
           .sort((a, b) =>
@@ -53,11 +53,11 @@ export class ListOfMedicalPrescriptionsComponent {
         // Ajouter la couleur selon la position
         this.filteredPatients.forEach((patient, index) => {
           if (index < 2) {
-            (patient as any).nextIntakeColor = 'danger'; // 🔴
+            (patient as any).nextIntakeColor = 'danger';
           } else if (index < 4) {
-            (patient as any).nextIntakeColor = 'warning'; // 🟠
+            (patient as any).nextIntakeColor = 'warning';
           } else {
-            (patient as any).nextIntakeColor = 'info'; // 🟡
+            (patient as any).nextIntakeColor = 'info';
           }
         });
         this.sortPatientsByDeliveryStatus();

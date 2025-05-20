@@ -15,8 +15,8 @@ export class HomeComponent implements OnInit{
   listPatients: Patient[] = [];
   treatments: MedicalTreatment[] = [];
 
-  totalPatientsHospital: number = 0; // Total patients dans l'hôpital
-  totalMaleInHospital: number = 0;  // Total hommes dans l'hôpital
+  totalPatientsHospital: number = 0;
+  totalMaleInHospital: number = 0;  
   totalFemaleInHospital: number = 0;
   totalPatients: number = 0;
   maleNumber: number = 0;
@@ -134,18 +134,23 @@ export class HomeComponent implements OnInit{
   }
 
 
-  loadUpcomingAppointments(): void {
-    this.upcomingAppointments = this.listPatients
-      .filter(patient => patient.latestTreatment && patient.latestTreatment.next_intake_Date)
-      .map(patient => ({
-        patientName: patient.lastName,
-        patientSurname: patient.firstName,
-        phone: patient.phoneNumber,
-        nextIntakeDate: patient.latestTreatment.next_intake_Date
-      }))
-      .sort((a, b) =>
-        new Date(a.nextIntakeDate).getTime() - new Date(b.nextIntakeDate).getTime()
-      )
-      .slice(0, 2);
-  }
+loadUpcomingAppointments(): void {
+  this.upcomingAppointments = this.listPatients
+    .filter(patient =>
+      patient.latestTreatment != null &&
+      patient.latestTreatment.status?.toLowerCase() !== 'décédé' &&
+      patient.latestTreatment.next_intake_Date != null
+    )
+    .map(patient => ({
+      patientName: patient.lastName,
+      patientSurname: patient.firstName,
+      phone: patient.phoneNumber,
+      nextIntakeDate: patient.latestTreatment!.next_intake_Date
+    }))
+    .sort((a, b) =>
+      new Date(a.nextIntakeDate).getTime() - new Date(b.nextIntakeDate).getTime()
+    )
+    .slice(0, 2);
+}
+
 }

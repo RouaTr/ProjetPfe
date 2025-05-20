@@ -14,7 +14,8 @@ export class AddPatientComponent {
   messageCommande = "";
   PatientForm: FormGroup;
 
-  constructor(private crudService: CrudService, private router: Router, private fb: FormBuilder) {
+  constructor(private crudService: CrudService, private router: Router, private fb: FormBuilder) {//injecter les dependances
+//on crée tous les champs du formulaire, on les regroupe avec FormBuilder pour obtenir un FormGroup pour gérer les formulaires réactifs
     let formControls = {
       medicalRecordNumber:new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
@@ -63,6 +64,7 @@ export class AddPatientComponent {
     this.PatientForm = this.fb.group(formControls);
 
   }
+  //accesseurs pour les champs dans le formulaire
   get lastNameControl(): FormControl {
     return this.PatientForm.get('lastName') as FormControl;
   }
@@ -141,12 +143,10 @@ export class AddPatientComponent {
                 localStorage.setItem('selectedPatientId', res.id.toString());
               }
 
-              // Optionally, navigate to another page
-              // this.router.navigate(['/patients']);
             },
             err => {
               console.log("Erreur serveur :", err);
-              this.messageCommande = "Problème de serveur !";
+              this.messageCommande = "Vérifier vos informations !";
             }
           );
         } else {
@@ -182,7 +182,7 @@ export class AddPatientComponent {
       }
     });
   }
-
+//calcul de l'age a partir de la date de naissance
   calculateAge(birthDate: Date): number {
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
@@ -191,7 +191,6 @@ export class AddPatientComponent {
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-
     return age;
   }
 

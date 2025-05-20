@@ -56,6 +56,9 @@ export class ListPatientsComponent {
                 new Date(b.treatmentRegistrationDate).getTime() - new Date(a.treatmentRegistrationDate).getTime()
               );
               patient.latestTreatment = patientTreatments[0];
+              if (!patient.latestTreatment.status || patient.latestTreatment.status.trim() === '') {
+                patient.latestTreatment.status = 'file active';
+              }
 
               // Calcul de duration_of_visual_loss (à INSÉRER ici dans latestTreatment)
               const nextIntakeDate = patient.latestTreatment?.next_intake_Date
