@@ -70,8 +70,9 @@ export class ListLaboratoryComponent {
     private router: Router,
     private http: HttpClient
   ) {}
-
+ // Méthode appelée automatiquement à l’initialisation du composant
   ngOnInit(): void {
+     // Récupère l’ID du patient depuis l’URL
     this.route.paramMap.subscribe(params => {
       const id = params.get('patientId');
       if (id) {
@@ -83,6 +84,7 @@ export class ListLaboratoryComponent {
         console.error("Erreur : patientId non récupéré");
       }
     });
+      // Charge la liste des patients associés au praticien connecté
     const practitionerEmail = localStorage.getItem('practitionnerEmail');
     if (practitionerEmail) {
       this.crudService.getPatientsByPractitionner(practitionerEmail).subscribe(
@@ -98,7 +100,7 @@ export class ListLaboratoryComponent {
       console.error("Aucun email de praticien trouvé dans le localStorage.");
     }
   }
-
+ // Récupère les données du patient depuis l'API
   loadPatientData(): void {
     this.crudService.findPatientById(this.patientId).subscribe({
       next: (data) => {
@@ -110,7 +112,7 @@ export class ListLaboratoryComponent {
       }
     });
   }
-
+// Filtre les résultats de laboratoire selon la date saisie
   filterByDate(): void {
     if (!this.searchDate) {
       this.filteredLaboratory = [...this.laboratory]; // Afficher tout si la recherche est vide
@@ -126,7 +128,7 @@ export class ListLaboratoryComponent {
       });
     }
   }
-
+// Charge tous les résultats labo du patient depuis le backend
   getLaboratory(): void {
     this.crudService.getLaboratoryByPatientId(this.patientId).subscribe({
       next: (data) => {
@@ -150,22 +152,8 @@ export class ListLaboratoryComponent {
     });
   }
 
-  private filterSymptoms(symptom: Laboratory): Laboratory {
-    const filteredSymptom: { [key: string]: any } = {
-      id: symptom.id,
-      medicaltestDate: symptom.medicaltestDate
-    };
 
-    Object.keys(symptom).forEach((key) => {
-      const value = (symptom as any)[key];
-      if (value !== true && value !== null && value !== undefined && key !== 'id' && key !== 'medicaltestDate' && key !== 'patient') {
-        filteredSymptom[key] = value;
-      }
-    });
-
-    return filteredSymptom as Laboratory;
-  }
-
+// Vérifie si la valeur est en dehors des plages normales
   isOutOfRange(key: string, value: number): boolean {
     if (this.usualRanges[key]) {
       return value < this.usualRanges[key].min || value > this.usualRanges[key].max;
@@ -176,8 +164,6 @@ export class ListLaboratoryComponent {
   updateLaboratory(laboratory: number) {
     this.router.navigate(['/medicalfolder/listlaboratory/updatelaboratory', laboratory]);
   }
-
-
 
 
   onFileSelected(event: any) {
@@ -219,7 +205,7 @@ export class ListLaboratoryComponent {
       this.selectedFile.name,
       this.selectedPatientId,
       this.fileType,
-      this.saveDate// Passe le type sélectionné ici
+      this.saveDate
     ).subscribe({
       next: (response) => {
         console.log('Réponse du serveur:', response);  // Affiche la réponse complète du serveur

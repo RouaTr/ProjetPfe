@@ -11,7 +11,7 @@ import { Practitionner } from '../Entity/Practitionner.Entity';
 })
 export class AddPractitionnerComponent {
 
-messageCommande = "";
+  messageCommande = "";
   PractitionnerForm: FormGroup;
 
   constructor(private crudService: CrudService, private router: Router, private fb: FormBuilder) {
@@ -57,64 +57,55 @@ messageCommande = "";
   }
 
 
-
-  addNewPractitionner() {
-    this.PractitionnerForm.markAllAsTouched();
-    if (this.PractitionnerForm.invalid) {
-      console.log("🚨 Formulaire invalide !");
-      this.logInvalidFields();
-      return;
-    }
-
-
-    let data = this.PractitionnerForm.value;
-    let practitionnerLastName = data.practitionnerLastName;
-    let practitionnerFirstName = data.practitionnerFirstName;
-
-    // Vérifier si le patient existe déjà
-    this.crudService.doesPractitionnerExists(practitionnerLastName, practitionnerFirstName).subscribe(
-      (exists: boolean) => {
-        if (exists) {
-          this.messageCommande = " Le Pratitien existe déjà !";
-          console.log(this.messageCommande);
-          return;
-        }
-
-        // Création et ajout du patient
-        let practitionner = new Practitionner(undefined, data.practitionnerLastName,data.practitionnerFirstName, data.practitionnerPhoneNumber, data.practitionnerEmail,
-          data.password, data.practitionnerRole
-        );
-
-        this.crudService.addPractitionner(practitionner).subscribe(
-          res => {
-            console.log(" practitionner ajouté avec succès :", res);
-            this.messageCommande = " Praticien ajouté avec succès !";
-            this.router.navigate([``]);
-
-            if (res && res.id) {
-              localStorage.setItem('selectedPractitionnerId', res.id.toString());
-            }
-
-
-          },
-          err => {
-            console.log(" Erreur serveur :", err);
-            this.messageCommande = " Problème de serveur !";
-          }
-        );
-      },
-      err => {
-        console.log(" Erreur lors de la vérification du patient :", err);
-        this.messageCommande = " Problème lors de la vérification du patient !";
-      }
-    );
+ addNewPractitionner() {
+  this.PractitionnerForm.markAllAsTouched();
+  if (this.PractitionnerForm.invalid) {
+    console.log("🚨 Formulaire invalide !");
+    this.messageCommande = "🚨 informations invalides !";
+    this.logInvalidFields();
+    return;
   }
 
+  let data = this.PractitionnerForm.value;
+
+  let practitioner = new Practitionner(
+    undefined,
+    data.practitionnerLastName,
+    data.practitionnerFirstName,
+    data.practitionnerPhoneNumber,
+    data.practitionnerEmail,
+    data.password,
+    data.practitionnerRole
+  );
+
+ this.crudService.addPractitionner(practitioner).subscribe(
+  res => {
+    console.log("praticien ajouté avec succès :", res);
+    this.messageCommande = "✅ compte ajouté avec succès !";
+
+    if (res && res.id) {
+      localStorage.setItem('selectedPractitionnerId', res.id.toString());
+    }
+
+    setTimeout(() => {
+      this.router.navigate([``]);
+    }, 2000);
+  },
+  err => {
+    console.log("Erreur lors de l'ajout :", err);
+    if (err.status === 404 && err.error.message === "email exist deja !") {
+      this.messageCommande = "⚠️ Ce praticien existe déjà avec cet email.";
+    } else {
+      this.messageCommande = "❌ Problème de serveur !";
+    }
+  }
+);
+
+}
 
 
   logInvalidFields() {
     console.log(" Champs invalides dans le formulaire :");
-
     Object.keys(this.PractitionnerForm.controls).forEach(key => {
       const control = this.PractitionnerForm.get(key);
       if (control?.invalid) {

@@ -60,7 +60,7 @@ export class ListPatientsComponent {
                 patient.latestTreatment.status = 'file active';
               }
 
-              // Calcul de duration_of_visual_loss (à INSÉRER ici dans latestTreatment)
+              // Calcul de duration_of_visual_loss
               const nextIntakeDate = patient.latestTreatment?.next_intake_Date
                 ? new Date(patient.latestTreatment.next_intake_Date)
                 : null;

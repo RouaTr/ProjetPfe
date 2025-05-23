@@ -33,6 +33,7 @@ export class Patient {
     public contaminationMode?: string,
     public initialScreeningType?: string,
     public initialScreeningReason?: string,
+     public imc?: number,
     public lastNegativeDate?: Date,
     public positiveHIVDate?: Date,
     public hlaB5701Typing?: string,

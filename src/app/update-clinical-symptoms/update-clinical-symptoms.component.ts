@@ -108,21 +108,21 @@ export class UpdateClinicalSymptomsComponent {
 
   ngOnInit(): void {
     this.optionsKeys = Object.keys(this.options);
-    const storedId = localStorage.getItem('selectedPatientId');
-    if (storedId) {
-      this.patientId = parseInt(storedId, 10);
-      console.log("🔹 ID du patient récupéré :", this.patientId);
-    } else {
-      console.error("⚠️ Aucun patient sélectionné !");
-    }
+this.symptomId = Number(this.route.snapshot.params['id']);
 
-    // Récupérer l'ID du symptôme à mettre à jour à partir de l'URL
-    this.route.params.subscribe(params => {
-      this.symptomId = params['id'];
-      if (this.symptomId) {
-        this.loadClinicalSymptoms(this.symptomId);
-      }
-    });
+  this.service.findClinicalSymptomsById(this.symptomId).subscribe((functionalsymptoms) => {
+  if (functionalsymptoms && functionalsymptoms.patient) {
+    this.patient = functionalsymptoms.patient;
+    this.currentClinicalSymptoms = functionalsymptoms;
+    this.patientId = this.patient.id;  // <- ici !
+    if (this.symptomId) {
+      this.loadClinicalSymptoms(this.symptomId);
+    }
+  } else {
+    console.error("Les signes fonctionnels ou patient sont null");
+  }
+});
+
   }
 
   loadClinicalSymptoms(symptomId: number): void {
@@ -179,20 +179,14 @@ export class UpdateClinicalSymptomsComponent {
     });
   }
 
-
-  onCheckboxChange(event: any, group: string, option: any) {
-    const control = this.ClinicalSymptomsForm.get(group) as FormArray;
-    if (event.target.checked) {
-      if (!control.value.includes(option)) {
-        control.push(new FormControl(option));
-      }
-    } else {
-      const index = control.controls.findIndex((ctrl) => ctrl.value === option);
-      if (index !== -1) {
-        control.removeAt(index);
-      }
-    }
+onCheckboxChange(event: any, group: string, index: number) {
+  const control = this.ClinicalSymptomsForm.get(group) as FormArray;
+  if (control && control.at(index)) {
+    control.at(index).setValue(event.target.checked);
   }
+}
+
+
 
   convertArrayToString(arr: any[], options: string[]): string {
     return arr
@@ -207,11 +201,11 @@ export class UpdateClinicalSymptomsComponent {
   }
 
   logInvalidFields() {
-    console.log("🔴 Champs invalides dans le formulaire :");
+    console.log(" Champs invalides dans le formulaire :");
     Object.keys(this.ClinicalSymptomsForm.controls).forEach(key => {
       const control = this.ClinicalSymptomsForm.get(key);
       if (control?.invalid) {
-        console.log(`❌ Champ : ${key}`);
+        console.log(` Champ : ${key}`);
         console.log("   ↳ Erreurs :", control.errors);
         if (control instanceof FormArray) {
           control.controls.forEach((ctrl, index) => {
@@ -237,17 +231,19 @@ export class UpdateClinicalSymptomsComponent {
 
     if (!this.patientId) {
       console.error("Erreur : Aucun ID patient récupéré !");
-      this.messageCommande = `<div class="alert alert-danger" role="alert">
+      this.messageCommande = `
         Impossible de mettre à jour les signes fonctionnels : aucun patient enregistré.
-      </div>`;
+     `;
       return;
     }
+        this.patientId = this.currentClinicalSymptoms.patient.id; // ✅ Récupération correcte de l'ID du patient
+
 
     if (this.ClinicalSymptomsForm.get('clinicalSymptomsDate')?.invalid) {
       console.log("🚨 La date est obligatoire !");
-      this.messageCommande = `<div class="alert alert-danger" role="alert">
+      this.messageCommande = `
         Veuillez renseigner la date avant de soumettre le formulaire.
-      </div>`;
+      `;
       return;
     }
     console.log("📅 Date enregistrée :", this.ClinicalSymptomsForm.value.clinicalSymptomsDate);
@@ -278,7 +274,7 @@ export class UpdateClinicalSymptomsComponent {
     let clinicalsymptoms = new ClinicalSymptoms();
         Object.assign(clinicalsymptoms, data);
         clinicalsymptoms.id = this.symptomId;
-       
+
 
 
     this.service.updateClinicalSymptoms(this.symptomId, this.patientId, clinicalsymptoms).subscribe({
@@ -292,4 +288,3 @@ export class UpdateClinicalSymptomsComponent {
     });
   }
   }
-

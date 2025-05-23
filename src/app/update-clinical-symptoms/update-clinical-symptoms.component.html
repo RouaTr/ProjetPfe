@@ -37,7 +37,8 @@
                           <div *ngFor="let option of options['generalSigns']; let i = index">
                             <label>
                               <input type="checkbox" [value]="option"
-                                (change)="onCheckboxChange($event, 'generalSigns', option)" [formControlName]="i" />
+                                (change)="onCheckboxChange($event, 'generalSigns', i)" [formControlName]="i" />
+
                               {{ option }}
                             </label>
                           </div>
@@ -49,7 +50,8 @@
                           <div *ngFor="let option of options['dermatological']; let i = index">
                             <label>
                               <input type="checkbox" [value]="option"
-                                (change)="onCheckboxChange($event, 'dermatological', option)" [formControlName]="i" />
+                                (change)="onCheckboxChange($event, 'dermatological', i)" [formControlName]="i" />
+
                               {{ option }}
                             </label>
                           </div>
@@ -61,7 +63,8 @@
                           <div *ngFor="let option of options['neuroMuscular']; let i = index">
                             <label>
                               <input type="checkbox" [value]="option"
-                                (change)="onCheckboxChange($event, 'neuroMuscular', option)" [formControlName]="i" />
+                                (change)="onCheckboxChange($event, 'neuroMuscular', i)" [formControlName]="i" />
+
                               {{ option }}
                             </label>
                           </div>
@@ -72,8 +75,9 @@
                           <h3>Signes ORL</h3>
                           <div *ngFor="let option of options['ent']; let i = index">
                             <label>
-                              <input type="checkbox" [value]="option" (change)="onCheckboxChange($event, 'ent', option)"
+                              <input type="checkbox" [value]="option" (change)="onCheckboxChange($event, 'ent', i)"
                                 [formControlName]="i" />
+
                               {{ option }}
                             </label>
                           </div>
@@ -83,8 +87,9 @@
                           <h3>Puberté</h3>
                           <div *ngFor="let option of options['puberty']; let i = index">
                             <label>
-                              <input type="checkbox" [value]="option"
-                                (change)="onCheckboxChange($event, 'puberty', option)" [formControlName]="i" />
+                              <input type="checkbox" [value]="option" (change)="onCheckboxChange($event, 'puberty', i)"
+                                [formControlName]="i" />
+
                               {{ option }}
                             </label>
                           </div>
@@ -99,7 +104,8 @@
                           <div *ngFor="let option of options['psychiatric']; let i = index">
                             <label>
                               <input type="checkbox" [value]="option"
-                                (change)="onCheckboxChange($event, 'psychiatric', option)" [formControlName]="i" />
+                                (change)="onCheckboxChange($event, 'psychiatric', i)" [formControlName]="i" />
+
                               {{ option }}
                             </label>
                           </div>
@@ -111,7 +117,8 @@
                           <div *ngFor="let option of options['cardiovascular']; let i = index">
                             <label>
                               <input type="checkbox" [value]="option"
-                                (change)="onCheckboxChange($event, 'cardiovascular', option)" [formControlName]="i" />
+                                (change)="onCheckboxChange($event, 'cardiovascular', i)" [formControlName]="i" />
+
                               {{ option }}
                             </label>
                           </div>
@@ -123,7 +130,8 @@
                           <div *ngFor="let option of options['digestive']; let i = index">
                             <label>
                               <input type="checkbox" [value]="option"
-                                (change)="onCheckboxChange($event, 'digestive', option)" [formControlName]="i" />
+                                (change)="onCheckboxChange($event, 'digestive', i)" [formControlName]="i" />
+
                               {{ option }}
                             </label>
                           </div>
@@ -135,7 +143,8 @@
                           <div *ngFor="let option of options['lipodystrophy']; let i = index">
                             <label>
                               <input type="checkbox" [value]="option"
-                                (change)="onCheckboxChange($event, 'lipodystrophy', option)" [formControlName]="i" />
+                                (change)="onCheckboxChange($event, 'lipodystrophy', i)" [formControlName]="i" />
+
                               {{ option }}
                             </label>
                           </div>
@@ -147,7 +156,8 @@
                           <div *ngFor="let option of options['genitourinary']; let i = index">
                             <label>
                               <input type="checkbox" [value]="option"
-                                (change)="onCheckboxChange($event, 'genitourinary', option)" [formControlName]="i" />
+                                (change)="onCheckboxChange($event, 'genitourinary', i)" [formControlName]="i" />
+
                               {{ option }}
                             </label>
                           </div>
@@ -159,7 +169,8 @@
                           <div *ngFor="let option of options['ophthalmological']; let i = index">
                             <label>
                               <input type="checkbox" [value]="option"
-                                (change)="onCheckboxChange($event, 'ophthalmological', option)" [formControlName]="i" />
+                                (change)="onCheckboxChange($event, 'ophthalmological', i)" [formControlName]="i" />
+
                               {{ option }}
                             </label>
                           </div>
@@ -171,7 +182,8 @@
                           <div *ngFor="let option of options['pulmonary']; let i = index">
                             <label>
                               <input type="checkbox" [value]="option"
-                                (change)="onCheckboxChange($event, 'pulmonary', option)" [formControlName]="i" />
+                                (change)="onCheckboxChange($event, 'pulmonary', i)" [formControlName]="i" />
+
                               {{ option }}
                             </label>
                           </div>
@@ -182,8 +194,10 @@
                         <!-- Clinical Symptoms Date -->
                         <div class="Date">
                           <label for="clinicalSymptomsDate">Date des symptômes cliniques</label>
-                          <input type="date" formControlName="clinicalSymptomsDate" class="custom-date" [class.is-invalid]="isInvalidAndTouchedOrDirty(clinicalSymptomsDate)" required="">
-                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(clinicalSymptomsDate)"> Date d'ajout obligatoire
+                          <input type="date" formControlName="clinicalSymptomsDate" class="custom-date"
+                            [class.is-invalid]="isInvalidAndTouchedOrDirty(clinicalSymptomsDate)" required="">
+                          <small class="text-danger" *ngIf="isInvalidAndTouchedOrDirty(clinicalSymptomsDate)"> Date
+                            d'ajout obligatoire
                           </small>
                         </div>
 
@@ -206,4 +220,3 @@
 </body>
 
 </html>
-

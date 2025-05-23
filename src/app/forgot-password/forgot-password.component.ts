@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from '../service/crud.service';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-forgot-password',
@@ -18,9 +17,8 @@ export class ForgotPasswordComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Assurez-vous que le nom du contrôle ici est 'practitionnerEmail' et qu'il est lié correctement
     this.resetPasswordForm = this.fb.group({
-      practitionnerEmail: ['', [Validators.required, Validators.email]] // Correctement lié ici
+      practitionnerEmail: ['', [Validators.required, Validators.email]]
     });
   }
 

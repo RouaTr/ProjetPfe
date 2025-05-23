@@ -50,6 +50,7 @@ export class AddPatientComponent {
       contaminationMode: new FormControl(''),
       initialScreeningType: new FormControl(''),
       initialScreeningReason: new FormControl(''),
+       imc: new FormControl(''),
       lastNegativeDate: new FormControl(''),
       positiveHIVDate: new FormControl(''),
       hlaB5701Typing: new FormControl(''),
@@ -89,6 +90,10 @@ export class AddPatientComponent {
   get medicalRecordNumber(): FormControl {
     return this.PatientForm.get('medicalRecordNumber') as FormControl;
   }
+   get weight(): FormControl {
+    return this.PatientForm.get('imc') as FormControl;
+  }
+
   isInvalidAndTouchedOrDirty(control: AbstractControl | null): boolean {
     return (control as FormControl).invalid && ((control as FormControl).touched || (control as FormControl).dirty);
 
@@ -126,7 +131,7 @@ export class AddPatientComponent {
           data.educationLevel, data.smoking, data.alcohol, data.drugUse,
           data.physicalActivity, data.bodyTemperature, data.heartRate,
           data.bloodPressure, data.contaminationMode, data.initialScreeningType,
-          data.initialScreeningReason, data.lastNegativeDate, data.positiveHIVDate,
+          data.initialScreeningReason,data.imc, data.lastNegativeDate, data.positiveHIVDate,
           data.hlaB5701Typing, data.screeningCircumstance, data.viralType, data.age_at_HIV_diagnosis,
           data.contaminationDate, data.cdcStage
         );
@@ -181,6 +186,9 @@ export class AddPatientComponent {
         this.age.setValue(age);
       }
     });
+  this.PatientForm.get('weight')?.valueChanges.subscribe(() => this.calculateImc());
+  this.PatientForm.get('height')?.valueChanges.subscribe(() => this.calculateImc());
+
   }
 //calcul de l'age a partir de la date de naissance
   calculateAge(birthDate: Date): number {
@@ -193,5 +201,15 @@ export class AddPatientComponent {
     }
     return age;
   }
+calculateImc() {
+  const weight = this.PatientForm.get('weight')?.value;
+  const height = this.PatientForm.get('height')?.value;
+
+    const imc = weight / (height*0.01 * height*0.01);
+    this.PatientForm.get('imc')?.setValue(imc.toFixed(2));
+
+}
+
+
 
 }

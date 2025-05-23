@@ -35,7 +35,7 @@
   color: #bd2626;
 }
 
-body {
+.position-relative {
   background-image: url('src/assets/images/bg.jpg');
   background-size: cover;
   /* L’image couvre tout l’écran */

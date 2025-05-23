@@ -239,14 +239,16 @@ h5{
   margin-top: -17px;
 }
 
-/* Ajuster le bouton de scanner */
+
 .btn-scan {
-  width: 180px !important; /* largeur réduite */
+  width: 180px !important; 
 }
 
-/* Le bouton de dossier médical reste plus large */
+
 .btn-laboratory {
   width: 250px;
 }
-
+.btn-btn-primary{
+  width: 100px;
+}
 
